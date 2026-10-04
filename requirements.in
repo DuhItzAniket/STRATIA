@@ -1,0 +1,45 @@
+# Top-level dependencies for STRATIA. Exact versions are frozen in requirements.lock.
+# Install (Windows, CUDA 12.1 wheels):
+#   python -m venv .venv
+#   .venv\Scripts\python -m pip install -r requirements.in --extra-index-url https://download.pytorch.org/whl/cu121
+--extra-index-url https://download.pytorch.org/whl/cu121
+
+# Deep learning
+torch==2.5.1+cu121
+torchvision==0.20.1+cu121
+transformers==5.5.4          # DINOv3 backbones (gated, facebook/dinov3-*)
+huggingface_hub
+safetensors
+peft                         # LoRA (P077)
+timm
+
+# Numerics and data
+numpy>=1.26,<2
+scipy
+pandas
+pyarrow
+scikit-learn
+xarray
+netCDF4                      # Eye2Sky irradiance files (HDF5-based NetCDF4)
+h5py
+zarr                         # feature caches
+openpyxl                     # MGCD weather spreadsheets
+pyyaml
+
+# Images and geometry
+pillow
+opencv-python-headless
+imagehash                    # near-duplicate audit (P025)
+pvlib                        # solar position (P044)
+
+# Experiment management
+omegaconf
+hydra-core
+tensorboard
+tqdm
+matplotlib
+
+# Development
+pytest
+ruff
+pre-commit
