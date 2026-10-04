@@ -36,6 +36,14 @@ def _git(*args: str) -> str:
         return ""
 
 
+def _gpu_name(torch) -> str | None:
+    """GPU name, or None when CUDA is absent or no device is visible (e.g. CUDA_VISIBLE_DEVICES="")."""
+    try:
+        return torch.cuda.get_device_name(0) if torch.cuda.is_available() and torch.cuda.device_count() > 0 else None
+    except (AssertionError, RuntimeError):
+        return None
+
+
 def environment_snapshot() -> dict:
     import torch
 
@@ -47,7 +55,7 @@ def environment_snapshot() -> dict:
         "platform": platform.platform(),
         "torch": torch.__version__,
         "cuda": torch.version.cuda,
-        "gpu": torch.cuda.get_device_name(0) if torch.cuda.is_available() else None,
+        "gpu": _gpu_name(torch),
         "requirements_lock_sha256": hashlib.sha256(lock.read_bytes()).hexdigest()[:16] if lock.exists() else None,
     }
 
