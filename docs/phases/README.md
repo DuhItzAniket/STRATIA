@@ -22,3 +22,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P016](P016-montenegro-parser.md) | Montenegro parser | DONE |
 | [P017](P017-mgcd-parser.md) | MGCD parser + weather | DONE |
 | [P018](P018-segmentation-loader.md) | Segmentation datasets loader | DONE |
+| [P019](P019-b0268-ingest.md) | B0268 ingest | PARTIAL |

@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P019 — B0268 ingest (2026-10-04, PARTIAL)
+- B0268 ingest (`stratia/data/b0268.py`): sky-logger sidecars with checksum verification, EXIF fallback for the 25 legacy frames (UTC from IST), locations rounded to 0.01° for privacy.
+
 ### P018 — Segmentation datasets loader (2026-10-04)
 - Segmentation index and unified label mapping for SWIMSEG, SWINSEG, SWINySEG, SHWIMSEG and Almería (`stratia/data/segmentation.py`); encodings verified from the data (JPEG masks thresholded), QA sheets per dataset.
 
