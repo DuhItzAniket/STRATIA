@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P020 — External weak references (METAR) (2026-10-04, PARTIAL)
+- Deferred (plan marking D): METAR references for the B0268 site to be implemented with the first real B0268 campaign.
+
 ### P019 — B0268 ingest (2026-10-04, PARTIAL)
 - B0268 ingest (`stratia/data/b0268.py`): sky-logger sidecars with checksum verification, EXIF fallback for the 25 legacy frames (UTC from IST), locations rounded to 0.01° for privacy.
 
