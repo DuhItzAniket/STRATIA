@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P018 — Segmentation datasets loader (2026-10-04)
+- Segmentation index and unified label mapping for SWIMSEG, SWINSEG, SWINySEG, SHWIMSEG and Almería (`stratia/data/segmentation.py`); encodings verified from the data (JPEG masks thresholded), QA sheets per dataset.
+
 ### P017 — MGCD parser + weather (2026-10-04)
 - MGCD reader with official split, classes and weather joined for all 8,000 images (`stratia/data/mgcd.py`).
 

@@ -21,3 +21,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P015](P015-acquire-data.md) | Acquire missing public data | PARTIAL |
 | [P016](P016-montenegro-parser.md) | Montenegro parser | DONE |
 | [P017](P017-mgcd-parser.md) | MGCD parser + weather | DONE |
+| [P018](P018-segmentation-loader.md) | Segmentation datasets loader | DONE |

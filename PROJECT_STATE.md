@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | B — Data acquisition & inventory (P011–P022); Stage A complete |
-| Last completed phase | P017 — MGCD parser + weather |
-| Next phase | P018 — Segmentation datasets loader |
+| Last completed phase | P018 — Segmentation datasets loader |
+| Next phase | P019 — B0268 ingest |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | **CBH data:** 0 pairable Eye2Sky images on disk (P012). Needed before P047: OLDLR and WESTE images, Apr–Jul 2022 (≈ 0.3 GB per station-day). Missing public datasets need owner action (P015). |
@@ -40,3 +40,4 @@
 | P015 | Acquire missing public data | PARTIAL | 2026-10-04 |
 | P016 | Montenegro parser | DONE | 2026-10-04 |
 | P017 | MGCD parser + weather | DONE | 2026-10-04 |
+| P018 | Segmentation datasets loader | DONE | 2026-10-04 |
