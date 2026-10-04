@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | A — Foundation (P001–P010) |
-| Last completed phase | P006 — Tests & CI |
-| Next phase | P007 — Data registry spec |
+| Last completed phase | P007 — Data registry spec |
+| Next phase | P008 — Interface contract v1 |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None. Pending: Eye2Sky download (images at ceilometer sites) for P012 |
@@ -29,3 +29,4 @@
 | P004 | Config & run system | DONE | 2026-10-04 |
 | P005 | Experiment tracking | DONE | 2026-10-04 |
 | P006 | Tests & CI | DONE | 2026-10-04 |
+| P007 | Data registry spec | DONE | 2026-10-04 |

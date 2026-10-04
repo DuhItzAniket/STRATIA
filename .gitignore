@@ -8,11 +8,12 @@ venv/
 *.egg-info/
 
 # ---------- Data, runs, caches (never committed; referenced by manifest + SHA-256) ----------
-data/
-runs/
-caches/
-weights/
-outputs/
+# Anchored to the repository root so package folders such as stratia/data/ are not ignored.
+/data/
+/runs/
+/caches/
+/weights/
+/outputs/
 *.zarr/
 *.npy
 *.npz

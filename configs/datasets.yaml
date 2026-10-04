@@ -1,0 +1,155 @@
+# STRATIA data registry (P007).
+# Paths are relative to `data_root` in configs/paths.yaml (machine-specific, not committed).
+# licence_status: verified (read from the local licence file or the official record) | unverified (to check in P015).
+# status: present | partial | missing | not_downloaded. Counts are expected image counts; P011 measures actual ones.
+
+datasets:
+  ccsn:
+    name: "CCSN — Cirrus Cumulus Stratus Nimbus"
+    tasks: [genus]
+    source_url: "https://github.com/upuil/CCSN-Database"
+    doi: "10.7910/DVN/CADDPD"
+    licence: "Harvard Dataverse record terms"
+    licence_status: unverified
+    local_path: "CCSN/CCSN_v2"
+    exclude: ["__MACOSX/**", "**/._*"]
+    expected_images: 2543
+    classes: [Ac, As, Cb, Cc, Ci, Cs, Ct, Cu, Ns, Sc, St]
+    status: present
+    notes: "Consumer photos, single label per image; known duplicate/label-conflict issues (audit in P024–P026)."
+
+  mgcd:
+    name: "MGCD — Multimodal Ground-based Cloud Database"
+    tasks: [genus]
+    source_url: "https://github.com/shuangliutjnu/TJNU-Ground-based-Cloud-Dataset"
+    licence: "Distributed by Tianjin Normal University; terms to be confirmed"
+    licence_status: unverified
+    local_path: "MGCD/MGCD"
+    expected_images: 8000
+    classes: [1_cumulus, 2_altocumulus, 3_cirrus, 4_clearsky, 5_stratocumulus, 6_cumulonimbus, 7_mixed]
+    side_data: "Per-class xlsx with temperature, humidity, pressure, wind (analysis only; STRATIA is image-only)"
+    status: present
+    notes: "Official train/test split (4,000/4,000). Possibly the same pool as GRSCD (checked in P028)."
+
+  swimcat:
+    name: "SWIMCAT — Singapore Whole-sky Imaging Categories"
+    tasks: [sky_type]
+    source_url: "https://github.com/Soumyabrata/SWIMCAT"
+    licence: "CC BY-NC 4.0"
+    licence_status: verified   # local license.html
+    local_path: "SWIMCAT/swimcat"
+    expected_images: 784
+    classes: [A-sky, B-pattern, C-thick-dark, D-thick-white, E-veil]
+    status: present
+    notes: "125x125 patches; usable only at cloudy/clear level for genus."
+
+  swimseg:
+    name: "SWIMSEG / SWINSEG / SWINySEG / SHWIMSEG — sky/cloud segmentation"
+    tasks: [sky_parse]
+    source_url: "https://github.com/Soumyabrata"
+    licence: "CC BY-NC 4.0"
+    licence_status: verified   # local license.html (SWIMSEG); same group/terms assumed for the others, to confirm
+    local_paths:
+      swimseg: "SWIMCAT/swimseg"
+      swinseg: "SWIMCAT/swinseg"
+      swinyseg: "SWIMCAT/swinyseg"
+      shwimseg: "SWIMCAT/shwimseg"
+    images_glob: {swimseg: "images/*", swinseg: "images/*", swinyseg: "images/*", shwimseg: "LDR-fisheye/*"}
+    expected_images: {swimseg: 1013, swinseg: 115, swinyseg: 6768, shwimseg: 156}   # SHWIMSEG: 52 HDR sets x 3 LDR exposures
+    status: present
+    notes: "Binary sky/cloud masks from one Singapore camera; day (SWIMSEG) and night (SWINSEG)."
+
+  almeria:
+    name: "DLR all-sky imager cloud segmentation dataset, Almería"
+    tasks: [sky_parse, layer]
+    source_url: "https://zenodo.org/records/14639170"
+    licence: "CC BY 4.0"
+    licence_status: unverified   # stated by research notes; confirm on the Zenodo record in P015
+    local_path: "Almeria All Sky"
+    images_glob: ["kontas_2017/kontas_2017/images/*", "test_set/test_set/images/*/*"]
+    expected_images: 818
+    classes: {0: camera_mask, 1: sky, 2: low_layer, 3: mid_layer, 4: high_layer}
+    status: present
+    notes: "770 Kontas 2017 training images + 48-image test set from 4 cameras (Kontas, Metas, PVotSky, PVot Q71)."
+
+  montenegro:
+    name: "Multi-Annotator Ground-Based Sky Camera Dataset, Montenegro"
+    tasks: [genus_soft, oktas, cbh_class, wmo_codes]
+    source_url: "https://zenodo.org/records/21787669"
+    licence: "CC BY 4.0"
+    licence_status: verified   # local LICENSE.txt
+    local_path: "Montenegro"
+    expected_images: 2522
+    expected_annotations: 11191
+    status: present
+    notes: "9 professional observers; N, Nh, h (cloud-base height code), CL, CM, CH; human-agreement ceiling (P035)."
+
+  eye2sky:
+    name: "Eye2Sky all-sky imager network with ceilometers (Oldenburg region)"
+    tasks: [cbh, layer_weak, ssl]
+    source_url: "https://zenodo.org/records/12804613"
+    data_server: "https://eye2sky.de/data/"
+    licence: "Images CC BY-SA 3.0; measurement and ceilometer data CDLA-Sharing 1.0"
+    licence_status: unverified   # stated by the Zenodo record per research notes; confirm in P015
+    local_path: "Eye2Sky"
+    components:
+      images: "2022/<MM>/<DD>/ASI_<date>_<station>/..."
+      calibration: "asi_meta/<station>/*.yaml + masks/*.mat"
+      ceilometer: "ceilometer/ceil/data/{CDLRA,CDLRB}/*.nc (CHM15k, NetCDF3, 15 s)"
+      irradiance: "<station>/data/<station>.{cleaned,flagged}.nc"
+    status: partial
+    notes: "Locally only AURIC and BARSE images (1–9 Apr 2022). CBH training needs images at OLDLR/OLUOL/OLWIN (CDLRA) or WESTE (CDLRB); download in progress (P012)."
+
+  deepsky:
+    name: "DeepSky all-sky cloud classification dataset"
+    tasks: [genus]
+    source_url: "https://zenodo.org/records/8208505"
+    code_url: "https://github.com/dimkastan/DeepSky-classification-dataset"
+    licence: "Code MIT (local LICENSE.md); images: Zenodo record terms"
+    licence_status: unverified
+    local_path: "DeepSky"
+    expected_images: 7308
+    status: not_downloaded   # only the SIFT-CNN code repository is present
+    notes: "Official temporal split: 2021 train/val, 2022 test."
+
+  webcam:
+    name: "WEBCAM — WEBcam Clouds for Aviation Meteorology (Cote et al., IEEE Access 2025)"
+    tasks: [genus]
+    source_url: "https://github.com/MarcusCoteFIT/webcam-ground-based-cloud-image-dataset"
+    licence: "to confirm"
+    licence_status: unverified
+    local_path: "WEBCAM"
+    expected_images: 15500
+    status: not_downloaded   # only the authors' code notebook is present
+    notes: "9 aviation-oriented classes incl. fog/obscuration and precipitation."
+
+  b0268:
+    name: "Own Arducam B0268 captures (Bengaluru)"
+    tasks: [ood_test, adaptation]
+    source_url: "local (CloudScope sky logger)"
+    licence: "Owner's data"
+    licence_status: verified
+    local_path: "My Sample"
+    expected_images: 25
+    status: partial
+    notes: "Legacy 25 frames (one 5-minute window). New captures arrive via CloudScope tools/sky_logger with JSON sidecars."
+
+  hbmcd:
+    name: "HBMCD — HuaYun BJUT-MIP Cloud Dataset"
+    tasks: [genus]
+    source_url: "https://github.com/SadaharuZL/HuaYun-BJUT-MIP-Cloud-Dataset"
+    licence: "to confirm"
+    licence_status: unverified
+    expected_images: 25119
+    status: not_downloaded
+    notes: "Optional (P015)."
+
+  lenghusky8:
+    name: "LenghuSky-8 (labels only)"
+    tasks: [sky_parse]
+    source_url: "https://huggingface.co/datasets/ruiyicheng/LenghuSky-8"
+    licence: "to confirm"
+    licence_status: unverified
+    expected_images: 1111
+    status: not_downloaded
+    notes: "Optional; 81% night-time fisheye frames from an astronomical site."

@@ -1,0 +1,8 @@
+# Copy to configs/paths.yaml (not committed) and edit for this machine.
+# data_root:   where the raw datasets live (can be the external HDD)
+# cache_root:  resized images and feature caches (internal SSD: fast random reads)
+# runs_root:   experiment runs and the run registry
+data_root: "C:/Users/Luikz/Downloads/STRATIA/DATA"
+cache_root: "C:/Users/Luikz/Downloads/STRATIA/cache"
+runs_root: "runs"
+hf_cache: null   # null = Hugging Face default (~/.cache/huggingface)
