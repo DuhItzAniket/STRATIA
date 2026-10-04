@@ -43,7 +43,7 @@ def nvidia_smi() -> dict | None:
     if r.returncode != 0:
         return None
     vals = [v.strip() for v in r.stdout.strip().splitlines()[0].split(",")]
-    return dict(zip(q.split(","), vals))
+    return dict(zip(q.split(","), vals, strict=False))
 
 
 def cuda_smoke() -> dict:

@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | A — Foundation (P001–P010) |
-| Last completed phase | P003 — Project environment |
-| Next phase | P004 — Config & run system |
+| Last completed phase | P004 — Config & run system |
+| Next phase | P005 — Experiment tracking |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None. Pending: Eye2Sky download (images at ceilometer sites) for P012 |
@@ -26,3 +26,4 @@
 | P001 | Repo bootstrap | DONE | 2026-10-04 |
 | P002 | Phase protocol & logs | DONE | 2026-10-04 |
 | P003 | Project environment | DONE | 2026-10-04 |
+| P004 | Config & run system | DONE | 2026-10-04 |
