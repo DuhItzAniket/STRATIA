@@ -1,8 +1,15 @@
-# Minimal CPU-only dependencies for CI (unit tests on synthetic data; no GPU, no Hugging Face token).
+# CPU-only dependencies for CI (unit tests on synthetic data; no GPU, no Hugging Face token, no datasets).
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch==2.5.1+cpu
 numpy>=1.26,<2
 omegaconf
+pyyaml
+pandas
+pyarrow
+pillow
+scipy
+opencv-python-headless
+openpyxl
+pvlib
 pytest
 ruff
-pyyaml

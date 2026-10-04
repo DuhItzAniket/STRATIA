@@ -34,5 +34,7 @@ P021 manifest; P010 compute budget (training needs ≈ 30–120 img/s).
 ## Deviations from plan & why
 - Cache resolution 768 px (longest side) instead of 512: keeps headroom for crop/scale augmentation (P048) before the final 512 × 512 input; the cost is 3.16 GB in total.
 
+- **CI was failing on GitHub from P011 to P022** (pytest exit code 2: collection errors), because `requirements-ci.txt` lacked the libraries the new data modules import (pandas, Pillow, OpenCV, SciPy, openpyxl, pvlib). I had not re-checked CI after P010. Reproduced in a clean CPU-only environment without local data paths (9 collection errors), fixed `requirements-ci.txt`, re-ran there: 41 passed, 4 skipped (real-data tests). From now on CI is checked after every push.
+
 ## Next phase
 P023 — Integrity check (Stage C).
