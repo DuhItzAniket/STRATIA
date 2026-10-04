@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P013 — Eye2Sky readers (2026-10-04)
+- Eye2Sky readers (`stratia/data/eye2sky.py`) and the OCamCalib fisheye model (`stratia/geometry/ocam.py`); axis convention measured on 38 calibrations (xc = row), mask-name mismatch resolved, round trip ≈ 4e-7 px on OLDLR, WESTE and AURIC.
+
 ### P012 — Eye2Sky inventory (2026-10-04)
 - `scripts/eye2sky_inventory.py` and `docs/data/eye2sky_inventory.md`: images per station/day, calibration validity windows, ceilometer coverage (118 days each), stations within 1 km of the ceilometers (OLDLR, OLUOL, OLWIN; WESTE); 0 pairable image-days on disk — escalated.
 
