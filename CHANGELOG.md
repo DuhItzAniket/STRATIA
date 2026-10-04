@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P012 — Eye2Sky inventory (2026-10-04)
+- `scripts/eye2sky_inventory.py` and `docs/data/eye2sky_inventory.md`: images per station/day, calibration validity windows, ceilometer coverage (118 days each), stations within 1 km of the ceilometers (OLDLR, OLUOL, OLWIN; WESTE); 0 pairable image-days on disk — escalated.
+
 ### P011 — Inventory local data (2026-10-04)
 - `scripts/inventory.py`: per-file inventory of the data root (dataset, format, size, resolution, mode, junk, unreadable) and `docs/data/inventory.md`; 64,406 files, 15.0 GB, 0 unreadable images; CCSN mixed-resolution shortcut risk recorded.
 
