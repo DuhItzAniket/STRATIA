@@ -9,8 +9,8 @@ datasets:
     tasks: [genus]
     source_url: "https://github.com/upuil/CCSN-Database"
     doi: "10.7910/DVN/CADDPD"
-    licence: "Harvard Dataverse record terms"
-    licence_status: unverified
+    licence: "CC0 1.0"
+    licence_status: verified   # Harvard Dataverse API, 2026-10-04
     local_path: "CCSN/CCSN_v2"
     exclude: ["__MACOSX/**", "**/._*"]
     expected_images: 2543
@@ -64,7 +64,7 @@ datasets:
     tasks: [sky_parse, layer]
     source_url: "https://zenodo.org/records/14639170"
     licence: "CC BY 4.0"
-    licence_status: unverified   # stated by research notes; confirm on the Zenodo record in P015
+    licence_status: verified   # Zenodo API record 14639170, 2026-10-04
     local_path: "Almeria All Sky"
     images_glob: ["kontas_2017/kontas_2017/images/*", "test_set/test_set/images/*/*"]
     expected_images: 818
@@ -89,8 +89,8 @@ datasets:
     tasks: [cbh, layer_weak, ssl]
     source_url: "https://zenodo.org/records/12804613"
     data_server: "https://eye2sky.de/data/"
-    licence: "Images CC BY-SA 3.0; measurement and ceilometer data CDLA-Sharing 1.0"
-    licence_status: unverified   # stated by the Zenodo record per research notes; confirm in P015
+    licence: "CDLA-Sharing 1.0 (Zenodo record licence); research notes also cite CC BY-SA 3.0 for images"
+    licence_status: verified   # Zenodo API record 12804613 (cdla-sharing-1.0), 2026-10-04
     local_path: "Eye2Sky"
     components:
       images: "2022/<MM>/<DD>/ASI_<date>_<station>/..."
@@ -103,14 +103,14 @@ datasets:
   deepsky:
     name: "DeepSky all-sky cloud classification dataset"
     tasks: [genus]
-    source_url: "https://zenodo.org/records/8208505"
-    code_url: "https://github.com/dimkastan/DeepSky-classification-dataset"
-    licence: "Code MIT (local LICENSE.md); images: Zenodo record terms"
+    source_url: "https://github.com/dimkastan/DeepSky-classification-dataset"
+    paper_record: "https://zenodo.org/records/8208505"   # holds only the paper (PDF/DOCX), not the images
+    licence: "Paper record CC BY 4.0; images: on request from the authors (repository README)"
     licence_status: unverified
     local_path: "DeepSky"
     expected_images: 7308
     status: not_downloaded   # only the SIFT-CNN code repository is present
-    notes: "Official temporal split: 2021 train/val, 2022 test."
+    notes: "Official temporal split: 2021 train/val, 2022 test. Images are not publicly linked; request from the authors (P015)."
 
   webcam:
     name: "WEBCAM — WEBcam Clouds for Aviation Meteorology (Cote et al., IEEE Access 2025)"
@@ -121,7 +121,7 @@ datasets:
     local_path: "WEBCAM"
     expected_images: 15500
     status: not_downloaded   # only the authors' code notebook is present
-    notes: "9 aviation-oriented classes incl. fog/obscuration and precipitation."
+    notes: "9 aviation-oriented classes incl. fog/obscuration and precipitation. Download location not found in the repository; see the paper's data-availability statement (doi:10.1109/ACCESS.2025.3634057) (P015)."
 
   b0268:
     name: "Own Arducam B0268 captures (Bengaluru)"
@@ -142,14 +142,16 @@ datasets:
     licence_status: unverified
     expected_images: 25119
     status: not_downloaded
-    notes: "Optional (P015)."
+    download: "Baidu Pan link and extraction code in the repository's Download_Link file"
+    notes: "Optional (P015); needs a Baidu account."
 
   lenghusky8:
     name: "LenghuSky-8 (labels only)"
     tasks: [sky_parse]
     source_url: "https://huggingface.co/datasets/ruiyicheng/LenghuSky-8"
-    licence: "to confirm"
-    licence_status: unverified
+    labels_url: "https://github.com/ruiyicheng/LenghuSky-8"
+    licence: "Apache-2.0"
+    licence_status: verified   # Hugging Face dataset card tag, ungated, 2026-10-04
     expected_images: 1111
     status: not_downloaded
     notes: "Optional; 81% night-time fisheye frames from an astronomical site."

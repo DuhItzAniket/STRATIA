@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P015 — Acquire missing public data (2026-10-04, PARTIAL)
+- Verified licences from official records (CCSN CC0, Almería and Montenegro CC BY 4.0, Eye2Sky CDLA-Sharing 1.0, LenghuSky-8 Apache-2.0); found that DeepSky images are only available on request (Zenodo holds the paper only) and WEBCAM has no public link; owner actions in `docs/data/acquisition.md`.
+
 ### P014 — Ceilometer reader (2026-10-04)
 - CHM15k ceilometer reader with QC flags (`stratia/data/ceilometer.py`), summary over all 236 days and time-height figures; matches the vendor plot; CDLRB file latitude error and CDLRA 0x8000 laser-ageing warning identified and handled.
 
