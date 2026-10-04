@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P017 — MGCD parser + weather (2026-10-04)
+- MGCD reader with official split, classes and weather joined for all 8,000 images (`stratia/data/mgcd.py`).
+
 ### P016 — Montenegro parser (2026-10-04)
 - Montenegro parser and per-image soft labels (`stratia/data/montenegro.py`), all README counts reproduced, archive image-name prefix handled; experts' majority share on cloud-base height only 0.58.
 
