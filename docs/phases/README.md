@@ -11,3 +11,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P005](P005-experiment-tracking.md) | Experiment tracking | DONE |
 | [P006](P006-tests-ci.md) | Tests & CI | DONE |
 | [P007](P007-data-registry.md) | Data registry spec | DONE |
+| [P008](P008-interface-contract.md) | Interface contract v1 | DONE |
