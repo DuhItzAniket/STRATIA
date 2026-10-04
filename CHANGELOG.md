@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P016 — Montenegro parser (2026-10-04)
+- Montenegro parser and per-image soft labels (`stratia/data/montenegro.py`), all README counts reproduced, archive image-name prefix handled; experts' majority share on cloud-base height only 0.58.
+
 ### P015 — Acquire missing public data (2026-10-04, PARTIAL)
 - Verified licences from official records (CCSN CC0, Almería and Montenegro CC BY 4.0, Eye2Sky CDLA-Sharing 1.0, LenghuSky-8 Apache-2.0); found that DeepSky images are only available on request (Zenodo holds the paper only) and WEBCAM has no public link; owner actions in `docs/data/acquisition.md`.
 
