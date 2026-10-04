@@ -38,6 +38,7 @@ hydra-core
 tensorboard
 tqdm
 matplotlib
+tabulate                     # DataFrame.to_markdown for generated reports
 
 # Development
 pytest

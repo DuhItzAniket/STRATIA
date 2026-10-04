@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P021 — Unified sample schema (2026-10-04)
+- Unified 31-column manifest schema with validation (`stratia/data/manifest.py`) and builder: 52,032 images, 11 datasets, 6 camera types; Sun positions where time and location are known.
+
 ### P020 — External weak references (METAR) (2026-10-04, PARTIAL)
 - Deferred (plan marking D): METAR references for the B0268 site to be implemented with the first real B0268 campaign.
 
