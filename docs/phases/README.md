@@ -14,3 +14,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P008](P008-interface-contract.md) | Interface contract v1 | DONE |
 | [P009](P009-research-design.md) | Research design & pre-registration | DONE |
 | [P010](P010-hardware-profiling.md) | Hardware budget profiling | DONE |
+| [P011](P011-inventory.md) | Inventory local data | DONE |

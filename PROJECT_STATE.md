@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | B — Data acquisition & inventory (P011–P022); Stage A complete |
-| Last completed phase | P010 — Hardware budget profiling |
-| Next phase | P011 — Inventory local data |
+| Last completed phase | P011 — Inventory local data |
+| Next phase | P012 — Eye2Sky inventory |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None. Pending: Eye2Sky download (images at ceilometer sites) for P012 |
@@ -33,3 +33,4 @@
 | P008 | Interface contract v1 | DONE | 2026-10-04 |
 | P009 | Research design & pre-registration | DONE | 2026-10-04 |
 | P010 | Hardware budget profiling | DONE | 2026-10-04 |
+| P011 | Inventory local data | DONE | 2026-10-04 |

@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P011 — Inventory local data (2026-10-04)
+- `scripts/inventory.py`: per-file inventory of the data root (dataset, format, size, resolution, mode, junk, unreadable) and `docs/data/inventory.md`; 64,406 files, 15.0 GB, 0 unreadable images; CCSN mixed-resolution shortcut risk recorded.
+
 ### P010 — Hardware budget profiling (2026-10-04)
 - Measured DINOv3 ViT-S/B/L memory and throughput at 224/384/512 px (inference, full fine-tune, checkpointing, LoRA); `docs/compute.md` with defaults (ViT-S @512, batch 16 or 64 with checkpointing) and Windows sysmem-fallback countermeasures (allocator cap, throughput-collapse guard).
 
