@@ -16,7 +16,7 @@ version = { attr = "stratia.__version__" }
 include = ["stratia*"]
 
 [tool.ruff]
-line-length = 120
+line-length = 130
 target-version = "py311"
 
 [tool.ruff.lint]

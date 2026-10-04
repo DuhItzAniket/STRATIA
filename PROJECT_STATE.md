@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | B — Data acquisition & inventory (P011–P022); Stage A complete |
-| Last completed phase | P013 — Eye2Sky readers |
-| Next phase | P014 — Ceilometer reader |
+| Last completed phase | P014 — Ceilometer reader |
+| Next phase | P015 — Acquire missing public data |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | **CBH data:** 0 pairable Eye2Sky images on disk (P012). Needed before P047: OLDLR and WESTE images, Apr–Jul 2022 (≈ 0.3 GB per station-day). Missing public datasets need owner action (P015). |
@@ -36,3 +36,4 @@
 | P011 | Inventory local data | DONE | 2026-10-04 |
 | P012 | Eye2Sky inventory | DONE | 2026-10-04 |
 | P013 | Eye2Sky readers | DONE | 2026-10-04 |
+| P014 | Ceilometer reader | DONE | 2026-10-04 |

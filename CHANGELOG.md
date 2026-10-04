@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P014 — Ceilometer reader (2026-10-04)
+- CHM15k ceilometer reader with QC flags (`stratia/data/ceilometer.py`), summary over all 236 days and time-height figures; matches the vendor plot; CDLRB file latitude error and CDLRA 0x8000 laser-ageing warning identified and handled.
+
 ### P013 — Eye2Sky readers (2026-10-04)
 - Eye2Sky readers (`stratia/data/eye2sky.py`) and the OCamCalib fisheye model (`stratia/geometry/ocam.py`); axis convention measured on 38 calibrations (xc = row), mask-name mismatch resolved, round trip ≈ 4e-7 px on OLDLR, WESTE and AURIC.
 

@@ -17,3 +17,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P011](P011-inventory.md) | Inventory local data | DONE |
 | [P012](P012-eye2sky-inventory.md) | Eye2Sky inventory | DONE |
 | [P013](P013-eye2sky-readers.md) | Eye2Sky readers | DONE |
+| [P014](P014-ceilometer-reader.md) | Ceilometer reader | DONE |
