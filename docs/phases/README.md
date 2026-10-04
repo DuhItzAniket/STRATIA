@@ -25,3 +25,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P019](P019-b0268-ingest.md) | B0268 ingest | PARTIAL |
 | [P020](P020-external-references.md) | External weak references (METAR) | PARTIAL |
 | [P021](P021-unified-schema.md) | Unified sample schema | DONE |
+| [P022](P022-loader-performance.md) | Loader performance | DONE |

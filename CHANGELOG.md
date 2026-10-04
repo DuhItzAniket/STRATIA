@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P022 — Loader performance (2026-10-04)
+- Resized image cache (52,032 images, 3.16 GB, 0 errors) and DataLoader benchmark: 817 img/s to the GPU with 8 workers (3.3× faster than original files).
+
 ### P021 — Unified sample schema (2026-10-04)
 - Unified 31-column manifest schema with validation (`stratia/data/manifest.py`) and builder: 52,032 images, 11 datasets, 6 camera types; Sun positions where time and location are known.
 

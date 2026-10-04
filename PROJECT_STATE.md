@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Current stage | B — Data acquisition & inventory (P011–P022); Stage A complete |
-| Last completed phase | P021 — Unified sample schema |
-| Next phase | P022 — Loader performance |
+| Current stage | C — Data quality & leakage audit (P023–P032); Stages A–B complete (B with partial P015, P019, P020) |
+| Last completed phase | P022 — Loader performance |
+| Next phase | P023 — Integrity check |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | **CBH data:** 0 pairable Eye2Sky images on disk (P012). Needed before P047: OLDLR and WESTE images, Apr–Jul 2022 (≈ 0.3 GB per station-day). Missing public datasets need owner action (P015). |
@@ -44,3 +44,4 @@
 | P019 | B0268 ingest | PARTIAL | 2026-10-04 |
 | P020 | External weak references (METAR) | PARTIAL | 2026-10-04 |
 | P021 | Unified sample schema | DONE | 2026-10-04 |
+| P022 | Loader performance | DONE | 2026-10-04 |
