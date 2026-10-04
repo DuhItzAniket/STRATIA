@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P010 — Hardware budget profiling (2026-10-04)
+- Measured DINOv3 ViT-S/B/L memory and throughput at 224/384/512 px (inference, full fine-tune, checkpointing, LoRA); `docs/compute.md` with defaults (ViT-S @512, batch 16 or 64 with checkpointing) and Windows sysmem-fallback countermeasures (allocator cap, throughput-collapse guard).
+
 ### P009 — Research design & pre-registration (2026-10-04)
 - Pre-registered research design (`docs/research_design.md`): hypotheses H1–H4, metrics, Gate G4 criteria C1–C3, locked-test policy, threats to validity; ADR-002 (DINOv3 ViT-S/16 backbone), ADR-003 (single-camera scope); paper outline.
 

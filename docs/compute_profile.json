@@ -1,0 +1,234 @@
+{
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "total_gb": 6.44,
+  "free_at_start_gb": 5.32,
+  "mem_fraction_cap": 0.9,
+  "torch": "2.5.1+cu121",
+  "results": {
+    "vits16@224": {
+      "inference_bf16": {
+        "batch": 32,
+        "img_per_s": 751.1,
+        "peak_gb": 0.24
+      },
+      "train_full": {
+        "max_batch": 64,
+        "img_per_s": 236.8,
+        "peak_gb": 3.15
+      },
+      "train_full_ckpt": {
+        "max_batch": 64,
+        "img_per_s": 184.5,
+        "peak_gb": 0.84
+      },
+      "train_lora": {
+        "max_batch": 64,
+        "img_per_s": 252.9,
+        "peak_gb": 2.09,
+        "lora_targets": [
+          "k_proj",
+          "q_proj",
+          "v_proj"
+        ]
+      }
+    },
+    "vits16@384": {
+      "inference_bf16": {
+        "batch": 32,
+        "img_per_s": 226.3,
+        "peak_gb": 0.45
+      },
+      "train_full": {
+        "max_batch": 32,
+        "img_per_s": 74.3,
+        "peak_gb": 4.44
+      },
+      "train_full_ckpt": {
+        "max_batch": 64,
+        "img_per_s": 57.9,
+        "peak_gb": 1.89
+      },
+      "train_lora": {
+        "max_batch": 32,
+        "img_per_s": 77.0,
+        "peak_gb": 2.98,
+        "lora_targets": [
+          "k_proj",
+          "q_proj",
+          "v_proj"
+        ]
+      }
+    },
+    "vits16@512": {
+      "inference_bf16": {
+        "batch": 32,
+        "img_per_s": 121.8,
+        "peak_gb": 0.68
+      },
+      "train_full": {
+        "max_batch": 16,
+        "img_per_s": 38.7,
+        "peak_gb": 3.93
+      },
+      "train_full_ckpt": {
+        "max_batch": 64,
+        "img_per_s": 30.3,
+        "peak_gb": 3.12
+      },
+      "train_lora": {
+        "max_batch": 16,
+        "img_per_s": 40.1,
+        "peak_gb": 2.64,
+        "lora_targets": [
+          "k_proj",
+          "q_proj",
+          "v_proj"
+        ]
+      }
+    },
+    "vitb16@224": {
+      "inference_bf16": {
+        "batch": 32,
+        "img_per_s": 242.6,
+        "peak_gb": 0.73
+      },
+      "train_full": {
+        "max_batch": 32,
+        "img_per_s": 87.1,
+        "peak_gb": 4.29
+      },
+      "train_full_ckpt": {
+        "max_batch": 64,
+        "img_per_s": 68.8,
+        "peak_gb": 2.38
+      },
+      "train_lora": {
+        "max_batch": 64,
+        "img_per_s": 102.1,
+        "peak_gb": 4.39,
+        "lora_targets": [
+          "k_proj",
+          "q_proj",
+          "v_proj"
+        ]
+      }
+    },
+    "vitb16@384": {
+      "inference_bf16": {
+        "batch": 32,
+        "img_per_s": 92.0,
+        "peak_gb": 1.09
+      },
+      "train_full": {
+        "max_batch": 16,
+        "img_per_s": 28.6,
+        "peak_gb": 5.58
+      },
+      "train_full_ckpt": {
+        "max_batch": 64,
+        "img_per_s": 23.8,
+        "peak_gb": 4.1
+      },
+      "train_lora": {
+        "max_batch": 16,
+        "img_per_s": 33.9,
+        "peak_gb": 3.35,
+        "lora_targets": [
+          "k_proj",
+          "q_proj",
+          "v_proj"
+        ]
+      }
+    },
+    "vitb16@512": {
+      "inference_bf16": {
+        "batch": 32,
+        "img_per_s": 50.2,
+        "peak_gb": 1.5
+      },
+      "train_full": {
+        "max_batch": 4,
+        "img_per_s": 14.8,
+        "peak_gb": 3.36
+      },
+      "train_full_ckpt": {
+        "max_batch": 32,
+        "img_per_s": 12.5,
+        "peak_gb": 3.76
+      },
+      "train_lora": {
+        "max_batch": 8,
+        "img_per_s": 17.7,
+        "peak_gb": 3.01,
+        "lora_targets": [
+          "k_proj",
+          "q_proj",
+          "v_proj"
+        ]
+      }
+    },
+    "vitl16@224": {
+      "inference_bf16": {
+        "batch": 32,
+        "img_per_s": 93.5,
+        "peak_gb": 2.08
+      },
+      "train_full_ckpt": {
+        "max_batch": 0,
+        "note": "OOM at batch 1"
+      },
+      "train_lora": {
+        "max_batch": 16,
+        "img_per_s": 41.4,
+        "peak_gb": 4.34,
+        "lora_targets": [
+          "k_proj",
+          "q_proj",
+          "v_proj"
+        ]
+      }
+    },
+    "vitl16@384": {
+      "inference_bf16": {
+        "batch": 32,
+        "img_per_s": 31.7,
+        "peak_gb": 2.52
+      },
+      "train_full_ckpt": {
+        "max_batch": 0,
+        "note": "OOM at batch 1"
+      },
+      "train_lora": {
+        "max_batch": 8,
+        "img_per_s": 12.1,
+        "peak_gb": 5.46,
+        "lora_targets": [
+          "k_proj",
+          "q_proj",
+          "v_proj"
+        ]
+      }
+    },
+    "vitl16@512": {
+      "inference_bf16": {
+        "batch": 32,
+        "img_per_s": 17.3,
+        "peak_gb": 3.07
+      },
+      "train_full_ckpt": {
+        "max_batch": 0,
+        "note": "OOM at batch 1"
+      },
+      "train_lora": {
+        "max_batch": 4,
+        "img_per_s": 6.5,
+        "peak_gb": 4.99,
+        "lora_targets": [
+          "k_proj",
+          "q_proj",
+          "v_proj"
+        ]
+      }
+    }
+  }
+}
