@@ -1,0 +1,54 @@
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# ---------- Data, runs, caches (never committed; referenced by manifest + SHA-256) ----------
+data/
+runs/
+caches/
+weights/
+outputs/
+*.zarr/
+*.npy
+*.npz
+*.memmap
+*.parquet
+!tests/fixtures/**/*.parquet
+
+# ---------- Model files (released via GitHub Releases / Hugging Face) ----------
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.onnx
+*.bin
+
+# ---------- Machine-specific configuration ----------
+configs/paths.yaml
+
+# ---------- Secrets ----------
+.env
+*.key
+*.pem
+hf_token*
+
+# ---------- Paper build outputs ----------
+paper/**/*.aux
+paper/**/*.log
+paper/**/*.bbl
+paper/**/*.blg
+paper/**/*.out
+paper/**/*.synctex.gz
+paper/**/*.pdf
+!paper/figures/**/*.pdf
+
+# ---------- IDE / OS ----------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
