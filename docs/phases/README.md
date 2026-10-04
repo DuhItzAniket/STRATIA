@@ -9,3 +9,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P003](P003-environment.md) | Project environment | DONE |
 | [P004](P004-config-run-system.md) | Config & run system | DONE |
 | [P005](P005-experiment-tracking.md) | Experiment tracking | DONE |
+| [P006](P006-tests-ci.md) | Tests & CI | DONE |
