@@ -198,7 +198,8 @@ def contact_sheet(pairs: pd.DataFrame, files: list[str], cache_root: str | Path,
             except OSError:
                 img = np.zeros((tile, tile, 3), dtype=np.uint8)
             sheet[y:y + tile, x + side * (tile + 4):x + side * (tile + 4) + tile] = img
-        text = "  ".join(f"{col[:3]} {p[col]:.3f}" if isinstance(p[col], float) else f"{col[:3]} {p[col]}"
+        text = "  ".join(str(p[col]) if col == "caption" else                     # a ready-made caption, as is
+                         f"{col[:3]} {p[col]:.3f}" if isinstance(p[col], float) else f"{col[:3]} {p[col]}"
                          for col in caption_cols)
         cv2.putText(sheet, text, (x, y + tile + 16), cv2.FONT_HERSHEY_SIMPLEX, 0.42, (0, 0, 0), 1, cv2.LINE_AA)
     out = Path(out)

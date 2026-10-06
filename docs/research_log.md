@@ -97,4 +97,33 @@ Results (`docs/data/near_duplicates_report.md`, `data/near_duplicate_groups.parq
 - Negative result worth keeping: a perceptual hash alone cannot audit sky images (too many spurious matches on
   smooth skies), and an embedding alone cannot see flips. Two measures were needed.
 
-Open for later phases. Label conflicts (P026) now have two sources: the exact-duplicate pairs of P024 and the copy pairs of P025.
+### P026 — Label-conflict audit
+
+Method. Every pair that P024 (exact duplicates) or P025 (copies, same scene) marked as the same picture was
+compared on the label its dataset ships with: the native class (CCSN, MGCD, SWIMCAT, Montenegro étage set) or the
+mask (SWIM family, SHWIMSEG, Almería; the copy's mask flipped or rotated like its picture, then pixel agreement).
+Montenegro's multi-rater distributions were summarised as majority shares. Decision: pHash copies inside a camera's
+own time series count as same scene (frames days apart hash alike, P025), so a label difference there is a
+consistency rate, not an error; alternative rejected: treating them as copies, which would have called 512
+Montenegro pairs "mislabelled". Nothing was corrected; the policy (report, section Policy) keeps conflicting
+pictures out of every test split and leaves training labels to the harmonisation (P033, P034).
+
+Results (`docs/data/label_conflicts_report.md`, `data/label_conflicts.parquet`, `data/mask_agreement.parquet`,
+sheets `docs/data/figures/label_conflict_*.jpg`, `mask_*.jpg`):
+- **CCSN files the same photograph under two genera**: 105 of its 129 copy pairs and 22 of 25 same-scene pairs
+  disagree; 200 images (7.9 %) are in an exact or copy conflict (Ns/St, Cb/Cu, Cc/Cs, Ac/Cc, Sc/St most often, some
+  across étages). *For the paper:* a ceiling on single-label genus accuracy on CCSN, and the reason STRATIA predicts
+  a genus set and evaluates at étage level.
+- **MGCD labels are per sequence**: consecutive frames disagree in 0.6 % of 36,532 same-scene pairs; 701 same-scene
+  pairs (452 images) straddle the official train/test split.
+- **People cannot agree on cloud height from a webcam frame**: Montenegro's 5–9 raters reach no majority on the
+  height code for 39 % of images (median majority share 0.60; oktas 0.75). Look-alike frames days apart flip
+  Clear/High clouds in 216 pairs. *For the paper:* image-only height labels are distributions; the ceilometer is
+  the reference (Paper B); evaluation on Montenegro scores against the rater distribution.
+- **Segmentation annotation noise is about 5 % of pixels**: SWIMSEG's 26 pixel-identical pairs were annotated twice
+  and agree on 94.9 % of pixels at the median (76 % at worst); SWINySEG copies inherit either mask (the construction
+  copies themselves agree on 99.7 %). One Almería frame is stored under two timestamps with incompatible masks.
+  *For the paper:* SWIM segmentation scores above roughly 95 % pixel accuracy are not meaningful.
+- SWIMCAT: no conflict of any kind. Montenegro frames carry a burned-in timestamp and a logo (shortcuts for P029).
+
+Open for later phases. P027 measures how fast frames decorrelate in the time-series datasets (Eye2Sky 30 s, Montenegro 20 min); P029 takes Montenegro's burned-in timestamp and logo as shortcut candidates; P033 and P034 take the conflict lists (`data/label_conflicts.parquet`, `data/mask_agreement.parquet`).

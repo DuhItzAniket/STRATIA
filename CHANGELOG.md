@@ -4,6 +4,10 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P026 — Label-conflict audit (2026-10-06)
+- Label-conflict audit (`stratia/data/label_conflicts.py`, `scripts/audit_label_conflicts.py`): every exact-duplicate, copy and same-scene pair compared on its dataset's native label and, for segmentation data, on the aligned mask; rater agreement for Montenegro. Findings: 7.9 % of CCSN images carry a second genus label on a copy of themselves; MGCD labels flip in 0.6 % of consecutive-frame pairs and 452 MGCD images straddle the official split; Montenegro raters reach no majority on cloud height for 39 % of images; SWIMSEG images annotated twice agree on 95 % of pixels. Nothing auto-corrected; policy in `docs/data/label_conflicts_report.md`; tables `data/label_conflicts.parquet`, `data/mask_agreement.parquet`.
+- `contact_sheet()` accepts a ready-made `caption` column.
+
 ### P025 — Near-duplicates (2026-10-06)
 - Near-duplicate search (`stratia/data/near_duplicates.py`, `scripts/find_near_duplicates.py`): DINOv3 ViT-S/16 embeddings of all 52,032 images (cached under `cache/features/`, reused by P029), dHash and pHash over all eight flips and rotations, k-nearest-neighbour pairs, thresholds chosen from contact sheets, union-find groups. Same-station Eye2Sky pairs are left to temporal blocking. Report `docs/data/near_duplicates_report.md`, sheets in `docs/data/figures/`.
 
