@@ -73,6 +73,28 @@ contain exact copies of SWIMSEG/SWINSEG, so any overlap between them is through 
 is a near-duplicate question (P025); (3) exact duplicates with conflicting labels exist in CCSN. Evidence:
 `docs/data/duplicates_report.md`, `data/duplicate_groups.parquet`, `data/image_hashes.parquet`.
 
-Open for later phases. Near-duplicates (consecutive frames, flips and rotations) are P025; whether SWINySEG is an
-augmented re-release of SWIMSEG and SWINSEG, as its construction suggests, will be visible there even if the exact
-hashes show little.
+### P025 — Near-duplicates
+
+Method. DINOv3 ViT-S/16 CLS embeddings (224 px, L2-normalised; cached for the shortcut audit) give each image its
+10 nearest neighbours; dHash and pHash computed for all eight flips and rotations give every candidate pair a
+"copy" distance. Thresholds were chosen from contact sheets, not assumed. Rejected alternative: cosine >= 0.97 *or*
+pHash <= 10 — the pHash half matched Montenegro frames of different nights, because the pHash of a smooth sky
+carries little information. Chosen rule: copy if dihedral pHash <= 2; same scene if cosine >= 0.97; either counts.
+Same-station Eye2Sky pairs are a time series and go to temporal blocking (P027).
+
+Results (`docs/data/near_duplicates_report.md`, `data/near_duplicate_groups.parquet`, `data/swinyseg_sources.parquet`):
+- **34.6 % of SWINySEG (2,342 of 6,768 images) are flipped, rotated or re-encoded copies of SWIMSEG (2,096) or
+  SWINSEG (246) images**, found by an exhaustive dihedral-pHash pass over every pair. Exact hashing saw none of
+  them. *For the paper:* the three datasets are one source; any protocol that trains on one and tests on another
+  measures memorisation.
+- **MGCD's 8,000 images are a few hundred scenes**: 97.2 % of them sit in 227 same-scene groups (largest 291)
+  of consecutive frames seconds apart. Almería (43.5 %) and Montenegro (35.0 %) behave the same way at lower
+  cadence. *For the paper:* published random-split results on these datasets are inflated by design; our splits go
+  by group and time.
+- Overall: 14,112 images (27 %) in 1,656 near-duplicate groups; CCSN has 149 small groups of re-posted photos
+  (with the label conflicts P024 found); B0268 none; Eye2Sky cross-station pairs show that overcast skies look alike
+  15 km apart.
+- Negative result worth keeping: a perceptual hash alone cannot audit sky images (too many spurious matches on
+  smooth skies), and an embedding alone cannot see flips. Two measures were needed.
+
+Open for later phases. Label conflicts (P026) now have two sources: the exact-duplicate pairs of P024 and the copy pairs of P025.

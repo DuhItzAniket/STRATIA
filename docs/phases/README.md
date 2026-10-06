@@ -28,3 +28,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P022](P022-loader-performance.md) | Loader performance | DONE |
 | [P023](P023-integrity-check.md) | Integrity check | DONE |
 | [P024](P024-exact-duplicates.md) | Exact duplicates | DONE |
+| [P025](P025-near-duplicates.md) | Near-duplicates | DONE |

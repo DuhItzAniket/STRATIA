@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P025 — Near-duplicates (2026-10-06)
+- Near-duplicate search (`stratia/data/near_duplicates.py`, `scripts/find_near_duplicates.py`): DINOv3 ViT-S/16 embeddings of all 52,032 images (cached under `cache/features/`, reused by P029), dHash and pHash over all eight flips and rotations, k-nearest-neighbour pairs, thresholds chosen from contact sheets, union-find groups. Same-station Eye2Sky pairs are left to temporal blocking. Report `docs/data/near_duplicates_report.md`, sheets in `docs/data/figures/`.
+
 ### P024 — Exact duplicates (2026-10-06)
 - Exact-duplicate search by file bytes and by decoded pixels (`stratia/data/duplicates.py`, `scripts/find_duplicates.py`): 661 images (1.3 %) in 312 groups, all within one dataset (SWINySEG 533, SWIMSEG 52, CCSN 34 with 3 label conflicts, SWIMCAT 34, SHWIMSEG 6, Almería 2), none across datasets. Policy: one `group_id` per duplicate group at split time. Tables `data/duplicate_groups.parquet`, `data/image_hashes.parquet`; report `docs/data/duplicates_report.md`.
 
