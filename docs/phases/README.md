@@ -26,3 +26,5 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P020](P020-external-references.md) | External weak references (METAR) | PARTIAL |
 | [P021](P021-unified-schema.md) | Unified sample schema | DONE |
 | [P022](P022-loader-performance.md) | Loader performance | DONE |
+| [P023](P023-integrity-check.md) | Integrity check | DONE |
+| [P024](P024-exact-duplicates.md) | Exact duplicates | DONE |

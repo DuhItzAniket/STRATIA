@@ -4,6 +4,13 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P024 — Exact duplicates (2026-10-06)
+- Exact-duplicate search by file bytes and by decoded pixels (`stratia/data/duplicates.py`, `scripts/find_duplicates.py`): 661 images (1.3 %) in 312 groups, all within one dataset (SWINySEG 533, SWIMSEG 52, CCSN 34 with 3 label conflicts, SWIMCAT 34, SHWIMSEG 6, Almería 2), none across datasets. Policy: one `group_id` per duplicate group at split time. Tables `data/duplicate_groups.parquet`, `data/image_hashes.parquet`; report `docs/data/duplicates_report.md`.
+
+### P023 — Integrity check (2026-10-06)
+- Integrity check of all 52,032 manifest images (`stratia/data/integrity.py`, `scripts/integrity_check.py`): full decode, format, mode, EXIF orientation, size against the manifest, size outliers, contrast. Result: no corrupt, empty, missing, odd-mode, rotated or mis-sized image; 43 featureless clear-sky patches (SWIMCAT, SHWIMSEG) flagged as "blank" and explained. Report `docs/data/integrity_report.md`.
+- Added `docs/research_log.md`: the paper's working notes (decisions, numbers with evidence, negative results), now part of the phase protocol.
+
 ### P022 — Loader performance (2026-10-04)
 - Resized image cache (52,032 images, 3.16 GB, 0 errors) and DataLoader benchmark: 817 img/s to the GPU with 8 workers (3.3× faster than original files).
 

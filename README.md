@@ -19,6 +19,7 @@ STRATIA is **only the model**. It never controls hardware. The sky-observation s
 | `docs/phases/` | One document per completed phase |
 | `docs/adr/` | Architecture decision records |
 | `docs/data/` | Data cards and audit reports |
+| `docs/research_log.md` | What each phase taught us, with evidence, for the paper |
 | `paper/` | Paper sources; tables and figures generated from results |
 
 Datasets, runs, caches and model weights are never committed; datasets are referenced by manifest and SHA-256.

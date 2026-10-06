@@ -8,6 +8,7 @@ STRATIA is developed phase by phase following [`docs/PLAN.md`](docs/PLAN.md). Th
 2. Do the work; record commands, config hashes, run IDs and outputs.
 3. Verify every exit criterion with evidence.
 4. Update [`PROJECT_STATE.md`](PROJECT_STATE.md), [`CHANGELOG.md`](CHANGELOG.md) and, for experiments, [`EXPERIMENT_LOG.md`](EXPERIMENT_LOG.md).
+5. Add what the phase taught us to [`docs/research_log.md`](docs/research_log.md): decisions with their alternatives, numbers with the file or run that produced them, negative results. The paper is written from that log.
 5. Commit and push:
    ```
    git commit -m "P###: <title>" -m "<what changed and how it was verified>" -m "Phase-Status: DONE"
