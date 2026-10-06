@@ -8,6 +8,8 @@ pandas
 pyarrow
 pillow
 scipy
+scikit-learn
+matplotlib
 opencv-python-headless
 openpyxl
 pvlib
