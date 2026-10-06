@@ -4,6 +4,12 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P029 — Shortcut audit (2026-10-06)
+- Shortcut audit (`stratia/data/shortcuts.py`, `scripts/shortcut_audit.py`): per-camera mean/std images and fixed-structure masks (25–37 % of all-sky frames; Eye2Sky and Montenegro carry burned-in text), DINOv3 re-embeddings of controlled image variants (low resolution, sky only, fixed structure only) and 25 linear probes split by day or near-duplicate group. Findings: the dataset is readable at 99.7 % and the Eye2Sky station at 100 % from the sky alone; the hour of day at 4–6× chance; Montenegro's text strip predicts its class above chance. Shortcut list with mitigations in `docs/data/shortcuts_report.md`; probes in `data/shortcut_probes.parquet`.
+
+### P028 — MGCD ≟ GRSCD (2026-10-06, PARTIAL)
+- Deferred (plan marking D): GRSCD is not reachable; the publications match MGCD in every checkable number, so the two count as one source until a hash comparison can run (`docs/phases/P028-mgcd-grscd.md`).
+
 ### P027 — Temporal autocorrelation (2026-10-06)
 - Similarity-against-time-gap curves (`stratia/data/temporal.py`, `scripts/temporal_autocorrelation.py`) for Eye2Sky (both stations and across them), Montenegro and Almería, with different-day and same-hour-other-day baselines. Decisions: Eye2Sky and Almería split by calendar day without buffer; Montenegro by contiguous blocks of at least 7 days; a held-out Eye2Sky station is a valid out-of-camera test (same-moment cosine 0.81 vs 0.70, 0.4 % same scene). Report `docs/data/temporal_report.md`, figure `docs/data/figures/temporal_autocorrelation.png`, table `data/temporal_curves.parquet`.
 

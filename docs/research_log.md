@@ -155,4 +155,41 @@ Results.
 - Housekeeping found: the manifest holds only 9 Eye2Sky days (the download has about 120 per station) and no Almería
   timestamps (they are in the file names); both to be fixed before the splits (P037/P038).
 
-Open for later phases. P029 takes Montenegro's burned-in timestamp and logo and the time-of-day probe as shortcut candidates; P033 and P034 take the conflict lists (`data/label_conflicts.parquet`, `data/mask_agreement.parquet`); P037/P038 take the blocks decided in P027 and need the full Eye2Sky period and Almería timestamps in the manifest.
+### P028 — MGCD ≟ GRSCD (deferred)
+
+GRSCD cannot be fetched from here (Baidu link, like HBMCD). Every number the publications allow us to compare matches
+MGCD exactly (8,000 all-sky images of 1,024 px from the same Tianjin fisheye camera, the same seven sky types, the
+same 4,000/4,000 split). Decision: MGCD and GRSCD count as one source in every protocol and in the literature
+comparison until a hash run (`scripts/find_duplicates.py`, `scripts/find_near_duplicates.py`) on the GRSCD files
+says otherwise. `docs/phases/P028-mgcd-grscd.md`.
+
+### P029 — Shortcut audit
+
+Method. Per-camera mean and std images at 224 px give a fixed-structure mask (pixels that never change, plus
+everything outside the main field of view). The same images were re-embedded with DINOv3 after a controlled change
+(`lowres`: 96 px and back; `skyonly`: fixed structure grey; `fixedonly`: everything else grey), and linear probes on
+the frozen features, trained and tested on disjoint days or near-duplicate groups, predicted what a cloud model
+should not need: the dataset, the camera, the hour. Script `scripts/shortcut_audit.py`; report
+`docs/data/shortcuts_report.md`; table `data/shortcut_probes.parquet`; figure
+`docs/data/figures/shortcut_camera_statistics.jpg`.
+
+Results.
+- **The source is in the features**: a linear probe names the dataset at 99.7 % (chance 9 %) and tells SWIMSEG from
+  SWINySEG, two releases of one camera, at 99.7 %. Down-sampling to 96 px costs under one point. *For the paper:* any
+  pooled accuracy over mixed sources is partly "which camera"; leave-one-dataset-out and held-out-station results are
+  the ones that count, and per-source numbers must accompany every pooled one.
+- **The two Eye2Sky stations are told apart at 100 % from the sky alone** on unseen days (fisheye corners, horizon
+  objects and the timestamp block painted grey), and at 100 % from the fixed structure alone. *For the paper:*
+  camera identity is not a border artefact that masking removes; it is in the optics, exposure and colour response.
+  Masking is still right (25–37 % of an all-sky frame is not sky), but for pixel honesty, not for identity removal.
+- **The hour of day is readable**: 4× chance from the sky (sun position, brightness) and 6× chance from the fixed
+  structure (lit horizon objects, exposure state, and Montenegro's timestamp digits). *For the paper:* the sun is a
+  confound; STRATIA's ray-map input makes it an explicit variable, and results are reported by sun-zenith bin.
+- **Burned-in text leaks labels**: Montenegro's timestamp and logo pixels alone predict its class at 35 % balanced
+  accuracy (chance 20 %). Eye2Sky also carries a text block (top left). Both are masked from here on.
+- For scale: linear probes on frozen DINOv3 reach 85 % on MGCD (7 types), 46 % on CCSN (11 genera; the label noise
+  of P026), 100 % on SWIMCAT (5). Resolution changes these by at most two points.
+- Negative result worth keeping: masking the fixed structure *helps* the Montenegro class probe (54.7 % against
+  53.0 %); the foreground is noise for the cloud task.
+
+Open for later phases. P030 reports imbalance by class, étage, oktas and sun-zenith bin per dataset and chooses the sampling (camera-balanced, P029); P033 and P034 take the conflict lists (`data/label_conflicts.parquet`, `data/mask_agreement.parquet`); P037/P038 take the blocks decided in P027 and need the full Eye2Sky period and Almería timestamps in the manifest; P040 takes the per-camera masks (`cache/features/camera_stats_224.npz`) and the resolution normalisation; P044 makes the sun explicit.

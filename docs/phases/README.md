@@ -31,3 +31,5 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P025](P025-near-duplicates.md) | Near-duplicates | DONE |
 | [P026](P026-label-conflicts.md) | Label-conflict audit | DONE |
 | [P027](P027-temporal-autocorrelation.md) | Temporal autocorrelation | DONE |
+| [P028](P028-mgcd-grscd.md) | MGCD ≟ GRSCD | PARTIAL |
+| [P029](P029-shortcut-audit.md) | Shortcut audit | DONE |
