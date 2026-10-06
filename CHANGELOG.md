@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P027 — Temporal autocorrelation (2026-10-06)
+- Similarity-against-time-gap curves (`stratia/data/temporal.py`, `scripts/temporal_autocorrelation.py`) for Eye2Sky (both stations and across them), Montenegro and Almería, with different-day and same-hour-other-day baselines. Decisions: Eye2Sky and Almería split by calendar day without buffer; Montenegro by contiguous blocks of at least 7 days; a held-out Eye2Sky station is a valid out-of-camera test (same-moment cosine 0.81 vs 0.70, 0.4 % same scene). Report `docs/data/temporal_report.md`, figure `docs/data/figures/temporal_autocorrelation.png`, table `data/temporal_curves.parquet`.
+
 ### P026 — Label-conflict audit (2026-10-06)
 - Label-conflict audit (`stratia/data/label_conflicts.py`, `scripts/audit_label_conflicts.py`): every exact-duplicate, copy and same-scene pair compared on its dataset's native label and, for segmentation data, on the aligned mask; rater agreement for Montenegro. Findings: 7.9 % of CCSN images carry a second genus label on a copy of themselves; MGCD labels flip in 0.6 % of consecutive-frame pairs and 452 MGCD images straddle the official split; Montenegro raters reach no majority on cloud height for 39 % of images; SWIMSEG images annotated twice agree on 95 % of pixels. Nothing auto-corrected; policy in `docs/data/label_conflicts_report.md`; tables `data/label_conflicts.parquet`, `data/mask_agreement.parquet`.
 - `contact_sheet()` accepts a ready-made `caption` column.

@@ -126,4 +126,33 @@ sheets `docs/data/figures/label_conflict_*.jpg`, `mask_*.jpg`):
   *For the paper:* SWIM segmentation scores above roughly 95 % pixel accuracy are not meaningful.
 - SWIMCAT: no conflict of any kind. Montenegro frames carry a burned-in timestamp and a logo (shortcuts for P029).
 
-Open for later phases. P027 measures how fast frames decorrelate in the time-series datasets (Eye2Sky 30 s, Montenegro 20 min); P029 takes Montenegro's burned-in timestamp and logo as shortcut candidates; P033 and P034 take the conflict lists (`data/label_conflicts.parquet`, `data/mask_agreement.parquet`).
+### P027 — Temporal autocorrelation
+
+Method. For each camera with timestamps, pairs of frames sampled at time gaps in doubling bins (30 s to 23 days)
+and measured with the P025 instruments (DINOv3 cosine, pHash distance), against two baselines from the same camera:
+*different day* (pairs more than a day apart) and *same hour, other day* (the sun alone). Rule for the minimum gap:
+the mean-cosine excess over the different-day level falls to 10 % of the adjacent-frame excess and the same-scene
+share comes within one point of the baseline; the alternative, the first crossing of the 10th percentile, was not
+used because a few alike pairs matter more than the typical pair for leakage. Script
+`scripts/temporal_autocorrelation.py`, figure `docs/data/figures/temporal_autocorrelation.png`, table
+`data/temporal_curves.parquet`, report `docs/data/temporal_report.md`.
+
+Results.
+- **Eye2Sky (30 s cadence): 82–92 % of adjacent frames are the same scene; the share is below 1 % after 2–4 h; the
+  mean cosine reaches the different-day level between 8.5 and 17 h, and the same hour next day is no more alike than
+  the same hour on any day.** Decision: the block is one calendar day, no buffer. *For the paper:* a random split of
+  an all-sky time series is leakage by construction; day blocks are the smallest honest unit.
+- **Montenegro (20 min cadence, Oct–Dec): correlated across days** (excess 0.30 at one day, 0.09–0.17 up to six
+  days, baseline at 11+ days): weather and season persist. Decision: contiguous blocks of at least 7 days; residual
+  cross-boundary correlation reported rather than bought off with an 11-day buffer.
+- **Almería** comes in bursts (100 % same scene below 2 min); excess 0.05 at one day: day blocks.
+- **The two Eye2Sky stations 15 km apart are correlated through the weather but are not duplicates**: same-moment
+  cosine 0.81 against 0.70, same-scene share 0.4 %. A held-out station is a legitimate out-of-camera test; holding
+  out its days too removes the shared-weather term.
+- **The sun is a confound no temporal split removes**: the same hour on another day adds 0.02 cosine (0.04 for
+  Montenegro's fixed-foreground camera). *For the paper:* motivates the sun-position (ray-map) input and a P029 probe
+  for time of day.
+- Housekeeping found: the manifest holds only 9 Eye2Sky days (the download has about 120 per station) and no Almería
+  timestamps (they are in the file names); both to be fixed before the splits (P037/P038).
+
+Open for later phases. P029 takes Montenegro's burned-in timestamp and logo and the time-of-day probe as shortcut candidates; P033 and P034 take the conflict lists (`data/label_conflicts.parquet`, `data/mask_agreement.parquet`); P037/P038 take the blocks decided in P027 and need the full Eye2Sky period and Almería timestamps in the manifest.

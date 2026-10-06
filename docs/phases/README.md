@@ -30,3 +30,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P024](P024-exact-duplicates.md) | Exact duplicates | DONE |
 | [P025](P025-near-duplicates.md) | Near-duplicates | DONE |
 | [P026](P026-label-conflicts.md) | Label-conflict audit | DONE |
+| [P027](P027-temporal-autocorrelation.md) | Temporal autocorrelation | DONE |
