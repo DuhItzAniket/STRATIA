@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | C — Data quality & leakage audit (P023–P032); Stages A–B complete (B with partial P015, P019, P020) |
-| Last completed phase | P029 — Shortcut audit |
-| Next phase | P030 — Imbalance report |
+| Last completed phase | P033 — WMO ontology (Stage C: P032 Gate G1 pending) |
+| Next phase | P032 — Gate G1 data card, then P034 — Dataset → ontology mapping |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | **CBH data:** 0 pairable Eye2Sky images on disk (P012). Needed before P047: OLDLR and WESTE images, Apr–Jul 2022 (≈ 0.3 GB per station-day). Missing public datasets need owner action (P015). |
@@ -52,3 +52,6 @@
 | P027 | Temporal autocorrelation | DONE | 2026-10-06 |
 | P028 | MGCD ≟ GRSCD | PARTIAL | 2026-10-06 |
 | P029 | Shortcut audit | DONE | 2026-10-06 |
+| P030 | Imbalance report | DONE | 2026-10-08 |
+| P031 | Ceilometer QC & pairing tolerance | DONE | 2026-10-08 |
+| P033 | WMO ontology | DONE | 2026-10-08 |

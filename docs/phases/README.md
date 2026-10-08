@@ -33,3 +33,6 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P027](P027-temporal-autocorrelation.md) | Temporal autocorrelation | DONE |
 | [P028](P028-mgcd-grscd.md) | MGCD ≟ GRSCD | PARTIAL |
 | [P029](P029-shortcut-audit.md) | Shortcut audit | DONE |
+| [P030](P030-imbalance-report.md) | Imbalance report | DONE |
+| [P031](P031-ceilometer-qc.md) | Ceilometer QC & pairing tolerance | DONE |
+| [P033](P033-wmo-ontology.md) | WMO ontology | DONE |

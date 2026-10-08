@@ -4,6 +4,15 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P033 — WMO ontology (2026-10-08)
+- `configs/ontology.yaml` with loader and validator (`stratia/labels/ontology.py`): ten genera and étages, the contract's output classes, WMO code tables 0513/0515/0509/1600/2700, every dataset's native classes mapped to genus sets or explicitly excluded.
+
+### P031 — Ceilometer QC & pairing tolerance (2026-10-08)
+- Ceilometer QC and pairing study (`stratia/data/ceilometer_qc.py`, `scripts/ceilometer_qc.py`): streams 99.998 % complete, 3.5–6.1 % flagged; pairing tolerance ±30 s chosen from the instrument's own time consistency; the two sites 15 km apart agree on cloud presence only 82 % of the time. Report `docs/data/ceilometer_qc.md`.
+
+### P030 — Imbalance report (2026-10-08)
+- Imbalance report (`stratia/data/imbalance.py`, `scripts/imbalance_report.py`): 30 label distributions with imbalance metrics; sampling decided (square-root source sampling, class-balanced loss weights, no resampling of soft labels, macro metrics). `stratia/data/ceilometer.py::load_all` caches all ceilometer records. Report `docs/data/imbalance_report.md`.
+
 ### P029 — Shortcut audit (2026-10-06)
 - Shortcut audit (`stratia/data/shortcuts.py`, `scripts/shortcut_audit.py`): per-camera mean/std images and fixed-structure masks (25–37 % of all-sky frames; Eye2Sky and Montenegro carry burned-in text), DINOv3 re-embeddings of controlled image variants (low resolution, sky only, fixed structure only) and 25 linear probes split by day or near-duplicate group. Findings: the dataset is readable at 99.7 % and the Eye2Sky station at 100 % from the sky alone; the hour of day at 4–6× chance; Montenegro's text strip predicts its class above chance. Shortcut list with mitigations in `docs/data/shortcuts_report.md`; probes in `data/shortcut_probes.parquet`.
 

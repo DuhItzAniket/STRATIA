@@ -192,4 +192,51 @@ Results.
 - Negative result worth keeping: masking the fixed structure *helps* the Montenegro class probe (54.7 % against
   53.0 %); the foreground is noise for the cloud task.
 
-Open for later phases. P030 reports imbalance by class, étage, oktas and sun-zenith bin per dataset and chooses the sampling (camera-balanced, P029); P033 and P034 take the conflict lists (`data/label_conflicts.parquet`, `data/mask_agreement.parquet`); P037/P038 take the blocks decided in P027 and need the full Eye2Sky period and Almería timestamps in the manifest; P040 takes the per-camera masks (`cache/features/camera_stats_224.npz`) and the resolution normalisation; P044 makes the sun explicit.
+## 2026-10-08 — Stage C closes, Stage D begins
+
+### P030 — Imbalance report
+
+Method. Every label distribution we will train on (native classes per dataset and published split, Montenegro
+majority oktas and height codes, mask cloud fraction, sun-zenith bins, ceilometer cloud-base bins), each with the
+largest/smallest ratio, the normalised entropy and the effective number of classes. `scripts/imbalance_report.py`,
+`docs/data/imbalance_report.md`, `docs/data/figures/imbalance.png`, `data/imbalance_tables.parquet`.
+
+Results and decision.
+- **The class sets are nearly balanced (ratios 2–3); the imbalance is between sources and in the physical targets.**
+  Eye2Sky is 56 % of all images; Montenegro is 58 % low cloud with raters putting nearly every base below 1.5 km;
+  Montenegro's oktas are U-shaped (0 and 8 oktas 47 % together, 4 oktas 2.4 %); the segmentation sets have almost no
+  clear (1.4 %) or overcast (2.7 %) frames; the ceilometer records are 34 % "no cloud overhead".
+- **Decision:** sources sampled in proportion to the square root of their size (Eye2Sky 56 % → 35 %, B0268 25 frames
+  → 1 %), class-balanced loss weights inside a source (beta = 0.999), soft labels never resampled, macro metrics by
+  default, results by sun-zenith and cloud-fraction bin. Rejected: natural sampling (majority-camera collapse, the
+  P029 shortcut) and uniform sampling (tiny sources repeated thousands of times). *For the paper:* the "none" class
+  of the CBH head and the clear/overcast extremes need explicit attention; they are where the legacy model failed.
+
+### P031 — Ceilometer QC & pairing tolerance
+
+Method. All 1.36 M CHM15k records of CDLRA and CDLRB checked for completeness, range, layer order and flags; then the
+instrument's own time consistency measured (agreement of two records Δ apart; unanimity of all records inside ±w)
+and the two sites compared at the same instants. `scripts/ceilometer_qc.py`, `docs/data/ceilometer_qc.md`,
+`docs/data/figures/ceilometer_pairing.png`.
+
+Results and decision.
+- The streams are complete (99.998 %, no duplicates, no out-of-range or mis-ordered layers); flags remove 6.1 %
+  (CDLRA) and 3.5 % (CDLRB) of records (rain 3 %, window particles and optics on CDLRA 3 % each).
+- **Pairing tolerance ±30 s:** two records 30 s apart agree on presence / étage in 96.4 / 96.1 % of cases against
+  97.7 / 97.3 % at the instrument's 15 s cadence; ±2 min doubles the disagreement, ±5 min triples it, for one to two
+  points more coverage. Label = median lowest base of the clean records in the window, cloudy share as confidence.
+- **A cloud base is local:** the two sites 15 km apart agree on presence 82 % of the time and differ by 255 m at the
+  median when both see cloud. *For the paper:* CDLRB is a genuine held-out site (criterion C3), and the time-mismatch
+  part of the label noise is about 4 %, to be quoted next to any CBH error.
+
+### P033 — WMO ontology
+
+`configs/ontology.yaml` (validated by `stratia/labels/ontology.py`): ten genera with WMO étages, the contract's
+twelve output classes, code tables 0513 / 0515 / 0509 / 1600 / 2700 with the genera each code names, and every
+dataset's native classes mapped to genus sets or explicitly excluded (MGCD merged types → sets with alternatives,
+"mixed" → cloud of unknown genus; SWIMCAT → clear / cloud only; CCSN Ct → contrail). Decision: merged classes become
+sets, never one forced genus (a forced choice would import a 50 % error rate). Open item: the code-table wording was
+written from the tables as known to the author and must be checked against the current WMO edition before the
+appendix is final.
+
+Open for later phases. P032 writes the data card from the Stage C reports; P034 applies `configs/ontology.yaml` to every native label and merges the P026 conflicts; P035 computes Krippendorff's alpha for Montenegro; P036 builds the ceilometer target table at ±30 s; P037/P038 take the blocks decided in P027 and the sampling of P030; P040 takes the per-camera masks and resolution normalisation from P029; P044 makes the sun explicit.

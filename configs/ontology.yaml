@@ -1,0 +1,157 @@
+# STRATIA cloud ontology (P033).
+#
+# Genera and étages follow the WMO International Cloud Atlas; the code tables follow WMO-No. 306, Manual on Codes,
+# Volume I.1: 0513 (C_L), 0515 (C_M), 0509 (C_H), 1600 (h, height of the lowest cloud base), 2700 (N, total cloud
+# cover in oktas). Each dataset's native classes are mapped here, and only here; a class whose genera cannot be
+# named is mapped to `genera: null` (cloud present, genus unknown), never forced onto one genus (P034).
+version: 1
+
+# The model's genus-level output classes (interface contract v1, `genus_logits`), in order.
+genus_classes: [Ci, Cc, Cs, Ac, As, Ns, Sc, St, Cu, Cb, clear, contrail]
+
+genera:
+  Ci: {name: Cirrus,        etage: high}
+  Cc: {name: Cirrocumulus,  etage: high}
+  Cs: {name: Cirrostratus,  etage: high}
+  Ac: {name: Altocumulus,   etage: mid}
+  As: {name: Altostratus,   etage: mid,  extends: [high]}       # often extends into the high étage
+  Ns: {name: Nimbostratus,  etage: mid,  extends: [low, high]}  # middle étage by definition, usually reaching down
+  Sc: {name: Stratocumulus, etage: low}
+  St: {name: Stratus,       etage: low}
+  Cu: {name: Cumulus,       etage: low,  extends: [mid]}        # vertical development, base in the low étage
+  Cb: {name: Cumulonimbus,  etage: low,  extends: [mid, high]}
+
+extra_classes:
+  clear:    {name: Clear sky, meaning: "no cloud of any genus in the frame"}
+  contrail: {name: Contrail, meaning: "condensation trail (CCSN class Ct); not a WMO genus"}
+
+# Étages. `heights_m` are the weak thresholds STRATIA applies to a ceilometer base (P036 ablates them against the
+# WMO mid-latitude ranges, which overlap: high clouds 5-13 km, middle 2-7 km, low surface-2 km).
+etages:
+  low:  {heights_m: [0, 2000],      wmo_midlatitude: "surface to 2 km"}
+  mid:  {heights_m: [2000, 6000],   wmo_midlatitude: "2 km to 7 km"}
+  high: {heights_m: [6000, null],   wmo_midlatitude: "5 km to 13 km"}
+
+wmo_codes:
+  CL:   # code table 0513: clouds of the genera Sc, St, Cu and Cb
+    "0": {genera: [],       meaning: "no CL clouds"}
+    "1": {genera: [Cu],     meaning: "Cumulus humilis or Cumulus fractus other than of bad weather, or both"}
+    "2": {genera: [Cu],     meaning: "Cumulus mediocris or congestus, with or without Cu fractus/humilis or Sc, bases at one level"}
+    "3": {genera: [Cb],     meaning: "Cumulonimbus calvus, with or without Cu, Sc or St"}
+    "4": {genera: [Sc],     meaning: "Stratocumulus cumulogenitus"}
+    "5": {genera: [Sc],     meaning: "Stratocumulus other than cumulogenitus"}
+    "6": {genera: [St],     meaning: "Stratus nebulosus or Stratus fractus other than of bad weather, or both"}
+    "7": {genera: [St, Cu], meaning: "Stratus fractus or Cumulus fractus of bad weather (pannus), or both"}
+    "8": {genera: [Cu, Sc], meaning: "Cumulus and Stratocumulus (other than cumulogenitus) with bases at different levels"}
+    "9": {genera: [Cb],     meaning: "Cumulonimbus capillatus (often with an anvil), with or without other low clouds"}
+    "/": {genera: null,     meaning: "CL clouds not visible (darkness, fog, blowing dust or sand, or similar)"}
+  CM:   # code table 0515: clouds of the genera Ac, As and Ns
+    "0": {genera: [],       meaning: "no CM clouds"}
+    "1": {genera: [As],     meaning: "Altostratus translucidus"}
+    "2": {genera: [As, Ns], meaning: "Altostratus opacus or Nimbostratus", alternatives: true}
+    "3": {genera: [Ac],     meaning: "Altocumulus translucidus at a single level"}
+    "4": {genera: [Ac],     meaning: "patches of Altocumulus translucidus, often lenticular, continually changing"}
+    "5": {genera: [Ac],     meaning: "Altocumulus translucidus in bands, or one or more layers, progressively invading the sky"}
+    "6": {genera: [Ac],     meaning: "Altocumulus cumulogenitus or cumulonimbogenitus"}
+    "7": {genera: [Ac],     meaning: "Altocumulus translucidus or opacus in two or more layers, or opacus in one layer, or Ac with As or Ns",
+          may_include: [As, Ns]}
+    "8": {genera: [Ac],     meaning: "Altocumulus castellanus or floccus"}
+    "9": {genera: [Ac],     meaning: "Altocumulus of a chaotic sky, generally at several levels"}
+    "/": {genera: null,     meaning: "CM clouds not visible (darkness, fog, or a continuous lower layer)"}
+  CH:   # code table 0509: clouds of the genera Ci, Cc and Cs
+    "0": {genera: [],       meaning: "no CH clouds"}
+    "1": {genera: [Ci],     meaning: "Cirrus fibratus, sometimes uncinus, not progressively invading the sky"}
+    "2": {genera: [Ci],     meaning: "Cirrus spissatus in patches or sheaves, or Cirrus castellanus or floccus"}
+    "3": {genera: [Ci],     meaning: "Cirrus spissatus cumulonimbogenitus"}
+    "4": {genera: [Ci],     meaning: "Cirrus uncinus or fibratus, or both, progressively invading the sky"}
+    "5": {genera: [Ci, Cs], meaning: "Cirrus and Cirrostratus, or Cirrostratus alone, invading, veil below 45 degrees", alternatives: true}
+    "6": {genera: [Ci, Cs], meaning: "Cirrus and Cirrostratus, or Cirrostratus alone, invading, veil above 45 degrees, not the whole sky",
+          alternatives: true}
+    "7": {genera: [Cs],     meaning: "Cirrostratus covering the whole sky"}
+    "8": {genera: [Cs],     meaning: "Cirrostratus not progressively invading and not covering the whole sky"}
+    "9": {genera: [Cc],     meaning: "Cirrocumulus alone, or Cirrocumulus predominant among the CH clouds"}
+    "/": {genera: null,     meaning: "CH clouds not visible (darkness, fog, or a continuous lower layer)"}
+  h:    # code table 1600: height above surface of the base of the lowest cloud seen, metres
+    "0": {range_m: [0, 50]}
+    "1": {range_m: [50, 100]}
+    "2": {range_m: [100, 200]}
+    "3": {range_m: [200, 300]}
+    "4": {range_m: [300, 600]}
+    "5": {range_m: [600, 1000]}
+    "6": {range_m: [1000, 1500]}
+    "7": {range_m: [1500, 2000]}
+    "8": {range_m: [2000, 2500]}
+    "9": {range_m: [2500, null], meaning: "2,500 m or more, or no clouds"}
+    "/": {range_m: null,         meaning: "height of base unknown, or base below the station and top above it"}
+  N:    # code table 2700: total cloud cover, oktas
+    "0": {oktas: 0}
+    "1": {oktas: 1}
+    "2": {oktas: 2}
+    "3": {oktas: 3}
+    "4": {oktas: 4}
+    "5": {oktas: 5}
+    "6": {oktas: 6}
+    "7": {oktas: 7}
+    "8": {oktas: 8}
+    "9": {oktas: null, meaning: "sky obscured by fog or other meteorological phenomena"}
+    "/": {oktas: null, meaning: "cloud cover indiscernible or observation not made"}
+
+# Native classes of each dataset. `genera: []` with `extra: clear` is a clear sky; `genera: null` with `cloud: true`
+# is cloud of unnamed genus (contributes to cloud presence and oktas-type targets, not to the genus loss).
+datasets:
+  ccsn:
+    label: genus
+    classes:
+      Ac: {genera: [Ac]}
+      As: {genera: [As]}
+      Cb: {genera: [Cb]}
+      Cc: {genera: [Cc]}
+      Ci: {genera: [Ci]}
+      Cs: {genera: [Cs]}
+      Ct: {genera: [], extra: contrail}
+      Cu: {genera: [Cu]}
+      Ns: {genera: [Ns]}
+      Sc: {genera: [Sc]}
+      St: {genera: [St]}
+  mgcd:
+    label: sky type
+    note: "MGCD's seven sky types merge genera (its category definitions); the merged classes become genus sets"
+    classes:
+      1_cumulus:        {genera: [Cu]}
+      2_altocumulus:    {genera: [Ac, Cc], alternatives: true, note: "altocumulus and cirrocumulus"}
+      3_cirrus:         {genera: [Ci, Cs], alternatives: true, note: "cirrus and cirrostratus"}
+      4_clearsky:       {genera: [], extra: clear}
+      5_stratocumulus:  {genera: [Sc, St, As], alternatives: true, note: "stratocumulus, stratus and altostratus"}
+      6_cumulonimbus:   {genera: [Cb, Ns], alternatives: true, note: "cumulonimbus and nimbostratus"}
+      7_mixed:          {genera: null, cloud: true, note: "several cloud types in one frame; genus excluded"}
+  swimcat:
+    label: patch category
+    note: "appearance categories of 125 px patches, not genera: mapped to clear / cloud only (plan P034)"
+    classes:
+      A-sky:          {genera: [], extra: clear}
+      B-pattern:      {genera: null, cloud: true}
+      C-thick-dark:   {genera: null, cloud: true}
+      D-thick-white:  {genera: null, cloud: true}
+      E-veil:         {genera: null, cloud: true}
+  montenegro:
+    label: rater codes
+    altitude_class:
+      Clear:                           {etages: [], extra: clear}
+      Low clouds:                      {etages: [low]}
+      Middle clouds:                   {etages: [mid]}
+      High clouds:                     {etages: [high]}
+      Clouds of vertical development:  {etages: [low], genera: [Cu, Cb], alternatives: true}
+    codes: [CL, CM, CH, h, N, Nh]
+  almeria:
+    label: mask
+    mask_classes: {0: invalid, 1: sky, 2: low, 3: mid, 4: high}
+  swim_family:
+    label: mask
+    datasets: [swimseg, swinseg, swinyseg, shwimseg]
+    mask_classes: {0: sky, 255: cloud}
+  eye2sky:
+    label: ceilometer
+    targets: "lowest base in metres, layer count, étage of the lowest base by heights_m, no-cloud-overhead (P036)"
+  b0268:
+    label: P041 protocol
+    fields: "etage set (required), oktas (required), genus set (optional), sun visible, obscured, unsure"
