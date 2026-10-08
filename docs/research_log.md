@@ -301,4 +301,23 @@ stations (P027) are coincidences and weather look-alikes, not copies; inside a t
 and only exact duplicates add links. *For the paper:* the split rule is a published, hashed artefact; the published
 random splits of MGCD, SWINySEG, SWIMCAT and Almería are reported next to it as the leaky baseline protocol.
 
-Open for later phases. P039 locks the test files; P040 takes the per-camera masks and the frozen features; P041 instantiates the few-shot B0268 protocol; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives`; P047 pairs frames with `data/ceilometer_targets.parquet`.
+### P039 — Lock test sets
+
+`test_lock.json` (committed) holds the SHA-256 of every test set of every protocol (13 sets, 53,252 ids), bound to
+the manifest hash and the split config; a final evaluation on them must log a reason (`runs/final_eval_log.md`), and
+CI refuses a training config that names a test file (`scripts/check_test_lock.py`). Re-locking needs `--force` and an
+explanation in the commit. *For the paper:* test-set integrity is a verifiable artefact, not a promise.
+
+### P040 — Label-noise estimation
+
+Confident-learning flags from out-of-fold probes on frozen DINOv3 features (folds by split unit; C = 0.1 after a
+C = 1.0 run saturated every probability). Strong flags (suggested class >= 0.5 and >= 0.25 ahead): CCSN 29 %, MGCD
+7 %, Montenegro 11 %, SWIMCAT 0 (`docs/data/label_noise_report.md`, `data/label_noise_flags.parquet`). The sheets
+confirm real errors in CCSN (a lone cumulus labelled Ac, cumulonimbus labelled Ns), boundary noise between MGCD's
+merged classes, and Montenegro raters using "clouds of vertical development" for dark overcast skies. Decisions:
+nothing deleted or relabelled; CCSN genus results reported with and without strongly flagged test images;
+Montenegro's vertical-development class folded into the low étage for scoring; MGCD scored on the set. Negative
+result worth keeping: the plain confident-joint flag rate is not interpretable when the probe is weak or a class
+is rare (CCSN 46 %, Montenegro 55 % plain against 29 % and 11 % strong).
+
+Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

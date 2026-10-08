@@ -42,3 +42,5 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P036](P036-ceilometer-targets.md) | Ceilometer → targets | DONE |
 | [P037](P037-split-design.md) | Split design | DONE |
 | [P038](P038-split-generator.md) | Split generator | DONE |
+| [P039](P039-lock-test-sets.md) | Lock test sets | DONE |
+| [P040](P040-label-noise.md) | Label-noise estimation | DONE |

@@ -4,6 +4,12 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P040 — Label-noise estimation (2026-10-08)
+- Confident-learning flags on frozen features with a strong tier (`stratia/labels/noise.py`, `scripts/label_noise.py` → `data/label_noise_flags.parquet`); CCSN 29 %, MGCD 7 %, Montenegro 11 %, SWIMCAT 0 strong flags; sheets reviewed; nothing deleted. Report `docs/data/label_noise_report.md`.
+
+### P039 — Lock test sets (2026-10-08)
+- `test_lock.json` with the SHA-256 of 13 test sets (`stratia/data/test_lock.py`, `scripts/lock_test_sets.py`); final evaluations need a logged reason; CI step `scripts/check_test_lock.py` refuses training configs that reference a test set.
+
 ### P038 — Split generator (2026-10-08)
 - Split generator with proven guarantees (`stratia/data/splits.py`, `scripts/make_splits.py`): units from exact groups and temporal blocks (near-duplicate links only where no block exists), greedy stratified assignment, LODO folds, held-out station, hashes. Outputs `data/splits/*.parquet`, `data/splits/hashes.json`; report `docs/data/splits_report.md`.
 
