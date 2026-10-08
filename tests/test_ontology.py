@@ -27,9 +27,9 @@ def test_heights_and_codes():
 def test_dataset_classes_are_all_mapped_or_excluded():
     ont = on.load_ontology()
     assert ont.dataset_class("ccsn", "Ct") == {"genera": [], "extra": "contrail"}
-    mixed = ont.dataset_class("mgcd", "7_mixed")
+    mixed = ont.dataset_class("mgcd", "mixed")
     assert mixed["genera"] is None and mixed["cloud"] is True
-    assert ont.dataset_class("mgcd", "2_altocumulus")["genera"] == ["Ac", "Cc"]
+    assert ont.dataset_class("mgcd", "altocumulus")["genera"] == ["Ac", "Cc"]
     assert ont.dataset_class("swimcat", "A-sky")["extra"] == "clear"
     assert set(ont.datasets["montenegro"]["altitude_class"]) == {"Clear", "Low clouds", "Middle clouds", "High clouds",
                                                                  "Clouds of vertical development"}
@@ -39,7 +39,7 @@ def test_validation_catches_broken_files(tmp_path):
     raw = yaml.safe_load(on.DEFAULT_PATH.read_text(encoding="utf-8"))
     raw["genera"]["Cu"]["etage"] = "middle"                                   # not an étage name
     raw["datasets"]["ccsn"]["classes"]["Xx"] = {"genera": ["Zz"]}            # unknown genus
-    raw["datasets"]["mgcd"]["classes"]["7_mixed"] = {"genera": None}         # null genera without cloud: true
+    raw["datasets"]["mgcd"]["classes"]["mixed"] = {"genera": None}           # null genera without cloud: true
     del raw["wmo_codes"]["CL"]["9"]                                           # incomplete code table
     p = tmp_path / "broken.yaml"
     p.write_text(yaml.safe_dump(raw), encoding="utf-8")

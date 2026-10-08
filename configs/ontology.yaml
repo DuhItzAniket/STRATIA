@@ -116,14 +116,14 @@ datasets:
   mgcd:
     label: sky type
     note: "MGCD's seven sky types merge genera (its category definitions); the merged classes become genus sets"
-    classes:
-      1_cumulus:        {genera: [Cu]}
-      2_altocumulus:    {genera: [Ac, Cc], alternatives: true, note: "altocumulus and cirrocumulus"}
-      3_cirrus:         {genera: [Ci, Cs], alternatives: true, note: "cirrus and cirrostratus"}
-      4_clearsky:       {genera: [], extra: clear}
-      5_stratocumulus:  {genera: [Sc, St, As], alternatives: true, note: "stratocumulus, stratus and altostratus"}
-      6_cumulonimbus:   {genera: [Cb, Ns], alternatives: true, note: "cumulonimbus and nimbostratus"}
-      7_mixed:          {genera: null, cloud: true, note: "several cloud types in one frame; genus excluded"}
+    classes:   # keyed by the manifest's source_label (the folder names 1_cumulus ... 7_mixed without their number)
+      cumulus:        {genera: [Cu]}
+      altocumulus:    {genera: [Ac, Cc], alternatives: true, note: "altocumulus and cirrocumulus"}
+      cirrus:         {genera: [Ci, Cs], alternatives: true, note: "cirrus and cirrostratus"}
+      clearsky:       {genera: [], extra: clear}
+      stratocumulus:  {genera: [Sc, St, As], alternatives: true, note: "stratocumulus, stratus and altostratus"}
+      cumulonimbus:   {genera: [Cb, Ns], alternatives: true, note: "cumulonimbus and nimbostratus"}
+      mixed:          {genera: null, cloud: true, note: "several cloud types in one frame; genus excluded"}
   swimcat:
     label: patch category
     note: "appearance categories of 125 px patches, not genera: mapped to clear / cloud only (plan P034)"
