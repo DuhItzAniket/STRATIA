@@ -22,10 +22,14 @@ from stratia.data.mgcd import load_mgcd  # noqa: E402
 from stratia.data.montenegro import load_annotations, load_items, soft_labels  # noqa: E402
 from stratia.data.registry import load_paths  # noqa: E402
 from stratia.data.segmentation import build_index  # noqa: E402
+from stratia.data.temporal import times_from_filenames  # noqa: E402
 
 LICENCES = {"ccsn": "CC0-1.0", "mgcd": "research use; terms by agreement", "swimcat": "CC-BY-NC-4.0",
             "swimseg": "CC-BY-NC-4.0", "swinseg": "CC-BY-NC-4.0", "swinyseg": "CC-BY-NC-4.0", "shwimseg": "CC-BY-NC-4.0",
             "almeria": "CC-BY-4.0", "montenegro": "CC-BY-4.0", "eye2sky": "CDLA-Sharing-1.0", "b0268": "owner"}
+# The manifest holds nine Eye2Sky days per station (the audit and the image cache were built on them, P021-P032);
+# the April-July download on disk is ingested for the ceilometer-site work when those images arrive (P047).
+EYE2SKY_DAYS = ("2022-04-01", "2022-04-09")
 
 
 def ccsn(root: Path) -> pd.DataFrame:
@@ -51,10 +55,16 @@ def swimcat(root: Path) -> pd.DataFrame:
 def segmentation(root: Path) -> pd.DataFrame:
     idx = build_index(root)
     almeria = idx.dataset == "almeria"
+    # Almería's only timestamps are in its file names (asi_001_170328164030.jpg = 2017-03-28 16:40:30; the test set's
+    # 20230126135101_00160.jpg); the time zone is not stated, so they are taken as UTC for day blocking (P027, P032),
+    # and no sun position is derived from them.
+    utc = times_from_filenames(idx.image_file).dt.tz_localize("UTC").where(almeria)
     return pd.DataFrame({"dataset": idx.dataset, "image_file": idx.image_file,
                          "camera_id": ("almeria-" + idx.camera).where(almeria, idx.camera.str.lower()),
                          "camera_type": almeria.map({True: "fisheye_asi", False: "wsi_crop"}),
-                         "seg_file": idx.mask_file, "has_layers": idx.has_layers, "official_split": idx.split})
+                         "seg_file": idx.mask_file, "has_layers": idx.has_layers, "official_split": idx.split,
+                         "utc": utc, "time_source": pd.Series("file name (time zone not stated, taken as UTC)",
+                                                             index=idx.index).where(almeria & utc.notna())})
 
 
 def montenegro(root: Path) -> pd.DataFrame:
@@ -74,6 +84,8 @@ def eye2sky(root: Path) -> pd.DataFrame:
     rows, cals = [], {}
     for f in sorted((base / "2022").rglob("*.jpg")):
         n = parse_image_name(f)
+        if not (EYE2SKY_DAYS[0] <= pd.Timestamp(n.utc).strftime("%Y-%m-%d") <= EYE2SKY_DAYS[1]):
+            continue
         if n.station not in cals:
             cals[n.station] = station_calibrations(meta, n.station)
         cal = select_calibration(cals[n.station], n.utc)

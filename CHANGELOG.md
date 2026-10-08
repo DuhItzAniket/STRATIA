@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P032 — Gate G1: data card (2026-10-08)
+- `docs/data/data_card.md` (Datasheets-for-Datasets style) collecting the Stage C audit; gate G1 signed with zero blockers for Paper A, seven open items with owners. Manifest builder parses Almería timestamps from file names (row order unchanged).
+
 ### P033 — WMO ontology (2026-10-08)
 - `configs/ontology.yaml` with loader and validator (`stratia/labels/ontology.py`): ten genera and étages, the contract's output classes, WMO code tables 0513/0515/0509/1600/2700, every dataset's native classes mapped to genus sets or explicitly excluded.
 

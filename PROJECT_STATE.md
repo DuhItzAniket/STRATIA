@@ -2,19 +2,19 @@
 
 | Field | Value |
 |---|---|
-| Current stage | C — Data quality & leakage audit (P023–P032); Stages A–B complete (B with partial P015, P019, P020) |
-| Last completed phase | P033 — WMO ontology (Stage C: P032 Gate G1 pending) |
-| Next phase | P032 — Gate G1 data card, then P034 — Dataset → ontology mapping |
+| Current stage | D — Label harmonization & splits (P033–P042); Stages A–C complete (partial P015, P019, P020, P028) |
+| Last completed phase | P033 — WMO ontology (Gate G1 signed in P032) |
+| Next phase | P034 — Dataset → ontology mapping |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
-| Blockers | **CBH data:** 0 pairable Eye2Sky images on disk (P012). Needed before P047: OLDLR and WESTE images, Apr–Jul 2022 (≈ 0.3 GB per station-day). Missing public datasets need owner action (P015). |
+| Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 (≈ 0.3 GB per station-day) needed before P047. B0268 logging for P041 to start now. Missing public datasets need owner action (P015, cut-off 15 Oct). |
 | Compute | RTX 4050 Laptop 6 GB, 16 GB RAM; DINOv3 S/B/L access verified 2026-10-04 |
 
 ## Gates
 
 | Gate | Phase | Target date | Status |
 |---|---|---|---|
-| G1 Data audit | P032 | 14 Oct | — |
+| G1 Data audit | P032 | 14 Oct | **Signed 2026-10-08** (`docs/data/data_card.md`) |
 | G2 Splits & labels | P042 | 18 Oct | — |
 | G3 Baselines | P060 | 23 Oct | — |
 | G4 Model vs baselines (CVPR go/no-go) | P082 | 3 Nov | — |
@@ -54,4 +54,5 @@
 | P029 | Shortcut audit | DONE | 2026-10-06 |
 | P030 | Imbalance report | DONE | 2026-10-08 |
 | P031 | Ceilometer QC & pairing tolerance | DONE | 2026-10-08 |
+| P032 | Gate G1 — Data audit sign-off | DONE | 2026-10-08 |
 | P033 | WMO ontology | DONE | 2026-10-08 |

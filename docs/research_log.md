@@ -239,4 +239,14 @@ sets, never one forced genus (a forced choice would import a 50 % error rate). O
 written from the tables as known to the author and must be checked against the current WMO edition before the
 appendix is final.
 
-Open for later phases. P032 writes the data card from the Stage C reports; P034 applies `configs/ontology.yaml` to every native label and merges the P026 conflicts; P035 computes Krippendorff's alpha for Montenegro; P036 builds the ceilometer target table at ±30 s; P037/P038 take the blocks decided in P027 and the sampling of P030; P040 takes the per-camera masks and resolution normalisation from P029; P044 makes the sun explicit.
+### P032 — Gate G1: data card and sign-off
+
+`docs/data/data_card.md` collects the Stage C audit in the Datasheets-for-Datasets structure: eleven image sources
+(52,032 images, six camera types) and two ceilometers (1.36 M records); what is in the frames besides sky; every
+cleaning step with its numbers; intended and unintended uses (no pooled accuracy without per-source numbers, no
+genera from SWIMCAT, no general height model from Montenegro's code, CC-BY-NC inheritance from the SWIM family);
+seven open items with owners, none blocking Paper A. Gate G1 signed 2026-10-08. Housekeeping: Almería timestamps
+parsed into the manifest (row order unchanged, hash `464078b6d033dd39`). *For the paper:* the data card is the
+benchmark's datasheet; its open-items table is the honest limitations section.
+
+Open for later phases. P034 applies `configs/ontology.yaml` to every native label and merges the P026 conflicts; P035 computes Krippendorff's alpha for Montenegro; P036 builds the ceilometer target table at ±30 s; P037/P038 take the blocks decided in P027 and the sampling of P030; P040 takes the per-camera masks and resolution normalisation from P029; P044 makes the sun explicit.
