@@ -289,4 +289,16 @@ protocol for H1 / C1), held-out Eye2Sky station in same-day and disjoint-day var
 the published MGCD / Almería splits for comparison only. Seven guarantees are listed for P038 to prove. Decision:
 no buffer days between blocks (P027), no image-level random split anywhere.
 
-Open for later phases. P037/P038 take the blocks decided in P027, the sampling of P030 and the `label_conflict` flag of P034; P039 locks the test sets; P040 takes the per-camera masks and the frozen features; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives`.
+### P038 — Split generator
+
+`scripts/make_splits.py` implements the design with proofs: 8,661 units over 52,032 images, every source split
+70/10/20 by units with native-label shares within a point across splits (Montenegro's eleven weeks and Eye2Sky's
+nine days coarser), five LODO folds, two station variants, hashes per file (`data/splits/hashes.json`,
+`docs/data/splits_report.md`). **Decision forced by the real data:** near-duplicate links are not applied inside a
+time series. Taken literally, P025's groups fused eight of nine Eye2Sky days and Montenegro's ten weeks into three
+units, because pHash matches between smooth-sky frames days apart (P026) and same-scene links across days and
+stations (P027) are coincidences and weather look-alikes, not copies; inside a time series the block is the unit
+and only exact duplicates add links. *For the paper:* the split rule is a published, hashed artefact; the published
+random splits of MGCD, SWINySEG, SWIMCAT and Almería are reported next to it as the leaky baseline protocol.
+
+Open for later phases. P039 locks the test files; P040 takes the per-camera masks and the frozen features; P041 instantiates the few-shot B0268 protocol; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives`; P047 pairs frames with `data/ceilometer_targets.parquet`.

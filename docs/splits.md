@@ -7,10 +7,14 @@ prove. Parameters live in `configs/splits.yaml`; every number here comes from a 
 
 A **unit** is a connected component of two relations over images:
 
-- *same group*: the exact-duplicate groups of P024 (661 images, pixel-identical copies) and the near-duplicate
-  groups of P025 (14,112 images: dihedral-pHash copies and same-scene pairs with DINOv3 cosine ≥ 0.97). These
-  cross datasets inside the SWIM family (34.6 % of SWINySEG are copies of SWIMSEG/SWINSEG), which is why the family
-  is one source.
+- *same group*: the exact-duplicate groups of P024 (661 images, pixel-identical copies) everywhere; the
+  near-duplicate links of P025 (dihedral-pHash copies and same-scene pairs at DINOv3 cosine ≥ 0.97) only where no
+  temporal block exists (CCSN, MGCD, SWIM family). Inside a time series the block is the unit: a pHash match between
+  smooth-sky frames days apart or at the other station is a coincidence, not a copy (P026), and a same-scene link
+  across days or stations is a weather look-alike (the 448-image Eye2Sky group of P025 spans several days and both
+  stations). Applied, those links fuse eight of nine Eye2Sky days and Montenegro's ten weeks into three units.
+  Copies cross datasets inside the SWIM family (34.6 % of SWINySEG are copies of SWIMSEG/SWINSEG), which is why the
+  family is one source.
 - *same block*: the temporal blocks of P027: one calendar day for Eye2Sky (both stations on the same date share a
   block, since same-moment frames 15 km apart are correlated through the weather), contiguous 7-day blocks for
   Montenegro (its frames stay correlated across days), one calendar day for Almería and for B0268.

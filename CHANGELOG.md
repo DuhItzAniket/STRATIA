@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P038 — Split generator (2026-10-08)
+- Split generator with proven guarantees (`stratia/data/splits.py`, `scripts/make_splits.py`): units from exact groups and temporal blocks (near-duplicate links only where no block exists), greedy stratified assignment, LODO folds, held-out station, hashes. Outputs `data/splits/*.parquet`, `data/splits/hashes.json`; report `docs/data/splits_report.md`.
+
 ### P037 — Split design (2026-10-08)
 - `docs/splits.md` and `configs/splits.yaml`: units (groups ∪ temporal blocks), five protocols (in-domain blocked, LODO, held-out station, few-shot target, published for comparison), guarantees for the generator.
 

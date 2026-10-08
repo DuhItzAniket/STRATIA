@@ -41,3 +41,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P035](P035-montenegro-ceiling.md) | Montenegro soft labels & human ceiling | DONE |
 | [P036](P036-ceilometer-targets.md) | Ceilometer → targets | DONE |
 | [P037](P037-split-design.md) | Split design | DONE |
+| [P038](P038-split-generator.md) | Split generator | DONE |

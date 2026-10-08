@@ -15,8 +15,12 @@ sources:
   swimcat: swim
   shwimseg: swim
 
-# The unit a split may not cut: a connected component of "same group" (exact + near-duplicate groups, P024/P025)
-# and "same block" (temporal blocks, P027). A block key of kind `group` means the group alone.
+# The unit a split may not cut: a connected component of "same group" and "same block" (temporal blocks, P027).
+# Exact duplicates (P024) always share a unit. Near-duplicate links (dihedral-pHash copies and same-scene pairs,
+# P025) do so only where no temporal block exists: inside a time series the block is the unit, a pHash match between
+# smooth-sky frames days apart or at the other station is a coincidence (P026), and a same-scene link across days or
+# stations is a weather look-alike; applied, they fuse whole days or weeks into one unit.
+near_duplicate_links_only_without_blocks: true
 blocks:
   eye2sky:    {kind: day, shared_across_cameras: true}   # AURIC and BARSE on the same date go to the same split (P027)
   montenegro: {kind: days, length_days: 7}               # contiguous weeks (P027: correlated across days)

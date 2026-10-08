@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | D — Label harmonization & splits (P033–P042); Stages A–C complete (partial P015, P019, P020, P028) |
-| Last completed phase | P037 — Split design |
-| Next phase | P038 — Split generator |
+| Last completed phase | P038 — Split generator |
+| Next phase | P039 — Lock test sets |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 (≈ 0.3 GB per station-day) needed before P047. B0268 logging for P041 to start now. Missing public datasets need owner action (P015, cut-off 15 Oct). |
@@ -60,3 +60,4 @@
 | P035 | Montenegro soft labels & human ceiling | DONE | 2026-10-08 |
 | P036 | Ceilometer → targets | DONE | 2026-10-08 |
 | P037 | Split design | DONE | 2026-10-08 |
+| P038 | Split generator | DONE | 2026-10-08 |
