@@ -1,0 +1,60 @@
+# Split design (P037), implemented by scripts/make_splits.py (P038). See docs/splits.md for the reasoning.
+version: 1
+seed: 0
+
+# Share of units (not images) per split inside each source; units are assigned greedily to balance the
+# stratification column, so the image shares come out close to these.
+fractions: {train: 0.70, val: 0.10, test: 0.20}
+
+# Sources: the SWIM family is one source (P025: SWINySEG holds copies of SWIMSEG and SWINSEG; SWIMCAT and SHWIMSEG
+# come from the same cameras). Every other dataset is its own source.
+sources:
+  swimseg: swim
+  swinseg: swim
+  swinyseg: swim
+  swimcat: swim
+  shwimseg: swim
+
+# The unit a split may not cut: a connected component of "same group" (exact + near-duplicate groups, P024/P025)
+# and "same block" (temporal blocks, P027). A block key of kind `group` means the group alone.
+blocks:
+  eye2sky:    {kind: day, shared_across_cameras: true}   # AURIC and BARSE on the same date go to the same split (P027)
+  montenegro: {kind: days, length_days: 7}               # contiguous weeks (P027: correlated across days)
+  almeria:    {kind: day}
+  b0268:      {kind: day}
+  default:    {kind: group}
+
+# Column that the greedy assignment balances across splits inside a source (native labels; P030).
+stratify:
+  ccsn: source_label
+  mgcd: source_label
+  swimcat: source_label
+  montenegro: primary_class        # first altitude class of the rater majority
+  almeria: cloud_fraction_bin      # from P030's mask cloud fraction
+  swim: dataset                    # keep each SWIM member's share equal across splits
+
+# Samples that never go to a test split (they stay in train): P026 conflict merges.
+exclude_from_test:
+  flags: [label_conflict]
+
+# Leave-one-dataset-out: each fold holds out one whole source; training uses the train + val units of the others.
+lodo:
+  folds: [ccsn, mgcd, montenegro, swim, almeria]
+
+# Held-out station (Eye2Sky): train on one station, test on the other; `disjoint_days` also removes the test
+# station's days from training (P027: same-moment frames 15 km apart are correlated through the weather).
+held_out_station:
+  dataset: eye2sky
+  train_camera: eye2sky-AURIC
+  test_camera: eye2sky-BARSE
+  variants: [same_days, disjoint_days]
+
+# Few-shot target protocol (B0268, from P041 on): adaptation on k whole days, test on the remaining days.
+few_shot_target:
+  dataset: b0268
+  unit: day
+  shots_days: [0, 1, 3]
+  repeats: 5
+
+# Published splits that are reported next to ours for comparison only (they leak: P026).
+published_for_comparison: [mgcd, almeria]

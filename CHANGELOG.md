@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P037 — Split design (2026-10-08)
+- `docs/splits.md` and `configs/splits.yaml`: units (groups ∪ temporal blocks), five protocols (in-domain blocked, LODO, held-out station, few-shot target, published for comparison), guarantees for the generator.
+
 ### P036 — Ceilometer → targets (2026-10-08)
 - Ceilometer target table (`stratia/labels/ceilometer_targets.py`, `scripts/ceilometer_targets.py` → `data/ceilometer_targets.parquet`): per site and 30 s grid point, no-cloud / étage of the median lowest base within ±30 s under weak and WMO thresholds, confidence, base spread, layer count, second layer, daytime flag. Report `docs/data/ceilometer_targets.md`.
 

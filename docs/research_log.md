@@ -279,4 +279,14 @@ for the ablation. 94-97 % of daytime windows are labelled; the rest are flagged 
 target distribution and its confidence are now explicit; pairing with frames (P047) waits for the images at the
 ceilometer sites.
 
+### P037 — Split design
+
+`docs/splits.md` and `configs/splits.yaml`: the unit a split may not cut is a connected component of "same group"
+(P024 exact and P025 near-duplicate groups) and "same block" (P027: Eye2Sky days shared by both stations, Montenegro
+weeks, Almería and B0268 days). Protocols: in-domain blocked (70/10/20 by units, stratified on native labels, conflict
+merges never in test), leave-one-dataset-out over CCSN, MGCD, Montenegro, SWIM family and Almería (the main
+protocol for H1 / C1), held-out Eye2Sky station in same-day and disjoint-day variants, few-shot B0268 by days, and
+the published MGCD / Almería splits for comparison only. Seven guarantees are listed for P038 to prove. Decision:
+no buffer days between blocks (P027), no image-level random split anywhere.
+
 Open for later phases. P037/P038 take the blocks decided in P027, the sampling of P030 and the `label_conflict` flag of P034; P039 locks the test sets; P040 takes the per-camera masks and the frozen features; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives`.

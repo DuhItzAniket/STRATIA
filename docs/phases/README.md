@@ -40,3 +40,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P034](P034-dataset-mapping.md) | Dataset → ontology mapping | DONE |
 | [P035](P035-montenegro-ceiling.md) | Montenegro soft labels & human ceiling | DONE |
 | [P036](P036-ceilometer-targets.md) | Ceilometer → targets | DONE |
+| [P037](P037-split-design.md) | Split design | DONE |
