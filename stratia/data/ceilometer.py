@@ -62,6 +62,26 @@ def read_chm15k(path: str | Path) -> pd.DataFrame:
     return df
 
 
+def load_all(base: str | Path, cache: str | Path | None = None,
+             ceilometers: tuple[str, ...] = ("CDLRA", "CDLRB")) -> pd.DataFrame:
+    """Every record of every day file under `base/<ceilometer>/*.nc`, with a `ceilometer` column and `time` as a
+    column (UTC), sorted by ceilometer and time; cached as Parquet at `cache` when given."""
+    cache = Path(cache) if cache else None
+    if cache and cache.exists():
+        return pd.read_parquet(cache)
+    parts = []
+    for code in ceilometers:
+        for f in sorted((Path(base) / code).glob("*.nc")):
+            df = read_chm15k(f).reset_index()
+            df.insert(0, "ceilometer", code)
+            parts.append(df)
+    out = pd.concat(parts, ignore_index=True).sort_values(["ceilometer", "time"], kind="stable").reset_index(drop=True)
+    if cache:
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        out.to_parquet(cache, index=False)
+    return out
+
+
 def read_backscatter(path: str | Path) -> tuple[pd.DatetimeIndex, np.ndarray, np.ndarray]:
     """(time, range in m, normalised range-corrected signal) for plotting."""
     from scipy.io import netcdf_file
