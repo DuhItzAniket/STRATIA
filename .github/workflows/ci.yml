@@ -24,6 +24,8 @@ jobs:
         run: ruff check .
       - name: Unit tests (CPU, no GPU-marked tests)
         run: python -m pytest -q -m "not gpu"
+      - name: Test-set lock (well-formed; no training config references a test set)
+        run: python scripts/check_test_lock.py
       - name: Secret scan
         uses: gitleaks/gitleaks-action@v2
         env:

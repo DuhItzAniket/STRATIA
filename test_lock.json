@@ -1,0 +1,60 @@
+{
+  "locked_at": "2026-10-08T17:41:16Z",
+  "config_version": 1,
+  "seed": 0,
+  "manifest_sample_id_sha256_prefix": "464078b6d033dd39",
+  "tests": {
+    "in_domain/almeria/test": {
+      "n": 164,
+      "sha256": "48ed5729ab8b002428a347cfd6aa264c844dcc9be741b739ea3600ecbfa4316c"
+    },
+    "in_domain/ccsn/test": {
+      "n": 512,
+      "sha256": "efb614a8f128dfcd6362fe8e181aa3fd72e820c84245878308183c0d36abce28"
+    },
+    "in_domain/eye2sky/test": {
+      "n": 6524,
+      "sha256": "2f3171e65ab1256652a96fa78665ae363a76d4a7061590c2e610253141c74842"
+    },
+    "in_domain/mgcd/test": {
+      "n": 1569,
+      "sha256": "bc6a944d558c6bf1d025ebb1a320536f5204a7e40abc580423fbc52a9beae5c8"
+    },
+    "in_domain/montenegro/test": {
+      "n": 446,
+      "sha256": "e2a0773f7f306545404a9a22fbb27e8553df20436e5a605380a28809d4a8a19c"
+    },
+    "in_domain/swim/test": {
+      "n": 1768,
+      "sha256": "9439507b654a96f180a75c95e7124d62a585ddff7ce1d7e8c99fb0fba92549ab"
+    },
+    "lodo/almeria/test": {
+      "n": 818,
+      "sha256": "18a9873329d02b15063816762707dfd70630ad86e62adff5bdc0899a8daa3bce"
+    },
+    "lodo/ccsn/test": {
+      "n": 2543,
+      "sha256": "155b88ab483b0a6d5e59ed3d2add713765006c06b5d7cbed35b84cd320a875c3"
+    },
+    "lodo/mgcd/test": {
+      "n": 8000,
+      "sha256": "d24c81021843951f3aa48067f467e87ec30dcbb840787fb8784bd58cd7c30953"
+    },
+    "lodo/montenegro/test": {
+      "n": 2522,
+      "sha256": "8ec4f9eee18bcfaaabefbe593b4238782e6e45815dcb4e7b022c7a378e752066"
+    },
+    "lodo/swim/test": {
+      "n": 8836,
+      "sha256": "bfe16a9cc81d8342be6d81bcaeb12be9132a83de72f8a37f8b7c029bb954b94c"
+    },
+    "held_out_station/disjoint_days/test": {
+      "n": 4906,
+      "sha256": "3db0371e15b3693aad4281cc27dc8760285e0b3dbbab28845308d65845df9cf9"
+    },
+    "held_out_station/same_days/test": {
+      "n": 14644,
+      "sha256": "14acf274bb0b4bb2fcf75049f72acd36672f94fc881e0b126b48b7e22c26fde4"
+    }
+  }
+}
