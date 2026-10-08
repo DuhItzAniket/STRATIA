@@ -249,4 +249,23 @@ seven open items with owners, none blocking Paper A. Gate G1 signed 2026-10-08. 
 parsed into the manifest (row order unchanged, hash `464078b6d033dd39`). *For the paper:* the data card is the
 benchmark's datasheet; its open-items table is the honest limitations section.
 
-Open for later phases. P034 applies `configs/ontology.yaml` to every native label and merges the P026 conflicts; P035 computes Krippendorff's alpha for Montenegro; P036 builds the ceilometer target table at ±30 s; P037/P038 take the blocks decided in P027 and the sampling of P030; P040 takes the per-camera masks and resolution normalisation from P029; P044 makes the sun explicit.
+### P034 — Dataset → ontology mapping
+
+`data/labels.parquet` (one row per manifest sample) carries set-valued labels for every image whose dataset names
+them: CCSN 2,543 genus sets (200 conflict merges as alternatives, 199 contrails), MGCD 6,980 (4,204 sets of
+alternatives from its merged classes, 1,020 "mixed" = cloud of unknown genus, 1,338 clear), Montenegro 2,363 from the
+majority codes, SWIMCAT clear / cloud only, the segmentation sets cloud presence and (Almería) étages from the layer
+masks; Eye2Sky and B0268 wait for P036 and P041. Decision: merged classes become sets of alternatives, never a forced
+genus; conflicting copies take the union and are kept out of test splits. `docs/data/label_mapping.md`.
+
+### P035 — Montenegro soft labels & human ceiling
+
+Krippendorff's alpha and leave-one-rater-out agreement over 2,270 images with at least two raters, on the raw codes
+and on the derived STRATIA labels (`docs/data/montenegro_ceiling.md`, targets in `data/montenegro_targets.parquet`).
+**Human ceiling for criterion C2: étage set 85.2 % (alpha 0.54), total cover within ±1 okta 87.3 % (alpha 0.91);
+the model must reach 90 % of these on the same images against the rater majority.** Genus from the codes is weak
+(exact set alpha 0.28; Cc 0.07, Cb 0.09) and the height code has no consensus (alpha 0.36). *For the paper:*
+Montenegro tests cover and étage; genus and height on it are soft, exploratory comparisons; the ceilometer stays
+the CBH reference.
+
+Open for later phases. P036 builds the ceilometer target table at ±30 s; P037/P038 take the blocks decided in P027, the sampling of P030 and the `label_conflict` flag of P034; P039 locks the test sets; P040 takes the per-camera masks and the frozen features; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives`.

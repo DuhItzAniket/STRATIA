@@ -4,6 +4,12 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P035 — Montenegro soft labels & human ceiling (2026-10-08)
+- Krippendorff's alpha, pairwise and leave-one-rater-out agreement (`stratia/labels/agreement.py`, `scripts/montenegro_ceiling.py`) on raw codes and derived labels; human ceiling for C2: étage set 85.2 %, total cover ±1 okta 87.3 %. Per-image soft targets `data/montenegro_targets.parquet`; report `docs/data/montenegro_ceiling.md`.
+
+### P034 — Dataset → ontology mapping (2026-10-08)
+- Set-valued labels for every manifest sample through the ontology (`stratia/labels/mapping.py`, `scripts/map_labels.py` → `data/labels.parquet`): merged classes as alternatives, unknown genera excluded with reasons, P026 conflicts merged and flagged. Report `docs/data/label_mapping.md`. Ontology keys MGCD classes by the manifest's labels.
+
 ### P032 — Gate G1: data card (2026-10-08)
 - `docs/data/data_card.md` (Datasheets-for-Datasets style) collecting the Stage C audit; gate G1 signed with zero blockers for Paper A, seven open items with owners. Manifest builder parses Almería timestamps from file names (row order unchanged).
 

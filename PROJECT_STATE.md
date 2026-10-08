@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | D — Label harmonization & splits (P033–P042); Stages A–C complete (partial P015, P019, P020, P028) |
-| Last completed phase | P033 — WMO ontology (Gate G1 signed in P032) |
-| Next phase | P034 — Dataset → ontology mapping |
+| Last completed phase | P035 — Montenegro soft labels & human ceiling |
+| Next phase | P036 — Ceilometer → targets |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 (≈ 0.3 GB per station-day) needed before P047. B0268 logging for P041 to start now. Missing public datasets need owner action (P015, cut-off 15 Oct). |
@@ -56,3 +56,5 @@
 | P031 | Ceilometer QC & pairing tolerance | DONE | 2026-10-08 |
 | P032 | Gate G1 — Data audit sign-off | DONE | 2026-10-08 |
 | P033 | WMO ontology | DONE | 2026-10-08 |
+| P034 | Dataset → ontology mapping | DONE | 2026-10-08 |
+| P035 | Montenegro soft labels & human ceiling | DONE | 2026-10-08 |

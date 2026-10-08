@@ -157,14 +157,14 @@ def soft_targets(derived: pd.DataFrame) -> pd.DataFrame:
         genus_share = {g: float(np.mean([g in s.split("|") for s in g_rows])) for g in GENERA} if len(g_rows) else None
         okt = part.oktas.dropna()
         h = part.h_band.dropna()
+        okt_dist = {str(int(k)): float(v) for k, v in okt.value_counts(normalize=True).sort_index().items()}
+        h_dist = {k: float(v) for k, v in h.value_counts(normalize=True).sort_index().items()}
         rows.append({"item_id": item, "n_raters": int(part.user_id.nunique()),
                      "etage_share": json.dumps(etage_share) if etage_share else None,
                      "genus_share": json.dumps(genus_share) if genus_share else None,
-                     "oktas_dist": json.dumps({str(int(k)): float(v) for k, v in okt.value_counts(normalize=True).sort_index().items()})
-                     if len(okt) else None,
+                     "oktas_dist": json.dumps(okt_dist) if len(okt) else None,
                      "obscured_share": float(part.obscured.mean()),
-                     "h_band_dist": json.dumps({k: float(v) for k, v in h.value_counts(normalize=True).sort_index().items()})
-                     if len(h) else None,
+                     "h_band_dist": json.dumps(h_dist) if len(h) else None,
                      "cloud_share": float(part.cloud.dropna().mean()) if part.cloud.notna().any() else None})
     return pd.DataFrame(rows)
 
@@ -192,15 +192,19 @@ def ceiling_table(ann: pd.DataFrame, derived: pd.DataFrame) -> pd.DataFrame:
     add("raw h (height code 0-9), ±1 band", pivot(h_num, "hn"), "ordinal", "numeric", 1.0)
     add("étage set", pivot(derived, "etage_set"), "nominal", "nominal", note="exact set from the altitude class")
     for e in ETAGES:
-        t = pivot(derived.assign(flag=derived.etage_set.map(lambda s, e=e: (e in s.split("|")) if isinstance(s, str) else np.nan)), "flag")
-        add(f"étage {e} present", t, "nominal", "nominal")
+        add(f"étage {e} present", _flag_table(derived, "etage_set", e), "nominal", "nominal")
     add("genus set", pivot(derived, "genus_set"), "nominal", "nominal", note="exact set from C_L / C_M / C_H")
     for g in GENERA:
-        t = pivot(derived.assign(flag=derived.genus_set.map(lambda s, g=g: (g in s.split("|")) if isinstance(s, str) else np.nan)), "flag")
-        add(f"genus {g} present", t, "nominal", "nominal")
+        add(f"genus {g} present", _flag_table(derived, "genus_set", g), "nominal", "nominal")
     add("cloud present (N > 0)", pivot(derived.assign(c=derived.cloud.map(lambda v: np.nan if v is None else float(v))), "c"),
         "nominal", "nominal")
     return pd.DataFrame(rows)
+
+
+def _flag_table(derived: pd.DataFrame, column: str, token: str) -> pd.DataFrame:
+    """units x raters table of 'token is in the rater's set' (1.0 / 0.0; NaN where the rater gave no set)."""
+    flag = derived[column].map(lambda s: float(token in s.split("|")) if isinstance(s, str) else np.nan)
+    return pivot(derived.assign(flag=flag), "flag")
 
 
 def report_markdown(ceiling: pd.DataFrame, per_rater: pd.DataFrame, n_items: int, n_ann: int, decision: list[str]) -> str:
@@ -214,7 +218,8 @@ def report_markdown(ceiling: pd.DataFrame, per_rater: pd.DataFrame, n_items: int
              "a model is compared with (criterion C2).", "",
              "| Quantity | Level | Units | alpha | Pairwise | Leave-one-out | Note |", "|---|---|---|---|---|---|---|"]
     for _, r in ceiling.iterrows():
-        lines.append(f"| {r.quantity} | {r.level} | {int(r.units):,} | {f(r.alpha)} | {f(r.pairwise)} | {f(r.leave_one_out)} | {r.note} |")
+        lines.append(f"| {r.quantity} | {r.level} | {int(r.units):,} | {f(r.alpha)} | {f(r.pairwise)} | "
+                     f"{f(r.leave_one_out)} | {r.note} |")
     lines += ["", "## Raters against the others (étage set and total cover)", "",
               "| Rater | Units (étage) | Étage agreement | Units (N) | N within ±1 okta |", "|---|---|---|---|---|"]
     for _, r in per_rater.iterrows():

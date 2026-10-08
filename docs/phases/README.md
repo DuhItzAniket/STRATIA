@@ -37,3 +37,5 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P031](P031-ceilometer-qc.md) | Ceilometer QC & pairing tolerance | DONE |
 | [P032](P032-gate-g1-data-card.md) | Gate G1 — Data audit sign-off | DONE |
 | [P033](P033-wmo-ontology.md) | WMO ontology | DONE |
+| [P034](P034-dataset-mapping.md) | Dataset → ontology mapping | DONE |
+| [P035](P035-montenegro-ceiling.md) | Montenegro soft labels & human ceiling | DONE |

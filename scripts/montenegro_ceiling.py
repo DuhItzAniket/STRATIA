@@ -13,8 +13,6 @@ import sys
 import time
 from pathlib import Path
 
-import pandas as pd
-
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from stratia.data.montenegro import load_annotations, load_items  # noqa: E402
 from stratia.data.registry import load_paths  # noqa: E402
@@ -41,11 +39,13 @@ def main() -> None:
     print(ceiling.to_string(index=False), flush=True)
     print(per_rater.to_string(index=False), flush=True)
     c = ceiling.set_index("quantity")
+    e_loo, e_alpha = c.loc["étage set", "leave_one_out"], c.loc["étage set", "alpha"]
+    n_loo, n_alpha = c.loc["raw N (oktas 0-8)", "leave_one_out"], c.loc["raw N (oktas 0-8)", "alpha"]
     decision = [
         f"**Human ceiling for criterion C2:** a rater agrees with the majority of the other raters on the étage set in "
-        f"{c.loc['étage set', 'leave_one_out']:.1%} of images (alpha {c.loc['étage set', 'alpha']:.2f}) and on total cloud cover "
-        f"within ±1 okta in {c.loc['raw N (oktas 0-8)', 'leave_one_out']:.1%} (interval alpha {c.loc['raw N (oktas 0-8)', 'alpha']:.2f}). "
-        "A model's agreement with the rater majority is compared with these numbers; 90 % of them is the C2 bar.",
+        f"{e_loo:.1%} of images (alpha {e_alpha:.2f}) and on total cloud cover within ±1 okta in {n_loo:.1%} (interval alpha "
+        f"{n_alpha:.2f}). A model's agreement with the rater majority is compared with these numbers; 90 % of them is the "
+        "C2 bar.",
         f"**Genus from the codes is the weakest signal** (exact genus set alpha {c.loc['genus set', 'alpha']:.2f}); per-genus "
         "presence is used as a soft target (share of raters), never as a hard label.",
         f"**Height code h** (ordinal alpha {c.loc['raw h (height code 0-9)', 'alpha']:.2f}; ±1 band leave-one-out "
