@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P036 — Ceilometer → targets (2026-10-08)
+- Ceilometer target table (`stratia/labels/ceilometer_targets.py`, `scripts/ceilometer_targets.py` → `data/ceilometer_targets.parquet`): per site and 30 s grid point, no-cloud / étage of the median lowest base within ±30 s under weak and WMO thresholds, confidence, base spread, layer count, second layer, daytime flag. Report `docs/data/ceilometer_targets.md`.
+
 ### P035 — Montenegro soft labels & human ceiling (2026-10-08)
 - Krippendorff's alpha, pairwise and leave-one-rater-out agreement (`stratia/labels/agreement.py`, `scripts/montenegro_ceiling.py`) on raw codes and derived labels; human ceiling for C2: étage set 85.2 %, total cover ±1 okta 87.3 %. Per-image soft targets `data/montenegro_targets.parquet`; report `docs/data/montenegro_ceiling.md`.
 

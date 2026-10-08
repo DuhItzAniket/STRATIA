@@ -268,4 +268,15 @@ the model must reach 90 % of these on the same images against the rater majority
 Montenegro tests cover and étage; genus and height on it are soft, exploratory comparisons; the ceilometer stays
 the CBH reference.
 
-Open for later phases. P036 builds the ceilometer target table at ±30 s; P037/P038 take the blocks decided in P027, the sampling of P030 and the `label_conflict` flag of P034; P039 locks the test sets; P040 takes the per-camera masks and the frozen features; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives`.
+### P036 — Ceilometer → targets
+
+`data/ceilometer_targets.parquet`: for both sites and every 30 s of every day, the label a frame would get from the
+clean records within ±30 s: no cloud overhead (30 %), or the étage of the median lowest base (daytime: low 38-40 %,
+mid 20 %, high 10 %), "mixed" when fewer than half of the records see cloud (2 %), with the cloudy share as
+confidence, the base spread inside the window (33-35 m at the median), the mean layer count (16 % of windows have
+two or more layers) and the second layer's height. Both étage thresholds (weak 2 / 6 km, WMO 2 / 7 km) are stored
+for the ablation. 94-97 % of daytime windows are labelled; the rest are flagged records. *For the paper:* the CBH
+target distribution and its confidence are now explicit; pairing with frames (P047) waits for the images at the
+ceilometer sites.
+
+Open for later phases. P037/P038 take the blocks decided in P027, the sampling of P030 and the `label_conflict` flag of P034; P039 locks the test sets; P040 takes the per-camera masks and the frozen features; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives`.
