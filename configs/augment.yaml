@@ -1,0 +1,37 @@
+# Augmentation policy (P048). Read by stratia.augment.policy.AugmentationPolicy.
+#
+# `strength` scales every photometric range and the geometric jitter (0 = off, 1 = this file, 2 = twice the ranges)
+# for the regularisation study (P080). Each entry under `photometric` and `geometric` has `enabled` so a single
+# augmentation can be switched off for the ablation (P091). Geometric policies are chosen by the manifest's
+# `camera_type` through `groups`. No hue shift exists anywhere in this policy (sky colour carries cloud information).
+version: 1
+strength: 1.0
+input_size: 512
+
+groups:
+  all_sky: [fisheye_asi]                              # Eye2Sky, MGCD, Almería: zenith-pointing fisheyes
+  consumer: [wide_angle_usb, consumer_photo, fixed_lowcost]   # B0268, CCSN, Montenegro: pointed cameras
+  patch: [wsi_crop, wsi_patch]                        # SWIM family: undistorted crops and patches
+
+geometric:
+  all_sky:
+    rotate: {enabled: true, degrees: [-180, 180]}     # about the image centre ~ about the zenith (ADR-004)
+    flip: {enabled: false, p: 0.0}
+    crop: {enabled: true, scale: [0.8, 1.0], ratio: [0.95, 1.05]}
+  consumer:
+    rotate: {enabled: true, degrees: [-5, 5]}
+    flip: {enabled: true, p: 0.5}
+    crop: {enabled: true, scale: [0.6, 1.0], ratio: [0.8, 1.25]}
+  patch:
+    rotate: {enabled: true, degrees: [-10, 10]}
+    flip: {enabled: true, p: 0.5}
+    crop: {enabled: true, scale: [0.7, 1.0], ratio: [0.8, 1.25]}
+
+photometric:                                          # applied in this order; p = probability per sample
+  exposure: {enabled: true, p: 0.8, low: 0.6, high: 1.5}
+  white_balance: {enabled: true, p: 0.6, max_gain: 0.12}
+  sun_glare: {enabled: true, p: 0.3, strength: 1.0}  # at the Sun's pixel when the geometry is known
+  dirt_and_drops: {enabled: true, p: 0.25}
+  obstruction: {enabled: true, p: 0.2}               # also invalidates labels and ray-map patches
+  sensor_noise: {enabled: true, p: 0.5, read_sigma: 0.01, shot_scale: 0.03}
+  jpeg: {enabled: true, p: 0.5, q_low: 40, q_high: 95}

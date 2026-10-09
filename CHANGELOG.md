@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P048 — Augmentation policy (2026-10-10)
+- Physical photometric augmentations (`stratia/augment/photometric.py`: exposure, white balance on the colour-temperature axis, JPEG, sensor noise, Sun-aware glare with ghost, dirt and raindrops, obstruction cut-outs), per-camera-type geometric policies through the P046 transforms with dense labels carried along (`configs/augment.yaml`, `stratia/augment/policy.py`), `strength` and per-augmentation `enabled` for the ablations; gallery `docs/data/figures/augmentation_gallery.jpg`, `docs/data/augmentation_gallery.md`. No hue shift anywhere.
+
 ### P046 — Geometry-consistent transforms (2026-10-10)
 - ADR-004 (native view + ray maps; augmentations are pixel remappings); `GeoState` and the transforms Resize, Crop, RandomResizedCrop, HorizontalFlip, Rotate, Compose with `geometry_for` recomputing the ray map through the composed map (`stratia/geometry/transforms.py`); 8 consistency tests (coordinate image, Sun stays at the Sun, flip/rotation of the zenith map, padding invalid).
 

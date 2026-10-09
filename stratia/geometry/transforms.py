@@ -7,7 +7,9 @@ through the composed map (``geometry_for``), so the ray of an output patch is al
 its centre came from. Ray maps are never resampled or rotated as images.
 
 Transforms: ``Resize``, ``Crop``, ``RandomResizedCrop``, ``HorizontalFlip``, ``Rotate``, ``Compose``. Each is
-callable as ``transform(image, state, rng) -> (image, state)``; images are HxWxC uint8 or float32 arrays.
+callable as ``transform(image, state, rng) -> (image, state)``; images are HxWxC uint8 or float32 arrays. With
+``label=`` (a HxW integer label map) the same remapping is applied to it with nearest-neighbour sampling and
+``LABEL_IGNORE`` outside the source, and the call returns ``(image, state, label)``.
 Pixel-centre convention throughout (CloudScope ADR-012), matching cv2.warpAffine and cv2.resize.
 """
 
@@ -22,6 +24,8 @@ from ..contract import PATCH_SIZE
 from .cameras import CameraModel
 from .pose import Pose
 from .raymap import MASK_FRACTION, full_frame_affine, patch_rays, ray_map, resized_mask
+
+LABEL_IGNORE = 255      # value of label pixels that come from outside the source (stratia.data.segmentation.IGNORE)
 
 
 # ----------------------------------------------------------------------------------------------- state
@@ -55,16 +59,29 @@ class GeoState:
         return inv[0, 0] * xs + inv[0, 1] * ys + inv[0, 2], inv[1, 0] * xs + inv[1, 1] * ys + inv[1, 2]
 
 
+def _warp_label(label: np.ndarray | None, m: np.ndarray, new_w: int, new_h: int) -> np.ndarray | None:
+    if label is None:
+        return None
+    return cv2.warpAffine(label, m, (new_w, new_h), flags=cv2.INTER_NEAREST, borderMode=cv2.BORDER_CONSTANT,
+                          borderValue=LABEL_IGNORE)
+
+
+def _result(image, state, label, had_label: bool):
+    return (image, state, label) if had_label else (image, state)
+
+
 def _warp(image: np.ndarray, state: GeoState, m_cur_to_new: np.ndarray, new_w: int, new_h: int,
-          interpolation: int = cv2.INTER_LINEAR) -> tuple[np.ndarray, GeoState]:
-    """Apply a 2x3 current->new affine (cv2 convention) to the image and the coverage; compose the state."""
+          interpolation: int = cv2.INTER_LINEAR, label: np.ndarray | None = None):
+    """Apply a 2x3 current->new affine (cv2 convention) to the image, the coverage and the label; compose the
+    state. Returns (image, state) or (image, state, label) when a label was given."""
     m = np.asarray(m_cur_to_new, dtype=float)
     out = cv2.warpAffine(image, m, (new_w, new_h), flags=interpolation, borderMode=cv2.BORDER_CONSTANT, borderValue=0)
     cov = cv2.warpAffine(state.coverage.astype(np.uint8), m, (new_w, new_h), flags=cv2.INTER_NEAREST,
                          borderMode=cv2.BORDER_CONSTANT, borderValue=0) > 0
     m3 = np.vstack([m, [0.0, 0.0, 1.0]])
     new_to_cur = np.linalg.inv(m3)
-    return out, replace(state, width=new_w, height=new_h, affine=state.affine @ new_to_cur, coverage=cov)
+    new_state = replace(state, width=new_w, height=new_h, affine=state.affine @ new_to_cur, coverage=cov)
+    return _result(out, new_state, _warp_label(label, m, new_w, new_h), label is not None)
 
 
 # ----------------------------------------------------------------------------------------------- transforms
@@ -72,13 +89,15 @@ class Resize:
     def __init__(self, width: int, height: int | None = None):
         self.width, self.height = width, height or width
 
-    def __call__(self, image: np.ndarray, state: GeoState, rng=None) -> tuple[np.ndarray, GeoState]:
+    def __call__(self, image: np.ndarray, state: GeoState, rng=None, label: np.ndarray | None = None):
         shrinking = self.width < state.width or self.height < state.height
         inter = cv2.INTER_AREA if shrinking else cv2.INTER_LINEAR
         out = cv2.resize(image, (self.width, self.height), interpolation=inter)
         cov = cv2.resize(state.coverage.astype(np.uint8), (self.width, self.height), interpolation=cv2.INTER_NEAREST) > 0
         step = full_frame_affine(state.width, state.height, self.width, self.height)    # new pixel -> current pixel
-        return out, replace(state, width=self.width, height=self.height, affine=state.affine @ step, coverage=cov)
+        new_state = replace(state, width=self.width, height=self.height, affine=state.affine @ step, coverage=cov)
+        new_label = None if label is None else cv2.resize(label, (self.width, self.height), interpolation=cv2.INTER_NEAREST)
+        return _result(out, new_state, new_label, label is not None)
 
 
 class Crop:
@@ -87,9 +106,9 @@ class Crop:
     def __init__(self, x0: int, y0: int, width: int, height: int):
         self.x0, self.y0, self.width, self.height = int(x0), int(y0), int(width), int(height)
 
-    def __call__(self, image: np.ndarray, state: GeoState, rng=None) -> tuple[np.ndarray, GeoState]:
+    def __call__(self, image: np.ndarray, state: GeoState, rng=None, label: np.ndarray | None = None):
         m = np.array([[1.0, 0.0, -self.x0], [0.0, 1.0, -self.y0]])
-        return _warp(image, state, m, self.width, self.height, cv2.INTER_NEAREST)
+        return _warp(image, state, m, self.width, self.height, cv2.INTER_NEAREST, label)
 
 
 class RandomResizedCrop:
@@ -113,23 +132,26 @@ class RandomResizedCrop:
         side = min(width, height)
         return (width - side) // 2, (height - side) // 2, side, side
 
-    def __call__(self, image: np.ndarray, state: GeoState, rng=None) -> tuple[np.ndarray, GeoState]:
+    def __call__(self, image: np.ndarray, state: GeoState, rng=None, label: np.ndarray | None = None):
         rng = np.random.default_rng() if rng is None else rng
         x0, y0, w, h = self.sample_box(state.width, state.height, rng)
-        image, state = Crop(x0, y0, w, h)(image, state)
-        return Resize(self.size, self.size)(image, state)
+        if label is None:
+            image, state = Crop(x0, y0, w, h)(image, state)
+            return Resize(self.size, self.size)(image, state)
+        image, state, label = Crop(x0, y0, w, h)(image, state, label=label)
+        return Resize(self.size, self.size)(image, state, label=label)
 
 
 class HorizontalFlip:
     def __init__(self, p: float = 1.0):
         self.p = p
 
-    def __call__(self, image: np.ndarray, state: GeoState, rng=None) -> tuple[np.ndarray, GeoState]:
+    def __call__(self, image: np.ndarray, state: GeoState, rng=None, label: np.ndarray | None = None):
         rng = np.random.default_rng() if rng is None else rng
         if self.p < 1.0 and rng.uniform() >= self.p:
-            return image, state
+            return _result(image, state, label, label is not None)
         m = np.array([[-1.0, 0.0, state.width - 1.0], [0.0, 1.0, 0.0]])
-        return _warp(image, state, m, state.width, state.height, cv2.INTER_NEAREST)
+        return _warp(image, state, m, state.width, state.height, cv2.INTER_NEAREST, label)
 
 
 class Rotate:
@@ -145,21 +167,25 @@ class Rotate:
             return float(rng.uniform(*self.degrees))
         return float(self.degrees)
 
-    def __call__(self, image: np.ndarray, state: GeoState, rng=None) -> tuple[np.ndarray, GeoState]:
+    def __call__(self, image: np.ndarray, state: GeoState, rng=None, label: np.ndarray | None = None):
         angle = self.angle(rng)
         centre = ((state.width - 1) / 2.0, (state.height - 1) / 2.0)
         m = cv2.getRotationMatrix2D(centre, angle, 1.0)
-        return _warp(image, state, m, state.width, state.height, cv2.INTER_LINEAR)
+        return _warp(image, state, m, state.width, state.height, cv2.INTER_LINEAR, label)
 
 
 class Compose:
     def __init__(self, transforms):
         self.transforms = list(transforms)
 
-    def __call__(self, image: np.ndarray, state: GeoState, rng=None) -> tuple[np.ndarray, GeoState]:
+    def __call__(self, image: np.ndarray, state: GeoState, rng=None, label: np.ndarray | None = None):
+        if label is None:
+            for t in self.transforms:
+                image, state = t(image, state, rng)
+            return image, state
         for t in self.transforms:
-            image, state = t(image, state, rng)
-        return image, state
+            image, state, label = t(image, state, rng, label=label)
+        return image, state, label
 
 
 # ----------------------------------------------------------------------------------------------- geometry outputs
@@ -171,10 +197,13 @@ def patch_fraction(flags: np.ndarray, patch: int = PATCH_SIZE) -> np.ndarray:
 
 def geometry_for(state: GeoState, camera: CameraModel | None, pose: Pose | None, sun_azimuth_deg: float | None,
                  sun_zenith_deg: float | None, mask: np.ndarray | None = None, patch: int = PATCH_SIZE,
-                 min_elevation_deg: float = 0.0) -> tuple[np.ndarray, np.ndarray]:
+                 min_elevation_deg: float = 0.0, obstruction: np.ndarray | None = None) -> tuple[np.ndarray, np.ndarray]:
     """(ray_map, mask_out) for the current image of `state`: the contract's ray map computed through the composed
     pixel map, with padding patches (no source content) invalid; `mask_out` is the camera mask in current pixels,
-    False where the image is padding."""
+    False where the image is padding. `obstruction` (current pixels, True = synthetic obstruction, P048) is treated
+    like padding: those pixels leave the mask and patches mostly covered by it become invalid."""
+    if obstruction is not None:
+        state = replace(state, coverage=state.coverage & ~obstruction.astype(bool))
     out_size = (state.height, state.width)
     rays = None
     if camera is not None and camera.calibrated:
