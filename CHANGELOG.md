@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P050 — Metadata dropout (2026-10-10)
+- `GeometryDropout` (ray map / meta masked to the contract's null state, p = 0.3 each; `stratia/augment/dropout.py`) and the null-token path of the SkyRay encoder with meta FiLM (`stratia/model/skyray.py`); a stub model runs with and without metadata.
+
 ### P049 — Consumer-view synthesis (2026-10-10)
 - Re-projection of Eye2Sky frames into B0268-like 105° views at random pointings with exact ray maps and ceilometer labels inherited under the flat-layer assumption (`stratia/geometry/synthesis.py`, `scripts/synthesize_views.py` → `data/synthetic_views.parquet`, images under the cache); report `docs/data/synthetic_views.md`, figure `docs/data/figures/synthetic_views.jpg`.
 
