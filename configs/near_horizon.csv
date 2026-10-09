@@ -1,0 +1,3 @@
+camera_id,min_elevation_deg,source
+eye2sky-*,5.0,"P045 decision: below 5 deg elevation the Q25 fisheye compresses ~1 deg per 2 px and the masks already stop at 2-5 deg (P013: max off-axis 84.9-87.8 deg); the Sun validation (P044) sampled the Sun at >= 5 deg only, so the pose is verified there"
+b0268,0.0,"no horizon information yet: the camera is pointed, not zenith-fixed; obstructions are left to the sky-parsing head"

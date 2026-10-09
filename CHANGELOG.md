@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P045 — Ray-map generator (2026-10-10)
+- Contract ray maps and meta vector from camera, pose, Sun, mask and a near-horizon floor through one affine (`stratia/geometry/raymap.py`, `configs/near_horizon.csv`); overlays and Sun-patch check on four stations (`scripts/ray_map_overlays.py` → `docs/data/ray_maps.md`, figures).
+
 ### P044 — Sun position & calibration validation (2026-10-10)
 - Sun position and ENU/Sun-aligned frames (`stratia/geometry/sun.py`), camera poses with Kabsch fitting and 768 readings of Eye2Sky's declared orientation (`stratia/geometry/pose.py`), a Sun-disc detector built on measured facts (clip at 240, peak gate, glow limit; `stratia/geometry/sun_detect.py`), `scripts/sun_validation.py` → `configs/camera_poses.yaml` (4 fitted poses, median 0.08–0.12°, all ok), `docs/data/sun_validation.md`, figures. Declared orientation = Ry(pitch)·Rx(−roll)·Rz(yaw) camera-to-world on the OCamCalib frame; WESTE's March file is 2.9° off.
 

@@ -48,3 +48,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P042](P042-gate-g2.md) | Gate G2 — Splits & labels sign-off | DONE (conditional) |
 | [P043](P043-camera-models.md) | Camera models | DONE |
 | [P044](P044-sun-validation.md) | Sun position & calibration validation | DONE |
+| [P045](P045-ray-maps.md) | Ray-map generator | DONE |
