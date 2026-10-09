@@ -1,5 +1,7 @@
 # STRATIA
 
+[![CI](https://github.com/DuhItzAniket/STRATIA/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/DuhItzAniket/STRATIA/actions/workflows/ci.yml)
+
 **STRATIA — Spatio-Temporal Representation for Atmospheric Intelligence and Analysis.**
 A single-camera sky-understanding model: from one ground-based sky image (plus optional time, location and calibration), STRATIA predicts cloud genus, cloud layers (low / mid / high), cloud cover, cloud-base height with calibrated uncertainty, a sky / cloud / sun-glare / obstruction map, and a reliability score.
 
