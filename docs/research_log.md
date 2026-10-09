@@ -324,4 +324,8 @@ is rare (CCSN 46 %, Montenegro 55 % plain against 29 % and 11 % strong).
 
 No B0268 logger frames exist (owner item), so P041 is BLOCKED and Gate G2 is signed **conditionally** on 2026-10-10: every other Stage D criterion is met with evidence (`docs/phases/P042-gate-g2.md`; 149 tests, lock check, lint). *For the paper:* C1/C2 do not depend on B0268; H4 (geometry helps transfer to a consumer camera) and the B0268 OOD numbers wait for P041/P083. Stage E starts on fixed labels and splits.
 
+### P043 — Camera models
+
+Every camera now answers pixel <-> direction through one interface: OCamCalib for Eye2Sky, OpenCV fisheye/pinhole (NumPy, matching cv2 to 1e-3 px) for the B0268 through CloudScope's calibration file, and an explicit unknown camera (all-zero ray maps) for CCSN, MGCD, Montenegro, SWIM and Almería. The B0268 model is a **nominal datasheet model** (105 deg equidistant, no distortion) flagged `provisional` until the checkerboard calibration exists; no geometry number about the B0268 may come from it. Shared test vectors (39 samples, 3 cameras) are the contract's executable part for CloudScope. *For the paper:* the geometry pipeline is camera-agnostic by construction; the single-camera claim (ADR-003) does not depend on a particular projection.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P043 — Camera models (2026-10-10)
+- One camera interface (`stratia/geometry/cameras.py`): OCamCalib, OpenCV fisheye/pinhole in NumPy (cross-checked against cv2), CloudScope camera-model file loader (`schemas/camera_model.schema.json`), unknown-camera placeholder, registry `configs/cameras.yaml`; provisional B0268 datasheet model (`configs/cameras/b0268_nominal.camera.json`); shared test vectors `tests/vectors/camera_test_vectors.json` (`scripts/make_camera_test_vectors.py`).
+
 ### P042 — Gate G2: splits & labels sign-off (2026-10-10)
 - Review of P033–P041 with evidence (`docs/phases/P042-gate-g2.md`); mechanical checks rerun (149 tests, test-set lock, lint); gate signed conditionally with P041 deferred (no B0268 frames exist; latest before P083).
 

@@ -40,6 +40,14 @@ class OcamModel:
             rho, theta = rho[: stop + 1], theta[: stop + 1]
         object.__setattr__(self, "_table", (theta, rho))
 
+    @property
+    def kind(self) -> str:
+        return "ocam"
+
+    @property
+    def calibrated(self) -> bool:
+        return True
+
     def _poly(self, rho: np.ndarray) -> np.ndarray:
         return np.polynomial.polynomial.polyval(rho, np.asarray(self.ss, dtype=float))
 

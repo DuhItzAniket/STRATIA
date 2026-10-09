@@ -18,7 +18,7 @@ STRATIA is distributed as an ONNX model plus a `model_card.json`. CloudScope (or
 | `ray_map` | float32 `[N, 4, H/p, W/p]` (`p` = patch size, 16 in v1) | no (zeros allowed) | At each patch centre of the resized image: channels 0–2 = unit viewing direction **in a Sun-aligned local frame** (z up; x toward the Sun's azimuth; y = z × x); channel 3 = 1 if the direction is valid (calibrated, inside the camera mask, above the horizon), else 0. Zenith angle = acos(z); azimuth relative to the Sun = atan2(y, x). If the camera is uncalibrated or the Sun position is unknown, the whole tensor is 0. |
 | `meta` | float32 `[N, 3]` | no (zeros allowed) | `[cos(Sun zenith), sin(Sun zenith), valid]`; all zero when time or location is unknown. Time of day, date and location are **deliberately not inputs** (they would let the model learn climatology shortcuts). |
 
-Hosts compute `ray_map` from their own calibration and pose; STRATIA ships a reference implementation and shared test vectors (STRATIA P043–P045, CloudScope P031/P067).
+Hosts compute `ray_map` from their own calibration and pose; STRATIA ships a reference implementation and shared test vectors (STRATIA P043–P045, CloudScope P031/P067). Reference implementation: `stratia/geometry/raymap.py` (`ray_map`, `meta_vector`, full-frame resize through `full_frame_affine`), camera models in `stratia/geometry/cameras.py`, poses in `stratia/geometry/pose.py`; shared vectors: `tests/vectors/camera_test_vectors.json` (P043).
 
 ## 3. Outputs
 

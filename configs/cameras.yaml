@@ -1,0 +1,30 @@
+# Camera models per manifest camera_id (P043). Resolved by stratia.geometry.cameras.camera_for().
+# model: ocam | opencv_fisheye | opencv_pinhole | unknown. A key ending in "*" is a prefix pattern.
+# provisional: true marks a nominal (datasheet) model that is not a calibration; it must be replaced before any
+# number that depends on it is reported.
+cameras:
+  eye2sky-*:
+    model: ocam
+    source: "Eye2Sky/asi_meta/{station}/{calib_id}"     # the manifest's calib_id selects the validity window (P013)
+    note: "OCamCalib files from the Eye2Sky network; pose from configs/camera_poses.yaml (P044)"
+  b0268:
+    model: opencv_fisheye
+    source: "configs/cameras/b0268_nominal.camera.json"
+    provisional: true
+    note: >-
+      Arducam B0268 datasheet: 4656 x 3496, 105 deg horizontal field of view, strong distortion. Equidistant model
+      with zero distortion until CloudScope's checkerboard calibration (CloudScope P031,
+      `cloudscope-camtool calibrate ... --out b0268.camera.json`) replaces this file.
+  mgcd-asi:
+    model: unknown
+    note: "fisheye all-sky imager, no calibration published"
+  almeria-Kontas:
+    model: unknown
+    note: "Cloud_Cam_Kontas all-sky imager; the dataset ships masks but no camera model"
+  montenegro-lowcost:
+    model: unknown
+  wsi-singapore:
+    model: unknown
+    note: "SWIM family: WAHRSIS catadioptric imager, no calibration published"
+  ccsn-various:
+    model: unknown
