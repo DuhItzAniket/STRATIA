@@ -1,0 +1,154 @@
+# Camera poses fitted against the Sun (P044, scripts/sun_validation.py). Do not edit by hand.
+meta:
+  generated_utc: '2026-10-09T20:22:36+00:00'
+  eye2sky_convention: yxz|-r+p+y|ENU|ocam|c2w
+  convention_mean_median_err_deg: 0.8868
+  runner_up: zxy|+r-p-y|ENU|ocam|w2c
+  runner_up_mean_median_err_deg: 0.8868
+  candidates_tested: 768
+  status_rule:
+    min_inliers: 15
+    min_span_hours: 3.0
+    max_median_deg: 1.0
+    max_p90_deg: 2.0
+  sampling:
+    day_step: 7
+    minute_step: 5
+    min_apparent_elevation_deg: 5.0
+poses:
+  AURIC_20191209.yaml:
+    station: AURIC
+    status: ok
+    n_sampled: 3084
+    n_detected: 129
+    n_inliers: 80
+    inlier_span_hours: 9.5
+    median_err_deg: 0.0785
+    p90_err_deg: 0.2576
+    max_inlier_err_deg: 0.4541
+    R:
+    - - 0.9779239097
+      - -0.2089604829
+      - -0.0005860597
+    - - 0.2089590096
+      - 0.977896178
+      - 0.0074294869
+    - - -0.0009793636
+      - -0.0073879353
+      - 0.9999722292
+    euler_zyx_deg:
+    - -0.4233
+    - 0.0561
+    - 12.0614
+    optical_axis_elevation_deg: 89.573
+    declared_external_orientation:
+    - -0.0107
+    - 3.1405
+    - 1.3656
+    days:
+    - '2022-04-01'
+    - '2022-07-29'
+    declared_convention_median_err_deg: 0.3466
+    rotation_distance_fitted_vs_declared_deg: 0.3592
+  BARSE_20191025.yaml:
+    station: BARSE
+    status: ok
+    n_sampled: 3080
+    n_detected: 83
+    n_inliers: 40
+    inlier_span_hours: 10.75
+    median_err_deg: 0.1204
+    p90_err_deg: 0.3635
+    max_inlier_err_deg: 0.4749
+    R:
+    - - 0.7796672796
+      - -0.6261804806
+      - 0.004115681
+    - - 0.6261040825
+      - 0.7794270973
+      - -0.0220698406
+    - - 0.0106118301
+      - 0.0197839773
+      - 0.9997479599
+    euler_zyx_deg:
+    - 1.1337
+    - -0.608
+    - 38.7659
+    optical_axis_elevation_deg: 88.714
+    declared_external_orientation:
+    - 0.0214
+    - 3.1445
+    - 0.8948
+    days:
+    - '2022-04-01'
+    - '2022-07-29'
+    declared_convention_median_err_deg: 0.1556
+    rotation_distance_fitted_vs_declared_deg: 0.0893
+  OLDLR_20220131.yaml:
+    station: OLDLR
+    status: ok
+    n_sampled: 718
+    n_detected: 61
+    n_inliers: 51
+    inlier_span_hours: 4.07
+    median_err_deg: 0.0956
+    p90_err_deg: 0.2472
+    max_inlier_err_deg: 0.485
+    R:
+    - - 0.9997028888
+      - -0.021894636
+      - -0.0107125686
+    - - 0.022083115
+      - 0.9995975928
+      - 0.0178041686
+    - - 0.0103184419
+      - -0.0180354457
+      - 0.9997841029
+    euler_zyx_deg:
+    - -1.0335
+    - -0.5912
+    - 1.2654
+    optical_axis_elevation_deg: 88.809
+    declared_external_orientation:
+    - -0.0187
+    - 3.1295
+    - 1.5474
+    days:
+    - '2022-04-01'
+    - '2022-04-08'
+    declared_convention_median_err_deg: 0.1024
+    rotation_distance_fitted_vs_declared_deg: 0.1194
+  WESTE_20220307.yaml:
+    station: WESTE
+    status: ok
+    n_sampled: 717
+    n_detected: 41
+    n_inliers: 30
+    inlier_span_hours: 4.17
+    median_err_deg: 0.1146
+    p90_err_deg: 0.3623
+    max_inlier_err_deg: 0.4772
+    R:
+    - - 0.9963709267
+      - -0.0850185274
+      - -0.0041020103
+    - - 0.0847423113
+      - 0.9953467412
+      - -0.0458650789
+    - - 0.0079823041
+      - 0.0453510174
+      - 0.9989392214
+    euler_zyx_deg:
+    - 2.5994
+    - -0.4574
+    - 4.8614
+    optical_axis_elevation_deg: 87.361
+    declared_external_orientation:
+    - -0.0054
+    - 3.1353
+    - 1.499
+    days:
+    - '2022-04-01'
+    - '2022-04-08'
+    declared_convention_median_err_deg: 2.9427
+    rotation_distance_fitted_vs_declared_deg: 3.035

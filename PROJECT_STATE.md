@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | E — Geometry & metadata (P043–P050); Stages A–D complete (partial P015, P019, P020, P028; P041 blocked) |
-| Last completed phase | P043 — Camera models |
-| Next phase | P044 — Sun position & calibration validation; P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
+| Last completed phase | P044 — Sun position & calibration validation |
+| Next phase | P045 — Ray-map generator; P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 needed before P047: download running since 2026-10-10 (`tools/download_eye2sky.py`). B0268 logging for P041 to start now (P041 BLOCKED). Missing public datasets need owner action (P015, cut-off 15 Oct). |
@@ -66,3 +66,4 @@
 | P041 | B0268 labelling protocol | BLOCKED | 2026-10-10 |
 | P042 | Gate G2 — Splits & labels sign-off | DONE (conditional) | 2026-10-10 |
 | P043 | Camera models | DONE | 2026-10-10 |
+| P044 | Sun position & calibration validation | DONE | 2026-10-10 |
