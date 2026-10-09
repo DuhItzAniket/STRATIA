@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P049 — Consumer-view synthesis (2026-10-10)
+- Re-projection of Eye2Sky frames into B0268-like 105° views at random pointings with exact ray maps and ceilometer labels inherited under the flat-layer assumption (`stratia/geometry/synthesis.py`, `scripts/synthesize_views.py` → `data/synthetic_views.parquet`, images under the cache); report `docs/data/synthetic_views.md`, figure `docs/data/figures/synthetic_views.jpg`.
+
 ### P048 — Augmentation policy (2026-10-10)
 - Physical photometric augmentations (`stratia/augment/photometric.py`: exposure, white balance on the colour-temperature axis, JPEG, sensor noise, Sun-aware glare with ghost, dirt and raindrops, obstruction cut-outs), per-camera-type geometric policies through the P046 transforms with dense labels carried along (`configs/augment.yaml`, `stratia/augment/policy.py`), `strength` and per-augmentation `enabled` for the ablations; gallery `docs/data/figures/augmentation_gallery.jpg`, `docs/data/augmentation_gallery.md`. No hue shift anywhere.
 

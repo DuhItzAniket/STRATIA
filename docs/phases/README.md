@@ -51,3 +51,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P045](P045-ray-maps.md) | Ray-map generator | DONE |
 | [P046](P046-geometry-transforms.md) | Geometry-consistent transforms | DONE |
 | [P048](P048-augmentation-policy.md) | Augmentation policy | DONE |
+| [P049](P049-consumer-view-synthesis.md) | Consumer-view synthesis | DONE |

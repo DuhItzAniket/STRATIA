@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | E — Geometry & metadata (P043–P050); Stages A–D complete (partial P015, P019, P020, P028; P041 blocked) |
-| Last completed phase | P048 — Augmentation policy |
-| Next phase | P049 — Consumer-view synthesis; then P047 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
+| Last completed phase | P049 — Consumer-view synthesis |
+| Next phase | P050 — Metadata dropout; then P047 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 needed before P047: download running since 2026-10-10 (`tools/download_eye2sky.py`). B0268 logging for P041 to start now (P041 BLOCKED). Missing public datasets need owner action (P015, cut-off 15 Oct). |
@@ -70,3 +70,4 @@
 | P045 | Ray-map generator | DONE | 2026-10-10 |
 | P046 | Geometry-consistent transforms | DONE | 2026-10-10 |
 | P048 | Augmentation policy | DONE | 2026-10-10 |
+| P049 | Consumer-view synthesis | DONE | 2026-10-10 |
