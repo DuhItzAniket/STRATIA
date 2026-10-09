@@ -2,12 +2,12 @@
 
 | Field | Value |
 |---|---|
-| Current stage | D — Label harmonization & splits (P033–P042); Stages A–C complete (partial P015, P019, P020, P028) |
-| Last completed phase | P040 — Label-noise estimation |
-| Next phase | P041 — B0268 labelling protocol (needs logger frames and two labellers), then P042 — Gate G2 |
+| Current stage | E — Geometry & metadata (P043–P050); Stages A–D complete (partial P015, P019, P020, P028; P041 blocked) |
+| Last completed phase | P042 — Gate G2 (conditional) |
+| Next phase | P043 — Camera models; P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
-| Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 (≈ 0.3 GB per station-day) needed before P047. B0268 logging for P041 to start now. Missing public datasets need owner action (P015, cut-off 15 Oct). |
+| Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 needed before P047: download running since 2026-10-10 (`tools/download_eye2sky.py`). B0268 logging for P041 to start now (P041 BLOCKED). Missing public datasets need owner action (P015, cut-off 15 Oct). |
 | Compute | RTX 4050 Laptop 6 GB, 16 GB RAM; DINOv3 S/B/L access verified 2026-10-04 |
 
 ## Gates
@@ -15,7 +15,7 @@
 | Gate | Phase | Target date | Status |
 |---|---|---|---|
 | G1 Data audit | P032 | 14 Oct | **Signed 2026-10-08** (`docs/data/data_card.md`) |
-| G2 Splits & labels | P042 | 18 Oct | — |
+| G2 Splits & labels | P042 | 18 Oct | **Signed 2026-10-10, conditional** (P041 deferred, latest before P083) |
 | G3 Baselines | P060 | 23 Oct | — |
 | G4 Model vs baselines (CVPR go/no-go) | P082 | 3 Nov | — |
 
@@ -63,3 +63,5 @@
 | P038 | Split generator | DONE | 2026-10-08 |
 | P039 | Lock test sets | DONE | 2026-10-08 |
 | P040 | Label-noise estimation | DONE | 2026-10-08 |
+| P041 | B0268 labelling protocol | BLOCKED | 2026-10-10 |
+| P042 | Gate G2 — Splits & labels sign-off | DONE (conditional) | 2026-10-10 |

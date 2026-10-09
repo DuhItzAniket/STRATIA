@@ -320,4 +320,8 @@ Montenegro's vertical-development class folded into the low étage for scoring; 
 result worth keeping: the plain confident-joint flag rate is not interpretable when the probe is weak or a class
 is rare (CCSN 46 %, Montenegro 55 % plain against 29 % and 11 % strong).
 
+### P041 / P042 — B0268 labelling (blocked) and Gate G2
+
+No B0268 logger frames exist (owner item), so P041 is BLOCKED and Gate G2 is signed **conditionally** on 2026-10-10: every other Stage D criterion is met with evidence (`docs/phases/P042-gate-g2.md`; 149 tests, lock check, lint). *For the paper:* C1/C2 do not depend on B0268; H4 (geometry helps transfer to a consumer camera) and the B0268 OOD numbers wait for P041/P083. Stage E starts on fixed labels and splits.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

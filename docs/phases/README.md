@@ -44,3 +44,5 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P038](P038-split-generator.md) | Split generator | DONE |
 | [P039](P039-lock-test-sets.md) | Lock test sets | DONE |
 | [P040](P040-label-noise.md) | Label-noise estimation | DONE |
+| [P041](P041-b0268-labelling.md) | B0268 labelling protocol | BLOCKED |
+| [P042](P042-gate-g2.md) | Gate G2 — Splits & labels sign-off | DONE (conditional) |

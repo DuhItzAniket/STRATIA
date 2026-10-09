@@ -4,6 +4,12 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P042 — Gate G2: splits & labels sign-off (2026-10-10)
+- Review of P033–P041 with evidence (`docs/phases/P042-gate-g2.md`); mechanical checks rerun (149 tests, test-set lock, lint); gate signed conditionally with P041 deferred (no B0268 frames exist; latest before P083).
+
+### P041 — B0268 labelling protocol (2026-10-10)
+- BLOCKED on the owner's sky-logger frames and a second labeller; requirements and the day-coverage rule recorded (`docs/phases/P041-b0268-labelling.md`).
+
 ### P040 — Label-noise estimation (2026-10-08)
 - Confident-learning flags on frozen features with a strong tier (`stratia/labels/noise.py`, `scripts/label_noise.py` → `data/label_noise_flags.parquet`); CCSN 29 %, MGCD 7 %, Montenegro 11 %, SWIMCAT 0 strong flags; sheets reviewed; nothing deleted. Report `docs/data/label_noise_report.md`.
 
