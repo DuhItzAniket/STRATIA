@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P046 — Geometry-consistent transforms (2026-10-10)
+- ADR-004 (native view + ray maps; augmentations are pixel remappings); `GeoState` and the transforms Resize, Crop, RandomResizedCrop, HorizontalFlip, Rotate, Compose with `geometry_for` recomputing the ray map through the composed map (`stratia/geometry/transforms.py`); 8 consistency tests (coordinate image, Sun stays at the Sun, flip/rotation of the zenith map, padding invalid).
+
 ### P045 — Ray-map generator (2026-10-10)
 - Contract ray maps and meta vector from camera, pose, Sun, mask and a near-horizon floor through one affine (`stratia/geometry/raymap.py`, `configs/near_horizon.csv`); overlays and Sun-patch check on four stations (`scripts/ray_map_overlays.py` → `docs/data/ray_maps.md`, figures).
 
