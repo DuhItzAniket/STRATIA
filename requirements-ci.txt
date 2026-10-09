@@ -5,7 +5,7 @@ numpy>=1.26,<2
 omegaconf
 pyyaml
 pandas
-pyarrow
+pyarrow==25.0.1   # 26.0.0 (2026-10-09) is built against NumPy 2 and fails to import next to numpy<2 (CI run 25)
 pillow
 scipy
 scikit-learn
