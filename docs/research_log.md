@@ -416,4 +416,8 @@ Set-valued genus BCE with partial negatives (single-label datasets are not exhau
 
 A 0.6 M-parameter DPT-lite decoder on frozen DINOv3 tokens reaches val mIoU 0.919 against the token probe's 0.875 and labels 22% of ceilometer-clear Eye2Sky sky as cloud (probe 32 %, prototype 85–99 %). *For the paper:* the dense head on frozen features already beats a from-scratch U-Net and the probe on every dataset.
 
+### P066 — Layer head
+
+Same decoder trunk, three layer classes on cloud pixels, trained on Almería: layer mIoU 0.559 with a bootstrap 95 % interval [0.467, 0.661] on the small val set; sky parsing stays at 0.894 in the joint run.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

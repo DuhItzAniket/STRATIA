@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P066 — Layer head (2026-10-11)
+- Layer head on the shared decoder trunk (`--layers`): Almería layer mIoU 0.559 [0.467, 0.661] (bootstrap 95 %), sky parsing 0.894 jointly.
+
 ### P065 — Sky-parsing head (2026-10-11)
 - Dense decoder + sky-parsing head (`stratia/model/dense.py`, `scripts/train_dense_heads.py`): val mIoU 0.919 on the grouped segmentation val (P057 token probe 0.875), clear-sky cloud fraction 0.220 (probe 0.323); `docs/data/dense_heads.md`. P057's data helpers moved into `stratia/baselines/segmentation.py`.
 

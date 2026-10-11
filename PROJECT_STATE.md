@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | G — model core (P061–P072); Stages A–F complete (P056 partial; P041 blocked) |
-| Last completed phase | P065 — Sky-parsing head |
-| Next phase | P066 — Layer head; P041 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
+| Last completed phase | P066 — Layer head |
+| Next phase | P067 — CBH head; P041 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 complete on disk (2026-10-11); P047 pair table built. B0268 logging for P041 to start now (P041 BLOCKED). Missing public datasets need owner action (P015, cut-off 15 Oct). |
@@ -88,3 +88,4 @@
 | P063 | Global heads | DONE | 2026-10-11 |
 | P064 | Taxonomy & soft-label losses | DONE | 2026-10-11 |
 | P065 | Sky-parsing head | DONE | 2026-10-11 |
+| P066 | Layer head | DONE | 2026-10-11 |
