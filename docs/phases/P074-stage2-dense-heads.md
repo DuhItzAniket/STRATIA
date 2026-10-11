@@ -16,7 +16,9 @@ B0268 images in the manifest (the P041 captures are still pending); P051 patch-t
    (`class_fractions`: mean predicted share of invalid / sky / cloud / sun-glare inside the camera mask) on the
    clear-sky frames and on the B0268 frames, both written to the result rows; the data helpers moved to
    `stratia/train/dense_data.py` for P076 / P077.
-2. Run: `--phase P074 --epochs 15 --layers --kendall` (18 minutes).
+2. Run: `--phase P074 --epochs 15 --layers --kendall` (18 minutes); repeated in P088 once the trainer saved its best
+   checkpoint (first run 0.905 / 0.299, the repeat 0.904 / 0.290: the table shows the repeat, which is the candidate
+   the robustness suite and the export read).
 
 ## Verification
 Grouped val, 891 images; the P066 fixed-weight joint run and the P065 sky-only run as references:
@@ -25,13 +27,13 @@ Grouped val, 891 images; the P066 fixed-weight joint run and the P065 sky-only r
 |---|---|---|---|---|---|
 | P065 sky only | **0.919** | — | — | **0.220** | — |
 | P066 sky + layer, weight 1.0 | 0.894 | 0.559 [0.463, 0.659] | 0.575 / 0.344 / 0.758 | 0.357 | — |
-| **P074 sky + layer, Kendall** | 0.905 | 0.559 [0.465, 0.656] | 0.577 / 0.341 / 0.758 | 0.299 | 0.443 |
+| **P074 sky + layer, Kendall** | 0.904 | 0.558 [0.464, 0.656] | 0.577 / 0.341 / 0.757 | 0.290 | 0.448 |
 
-- The learned weights settle at 6.2 (sky) against 1.6 (layer): the weighting recovers 0.011 of the 0.025 mIoU the
-  fixed-weight run had lost and 0.06 of the clear-sky cloud fraction, at an unchanged layer score. The per-class
+- The learned weights settle at 6.2 (sky) against 1.6 (layer): the weighting recovers 0.010 of the 0.025 mIoU the
+  fixed-weight run had lost and 0.07 of the clear-sky cloud fraction, at an unchanged layer score. The per-class
   layer picture is the same as P066 (mid 0.34 is the hard class).
-- Monitor on the clear-sky Eye2Sky frames: invalid 0.000, sky 0.701, cloud 0.299, sun-glare 0.000 (the glare
-  class has no labels yet and is never predicted). On the 25 B0268 legacy frames: sky 0.556, cloud 0.443,
+- Monitor on the clear-sky Eye2Sky frames: invalid 0.000, sky 0.710, cloud 0.290, sun-glare 0.000 (the glare
+  class has no labels yet and is never predicted). On the 25 B0268 legacy frames: sky 0.552, cloud 0.448,
   invalid 0. These frames are not known to be clear (no P041 labels yet), so the B0268 number is a reference
   for the P041 / P083 comparison rather than a collapse verdict; the prototype's 85–99 % is far away.
 
@@ -40,7 +42,7 @@ Grouped val, 891 images; the P066 fixed-weight joint run and the P065 sky-only r
 - [x] Predicted-class-fraction monitor on clear-sky and B0268 frames recorded in the result rows.
 
 ## Fit & data-risk notes
-- The sky-only head remains the best sky parser (0.919 vs 0.905); the joint model pays 0.014 mIoU for the layer
+- The sky-only head remains the best sky parser (0.919 vs 0.904); the joint model pays 0.015 mIoU for the layer
   head on the shared trunk even with the weighting. P076 reads this trade across all heads; a separate dense
   trunk for layers is the fallback if the joint loss keeps the gap.
 - No photometric augmentation is possible on cached tokens; the glare class waits for P077 (backbone in the

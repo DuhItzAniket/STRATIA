@@ -16,11 +16,11 @@ DPT-lite decoder (ADR-005 §2) on the frozen DINOv3 ViT-S/16 32 x 32 token grid 
 | P066 | dense_heads+layers | swimseg | 0.868 [0.848, 0.888] | 0.864 | 0.871 | - | - | - / - / - | 0.357 | - | 0.847 |
 | P066 | dense_heads+layers | swinseg | 0.898 [0.882, 0.912] | 0.905 | 0.890 | - | - | - / - / - | 0.357 | - | 0.866 |
 | P066 | dense_heads+layers | swinyseg | 0.868 [0.860, 0.876] | 0.861 | 0.875 | - | - | - / - / - | 0.357 | - | 0.843 |
-| P074 | dense_heads+layers+kendall | all | 0.905 [0.900, 0.909] | 0.870 | 0.880 | 0.964 | 0.559 [0.465, 0.656] | 0.577 / 0.341 / 0.758 | 0.299 | 0.443 | 0.875 |
-| P074 | dense_heads+layers+kendall | almeria | 0.885 [0.869, 0.903] | 0.868 | 0.824 | 0.964 | 0.559 [0.467, 0.662] | 0.577 / 0.341 / 0.758 | 0.299 | 0.443 | 0.865 |
-| P074 | dense_heads+layers+kendall | shwimseg | 0.809 [0.755, 0.854] | 0.779 | 0.839 | - | - | - / - / - | 0.299 | 0.443 | 0.786 |
-| P074 | dense_heads+layers+kendall | swimseg | 0.879 [0.859, 0.898] | 0.875 | 0.882 | - | - | - / - / - | 0.299 | 0.443 | 0.847 |
-| P074 | dense_heads+layers+kendall | swinseg | 0.903 [0.884, 0.921] | 0.911 | 0.895 | - | - | - / - / - | 0.299 | 0.443 | 0.866 |
-| P074 | dense_heads+layers+kendall | swinyseg | 0.878 [0.869, 0.885] | 0.871 | 0.885 | - | - | - / - / - | 0.299 | 0.443 | 0.843 |
+| P074 | dense_heads+layers+kendall | all | 0.904 [0.900, 0.909] | 0.869 | 0.879 | 0.964 | 0.558 [0.464, 0.656] | 0.577 / 0.341 / 0.757 | 0.290 | 0.448 | 0.875 |
+| P074 | dense_heads+layers+kendall | almeria | 0.885 [0.868, 0.902] | 0.868 | 0.823 | 0.964 | 0.558 [0.466, 0.661] | 0.577 / 0.341 / 0.757 | 0.290 | 0.448 | 0.865 |
+| P074 | dense_heads+layers+kendall | shwimseg | 0.809 [0.756, 0.854] | 0.779 | 0.839 | - | - | - / - / - | 0.290 | 0.448 | 0.786 |
+| P074 | dense_heads+layers+kendall | swimseg | 0.878 [0.858, 0.897] | 0.874 | 0.881 | - | - | - / - / - | 0.290 | 0.448 | 0.847 |
+| P074 | dense_heads+layers+kendall | swinseg | 0.903 [0.884, 0.921] | 0.911 | 0.895 | - | - | - / - / - | 0.290 | 0.448 | 0.866 |
+| P074 | dense_heads+layers+kendall | swinyseg | 0.877 [0.869, 0.885] | 0.870 | 0.884 | - | - | - / - / - | 0.290 | 0.448 | 0.843 |
 
 Rows in `data/dense_heads.parquet`; curves in each run's `metrics.jsonl` (phase P065 / P066).

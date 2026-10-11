@@ -87,3 +87,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P081](P081-fit-sign-off.md) | Fit sign-off | DONE |
 | [P082](P082-gate-g4.md) | Gate G4 — Model vs baselines | DONE |
 | [P089](P089-calibration.md) | Calibration | DONE |
+| [P088](P088-robustness-suite.md) | Robustness suite | DONE |

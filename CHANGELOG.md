@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P088 — Robustness suite (2026-10-11)
+- Robustness suite (`scripts/robustness_suite.py` → `docs/data/robustness.md`): eight corruptions on validation images with the backbone live; largest drops: étage F1 0.838 → 0.741 (sensor noise), sky mIoU 0.901 → 0.816 (sun glare), CBH MAE 606 → 1014 m (sensor noise).
+
 ### P089 — Calibration (2026-10-11)
 - Calibration (`scripts/calibrate.py` → `configs/calibration.json`, `docs/data/calibration.md`): cross-fitted per-head temperatures (genus ECE 0.145 → 0.092; étage and oktas kept at T = 1, ECE 0.023 / 0.030), conformal CBH intervals (80 % coverage 0.874 raw → 0.798), OOD threshold at the 95th in-domain percentile.
 

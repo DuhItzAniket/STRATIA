@@ -149,6 +149,9 @@ def main() -> int:
                 best = dict(rec, ev=ev)
                 best_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
         model.load_state_dict(best_state)
+        (run.dir / "checkpoints").mkdir(exist_ok=True)
+        torch.save({"model": best_state, "cfg": OmegaConf.to_container(cfg), "best_epoch": best["epoch"]},
+                   run.dir / "checkpoints" / "best.pt")
         ev = best["ev"]
         clear = S.clear_sky_frames(a.clear_frames)
         cam_masks = S.camera_masks(clear, data_root, SIZE) if len(clear) else []
