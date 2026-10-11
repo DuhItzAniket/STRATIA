@@ -126,6 +126,28 @@ def multilabel_macro_f1(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     return float(np.mean(f1s)) if f1s else 0.0
 
 
+THRESHOLD_GRID = tuple(np.linspace(0.05, 0.95, 19))
+
+
+def tuned_thresholds(probs: np.ndarray, truth: np.ndarray, grid=THRESHOLD_GRID) -> np.ndarray:
+    """0/1 predictions with a per-column threshold that maximises that column's F1 on the given rows (an optimistic,
+    selection-on-val number reported next to the fixed 0.5 one, as the probes' C is selected on val)."""
+    hat = np.zeros_like(truth)
+    for j in range(truth.shape[1]):
+        if truth[:, j].sum() == 0:
+            hat[:, j] = probs[:, j] > 0.5
+            continue
+        best_t, best_f1 = 0.5, -1.0
+        for t in grid:
+            p = probs[:, j] > t
+            tp = (p & (truth[:, j] == 1)).sum()
+            f1 = 2 * tp / max(2 * tp + (p & (truth[:, j] == 0)).sum() + (~p & (truth[:, j] == 1)).sum(), 1)
+            if f1 > best_f1:
+                best_t, best_f1 = t, f1
+        hat[:, j] = probs[:, j] > best_t
+    return hat.astype(int)
+
+
 def unsupported_positive_rate(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     """Share of rows predicted positive in columns that have no positive in `y_true` (nan when every column has
     support): the error `multilabel_macro_f1` deliberately leaves out."""

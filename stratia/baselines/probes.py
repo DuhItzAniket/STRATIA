@@ -45,12 +45,15 @@ def linear_probe(x_train: np.ndarray, y_train: np.ndarray, x_val: np.ndarray, y_
     for c in c_grid:
         if multilabel:
             pred = np.zeros_like(y_val)
+            probs = np.zeros(y_val.shape, dtype=np.float64)
             for j in range(y_train.shape[1]):
                 if y_train[:, j].min() == y_train[:, j].max():            # a column with one class only
                     pred[:, j] = y_train[0, j]
+                    probs[:, j] = float(y_train[0, j])
                     continue
                 clf = LogisticRegression(C=c, max_iter=max_iter, random_state=seed).fit(xt, y_train[:, j])
                 pred[:, j] = clf.predict(xv)
+                probs[:, j] = clf.predict_proba(xv)[:, 1]
             metric = T.multilabel_macro_f1(y_val, pred)
         else:
             clf = LogisticRegression(C=c, max_iter=max_iter, random_state=seed).fit(xt, y_train)
@@ -58,7 +61,13 @@ def linear_probe(x_train: np.ndarray, y_train: np.ndarray, x_val: np.ndarray, y_
             metric = T.macro_f1(y_val, pred)
         if best is None or metric > best.val_metric:
             best = ProbeResult("linear", {"C": c, "seed": seed}, metric, pred, {})
-    best.extra = {"accuracy": T.accuracy(y_val, best.val_pred)} if not multilabel else {}
+            if multilabel:
+                best.extra = {"probs": probs}
+    if multilabel:
+        probs = best.extra.pop("probs")
+        best.extra = {"macro_f1_tuned": T.multilabel_macro_f1(y_val, T.tuned_thresholds(probs, y_val))}
+    else:
+        best.extra = {"accuracy": T.accuracy(y_val, best.val_pred)}
     return best
 
 

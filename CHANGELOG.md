@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P073 — Stage-1: global heads on cached features (2026-10-11)
+- Stage-1 global heads on cached features (`stratia/train/data.py`, `global_eval.py`, `scripts/train_global_heads.py`): in-domain val mean étage macro-F1 0.817 (genus 0.626 CCSN, 0.812 MGCD), Montenegro agreement 1.047 / 1.027 of the human ceiling; LODO étage mean 0.485 (sources only) and 0.548 (+ Eye2Sky étage); `docs/data/stage1_global.md`.
+
 ### P072 — Training engine (2026-10-11)
 - Training engine (`stratia/train/engine.py`): AMP, accumulation, clipping, EMA, atomic checkpoint / resume with RNG and epoch position, NaN guard, early stopping; resume reproduces the uninterrupted run bit for bit (3 tests).
 

@@ -63,6 +63,7 @@ def run_lodo(cache: FeatureCache, tables: T.Tables, kind: str) -> list[dict]:
                      "linear_macro_f1": lin.val_metric, "linear_acc": float("nan"), "linear_C": lin.params["C"],
                      "knn_macro_f1": knn.val_metric, "knn_acc": float("nan"),
                      "linear_unsupported_fp": T.unsupported_positive_rate(yv, lin.val_pred),
+                     "linear_macro_f1_tuned": lin.extra.get("macro_f1_tuned", float("nan")),
                      "knn_unsupported_fp": T.unsupported_positive_rate(yv, knn.val_pred)})
     return rows
 

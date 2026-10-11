@@ -41,29 +41,43 @@ def genus_etage_matrix() -> torch.Tensor:
 def set_valued_bce(logits: torch.Tensor, target_set: torch.Tensor, alternatives: torch.Tensor, mask: torch.Tensor,
                    negative_weight: torch.Tensor | float = 1.0) -> torch.Tensor:
     """logits [N, C]; target_set [N, C] 0/1 (the known set S); alternatives [N] bool (S names alternatives);
-    mask [N] bool (sample has a genus set); negative_weight [N] or float (weight of BCE(p_c, 0) for c not in S).
+    mask [N] bool (sample has a genus set or known negatives); negative_weight: float, [N] (weight of BCE(p_c, 0)
+    for every c not in S) or [N, C] (per-class weights: 0 = the class is unknown for that sample, e.g. 'cloud of
+    unnamed genus' has a known negative on `clear` only).
 
-    Co-present sets: BCE(p_c, 1) summed over S. Alternatives: -log(1 - prod_{c in S}(1 - p_c)). Negatives: weighted
-    BCE(p_c, 0) over the complement, averaged over the complement size. Per sample: positives + negatives."""
+    Co-present sets: BCE(p_c, 1) summed over S (0 for an empty S). Alternatives: -log(1 - prod_{c in S}(1 - p_c)).
+    Negatives: weighted BCE(p_c, 0) over the complement, averaged over the complement size. Per sample:
+    positives + negatives."""
     logp = F.logsigmoid(logits)                     # log p
     log1mp = F.logsigmoid(-logits)                  # log (1 - p)
     s = target_set.to(logits.dtype)
+    has_pos = s.sum(1) > 0
     n_pos = s.sum(1).clamp_min(1.0)
     copresent = -(logp * s).sum(1) / n_pos
     log_none = (log1mp * s).sum(1)                  # log prod (1 - p_c) over S
     alt = -torch.log1p(-torch.exp(log_none).clamp_max(1.0 - EPS))
-    positives = torch.where(alternatives, alt, copresent)
+    positives = torch.where(alternatives & has_pos, alt, copresent)
     comp = 1.0 - s
+    if torch.is_tensor(negative_weight) and negative_weight.dim() == 2:
+        w = comp * negative_weight.to(logits.dtype)
+        negatives = -(log1mp * w).sum(1) / w.sum(1).clamp_min(1.0)
+        return _masked_mean(positives + negatives, mask)
     n_neg = comp.sum(1).clamp_min(1.0)
     negatives = -(log1mp * comp).sum(1) / n_neg
     nw = negative_weight if torch.is_tensor(negative_weight) else torch.full_like(negatives, float(negative_weight))
     return _masked_mean(positives + nw * negatives, mask)
 
 
-def soft_bce(logits: torch.Tensor, target: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
-    """BCE against soft targets in [0, 1] (expert shares), averaged over classes, masked over samples."""
-    per = F.binary_cross_entropy_with_logits(logits, target.to(logits.dtype), reduction="none").mean(1)
-    return _masked_mean(per, mask)
+def soft_bce(logits: torch.Tensor, target: torch.Tensor, mask: torch.Tensor,
+             column_weight: torch.Tensor | None = None) -> torch.Tensor:
+    """BCE against soft targets in [0, 1] (expert shares), averaged over classes, masked over samples;
+    `column_weight` [N, C] (0 = that class is unknown for that sample) restricts the average to known columns."""
+    per_c = F.binary_cross_entropy_with_logits(logits, target.to(logits.dtype), reduction="none")
+    if column_weight is None:
+        return _masked_mean(per_c.mean(1), mask)
+    w = column_weight.to(logits.dtype)
+    per = (per_c * w).sum(1) / w.sum(1).clamp_min(1.0)
+    return _masked_mean(per, mask & (w.sum(1) > 0))
 
 
 def hierarchy_consistency(genus_logits: torch.Tensor, etage_logits: torch.Tensor, mask: torch.Tensor,
