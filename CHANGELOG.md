@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P070 — Multi-task balancing (2026-10-11)
+- Multi-task balancing (`stratia/model/balance.py`): Kendall uncertainty weighting over present tasks, task-gradient cosine monitor (2 tests).
+
 ### P069 — Multi-dataset sampler (2026-10-11)
 - Multi-dataset sampler (`stratia/data/sampler.py`): per-task batches, p_d ∝ n_d^τ with an exact floor, label masks per head; observed shares match the config within 0.02 (3 tests).
 

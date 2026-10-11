@@ -432,4 +432,8 @@ Energy + Mahalanobis on frozen features: leave-one-source-out AUROC 0.961–1.00
 
 Per-task batches, square-root dataset balance (τ = 0.5), label masks; observed shares match the config.
 
+### P070 — Balancing
+
+Kendall weighting over present tasks and a task-gradient cosine monitor logged per step.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.
