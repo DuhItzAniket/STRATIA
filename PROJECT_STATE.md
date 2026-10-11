@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | F — Baselines (P051–P060); Stages A–E complete (P041 blocked) |
-| Last completed phase | P053 — B2: fine-tuned CNNs |
-| Next phase | P054 — B3: frozen probes; P041 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
+| Last completed phase | P054 — B3: frozen probes |
+| Next phase | P055 — B4: CLIP / SigLIP 2; P041 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 complete on disk (2026-10-11); P047 pair table built. B0268 logging for P041 to start now (P041 BLOCKED). Missing public datasets need owner action (P015, cut-off 15 Oct). |
@@ -76,3 +76,4 @@
 | P051 | Feature cache | DONE | 2026-10-11 |
 | P052 | B1: legacy CNN | DONE | 2026-10-11 |
 | P053 | B2: fine-tuned CNNs | DONE | 2026-10-11 |
+| P054 | B3: frozen probes | DONE | 2026-10-11 |

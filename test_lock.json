@@ -1,6 +1,6 @@
 {
-  "locked_at": "2026-10-11T04:00:09Z",
-  "config_version": 1,
+  "locked_at": "2026-10-11T04:42:01Z",
+  "config_version": 2,
   "seed": 0,
   "manifest_sample_id_sha256_prefix": "464078b6d033dd39",
   "tests": {
@@ -29,24 +29,24 @@
       "sha256": "9439507b654a96f180a75c95e7124d62a585ddff7ce1d7e8c99fb0fba92549ab"
     },
     "lodo/almeria/test": {
-      "n": 818,
-      "sha256": "18a9873329d02b15063816762707dfd70630ad86e62adff5bdc0899a8daa3bce"
+      "n": 734,
+      "sha256": "b124dce629852bf12a9ae840f54951eeca34bf6b795f75ec926e57145ffa79fb"
     },
     "lodo/ccsn/test": {
-      "n": 2543,
-      "sha256": "155b88ab483b0a6d5e59ed3d2add713765006c06b5d7cbed35b84cd320a875c3"
+      "n": 2288,
+      "sha256": "65237bb8be07dd4e3e7f01330c7e1666cfc6fac83bc1f53518b932dd5f64aa28"
     },
     "lodo/mgcd/test": {
-      "n": 8000,
-      "sha256": "d24c81021843951f3aa48067f467e87ec30dcbb840787fb8784bd58cd7c30953"
+      "n": 7041,
+      "sha256": "c2abfdd5d07b02587fcdfa1bcfccd40463348d9b1af5a7cb1e8222a8212d28d3"
     },
     "lodo/montenegro/test": {
-      "n": 2522,
-      "sha256": "8ec4f9eee18bcfaaabefbe593b4238782e6e45815dcb4e7b022c7a378e752066"
+      "n": 2011,
+      "sha256": "53e610a78e32ea291c8da47123e74b64e4e7ea92237737dfedb3515b1c65246a"
     },
     "lodo/swim/test": {
-      "n": 8836,
-      "sha256": "bfe16a9cc81d8342be6d81bcaeb12be9132a83de72f8a37f8b7c029bb954b94c"
+      "n": 7950,
+      "sha256": "00a4c9923cc646b4529757038790e192ddbf8df71a560187dd27fe584bafe86d"
     },
     "held_out_station/disjoint_days/test": {
       "n": 4906,

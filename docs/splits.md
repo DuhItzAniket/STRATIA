@@ -28,7 +28,7 @@ unrepeatable here. The official splits are reported only as "published protocol"
 | Protocol | What it measures | Train | Test | Notes |
 |---|---|---|---|---|
 | **In-domain, blocked** (per source) | performance on a source with no leakage | 70 % of units | 20 % of units (10 % val) | greedy stratified assignment of units; conflict-merged images (P026) never in test |
-| **Leave-one-dataset-out (LODO)** | transfer to an unseen source (the paper's main claim, H1, criterion C1) | train + val units of all other sources | the whole held-out source | folds: CCSN, MGCD, Montenegro, SWIM family, Almería |
+| **Leave-one-dataset-out (LODO)** | transfer to an unseen source (the paper's main claim, H1, criterion C1) | train + val units of all other sources | the held-out source minus its in-domain val units (locked); its in-domain val units are the LODO *val* set (model selection, gate G4) — amendment of 2026-10-11, config version 2 | folds: CCSN, MGCD, Montenegro, SWIM family, Almería |
 | **Held-out station** (Eye2Sky) | transfer to an unseen camera of the same type | AURIC | BARSE | two variants: same days (shared weather) and disjoint days (P027) |
 | **Few-shot target** (B0268) | adaptation to the user's camera | k whole days of B0268 (k = 0, 1, 3) plus the sources | the remaining B0268 days | repeated over day draws; the B0268 test days are locked when P041 delivers the labels |
 | **Published protocol** (MGCD, Almería) | comparison with the literature | their train split | their test split | leaks by construction; reported, never used for model selection |

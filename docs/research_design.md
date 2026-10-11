@@ -75,4 +75,9 @@ Test manifests are hashed into `test_lock.json` (P039). No model selection, earl
 
 ## 8. Amendments
 
-(none)
+- **2026-10-11 (P054, before any STRATIA model training).** The LODO protocol as locked in P039 made the *whole* held-out
+  source a locked test set, which left criterion C1 (judged on validation data, §5) without an unlocked LODO number.
+  Amendment: each LODO fold now has a `val` role = the held-out source's in-domain val units (the same units every
+  in-domain model selection uses), and the locked LODO test set is the held-out source minus those units. No locked set
+  had been evaluated; `test_lock.json` was re-locked with the five LODO entries changed and everything else identical
+  (`docs/phases/P054-frozen-probes.md`). C1 is evaluated on the LODO val sets; P090 evaluates the LODO test sets once.

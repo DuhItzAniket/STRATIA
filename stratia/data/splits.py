@@ -121,15 +121,22 @@ def in_domain_split(table: pd.DataFrame, config: dict) -> pd.DataFrame:
 
 
 def lodo_folds(in_domain: pd.DataFrame, config: dict) -> pd.DataFrame:
-    """One row per (fold, sample): role 'test' for the held-out source, 'train' for train + val samples of the
-    other sources whose unit has no member of the held-out source."""
+    """One row per (fold, sample): for the held-out source, role 'val' for its in-domain val units (model selection
+    and the pre-registered gate, which is judged on validation data) and 'test' for all its other units (locked,
+    evaluated once in P090); 'train' for train + val samples of the other sources whose unit has no member of the
+    held-out source. Config version 2 (P054 amendment): before it the whole held-out source was 'test'."""
     rows = []
     unit_sources = in_domain.groupby("unit").source.agg(set)
+    carve_val = int(config.get("version", 1)) >= 2
     for fold in config["lodo"]["folds"]:
-        test = in_domain[in_domain.source == fold]
+        held = in_domain[in_domain.source == fold]
+        val = held[held.split == "val"] if carve_val else held.iloc[0:0]
+        test = held[~held.sample_id.isin(val.sample_id)]
         tainted = {u for u, srcs in unit_sources.items() if fold in srcs}
         train = in_domain[(in_domain.source != fold) & in_domain.split.isin(["train", "val"]) & ~in_domain.unit.isin(tainted)]
         rows.append(pd.DataFrame({"fold": fold, "sample_id": test.sample_id.values, "role": "test"}))
+        if len(val):
+            rows.append(pd.DataFrame({"fold": fold, "sample_id": val.sample_id.values, "role": "val"}))
         rows.append(pd.DataFrame({"fold": fold, "sample_id": train.sample_id.values, "role": "train"}))
     return pd.concat(rows, ignore_index=True)
 

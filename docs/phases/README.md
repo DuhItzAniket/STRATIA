@@ -57,3 +57,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P051](P051-feature-cache.md) | Feature cache | DONE |
 | [P052](P052-legacy-cnn.md) | B1: legacy CNN | DONE |
 | [P053](P053-finetuned-cnns.md) | B2: fine-tuned CNNs | DONE |
+| [P054](P054-frozen-probes.md) | B3: frozen probes | DONE |

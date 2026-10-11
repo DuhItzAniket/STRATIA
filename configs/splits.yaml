@@ -1,5 +1,8 @@
 # Split design (P037), implemented by scripts/make_splits.py (P038). See docs/splits.md for the reasoning.
-version: 1
+# version 2 (P054, 2026-10-11): LODO folds carry a 'val' role = the held-out source's in-domain val units, so the
+# pre-registered gate (judged on validation data) has an unlocked LODO number; LODO 'test' = the rest of the source.
+# The in-domain and held-out-station files are unchanged by this version.
+version: 2
 seed: 0
 
 # Share of units (not images) per split inside each source; units are assigned greedily to balance the
