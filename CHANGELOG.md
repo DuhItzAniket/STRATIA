@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P071 — Model sanity suite (2026-10-11)
+- Full model (`stratia/model/stratia.py`: backbone + geometry + heads, `forward` and `forward_tokens`) and the sanity suite (`stratia/model/sanity.py`): contract shapes, overfit one batch, shuffled labels at chance, constant input, determinism (5 tests on a fake backbone).
+
 ### P070 — Multi-task balancing (2026-10-11)
 - Multi-task balancing (`stratia/model/balance.py`): Kendall uncertainty weighting over present tasks, task-gradient cosine monitor (2 tests).
 

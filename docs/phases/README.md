@@ -74,3 +74,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P068](P068-ood-quality-score.md) | OOD / quality score | DONE |
 | [P069](P069-multi-dataset-sampler.md) | Multi-dataset sampler | DONE |
 | [P070](P070-multi-task-balancing.md) | Multi-task balancing | DONE |
+| [P071](P071-model-sanity-suite.md) | Model sanity suite | DONE |

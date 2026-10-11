@@ -1,1 +1,2 @@
-"""Model components. P050 adds the SkyRay null-token encoder; the backbone and heads follow in Stage F."""
+"""Model components (Stage G): geometry encoder (skyray), global heads, dense decoder, CBH head, OOD score, losses,
+CBH bins, multi-task balancing, the assembled model (stratia) and the sanity suite."""
