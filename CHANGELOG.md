@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P059 — Baseline leaderboard (2026-10-11)
+- `scripts/baseline_leaderboard.py` → `docs/data/baseline_leaderboard.md`: recognition (in-domain, LODO), protocol gap, segmentation, CBH, and the best-baseline references for criteria C1 and C3.
+
 ### P058 — B7: CBH baselines (2026-10-11)
 - Cloud-base-height baselines on the P047 pairs (`stratia/baselines/cbh.py`, `scripts/baseline_cbh.py`): climatology, étage lookup, ridge on frozen features, ceilometer-supervised ResNet-18; MAE / bias / skill by height bin (`docs/data/baseline_cbh.md`).
 

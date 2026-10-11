@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | F — Baselines (P051–P060); Stages A–E complete (P041 blocked) |
-| Last completed phase | P058 — B7: CBH baselines |
-| Next phase | P059 — Baseline leaderboard; P041 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
+| Last completed phase | P059 — Baseline leaderboard |
+| Next phase | P060 — Gate G3 — Baselines reproduced; P041 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 complete on disk (2026-10-11); P047 pair table built. B0268 logging for P041 to start now (P041 BLOCKED). Missing public datasets need owner action (P015, cut-off 15 Oct). |
@@ -81,3 +81,4 @@
 | P056 | B5: small VLM | PARTIAL | 2026-10-11 |
 | P057 | B6: segmentation baselines | DONE | 2026-10-11 |
 | P058 | B7: CBH baselines | DONE | 2026-10-11 |
+| P059 | Baseline leaderboard | DONE | 2026-10-11 |
