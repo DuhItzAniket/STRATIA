@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P061 — Architecture spec (2026-10-11)
+- Architecture spec: `docs/architecture.md` (diagram, shape table, contract → module → loss map, frozen-feature training path), ADR-005 (heads: attention pool ⊕ CLS, CORAL oktas, light DPT-style dense decoder, zenith-prior CBH attention over 24 étage-aligned log bins + no-cloud, energy + Mahalanobis OOD), ADR-006 (losses: set-valued genus BCE with partial negatives, soft BCE, CORAL with soft cumulative targets, hierarchy consistency, dense CE, CBH ordinal CE + CRPS, layer consistency, Kendall weighting).
+
 ### P060 — Gate G3 — Baselines reproduced (2026-10-11)
 - Gate G3 signed (`docs/phases/P060-gate-g3.md`): seed variance and plausibility against the literature reviewed.
 

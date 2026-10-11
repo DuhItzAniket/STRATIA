@@ -396,4 +396,8 @@ climatology_median: MAE 1147 m, skill +0.000. climatology_month_hour: MAE 1131 m
 
 Baselines reproduced with acceptable seed variance and plausible against the literature; signed (`docs/phases/P060-gate-g3.md`).
 
+### P061 — Architecture spec
+
+The v1 design is fixed in `docs/architecture.md` with ADR-005 (heads) and ADR-006 (losses). Two choices matter for the paper: the CBH output is a distribution over 24 étage-aligned log bins (so the layer-consistency term is a sum over bins), and every loss is masked per sample so a batch can mix label types.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.
