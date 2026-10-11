@@ -468,4 +468,8 @@ LoRA on the last blocks with augmentation: étage 0.805 → 0.810, dense 0.869 �
 
 Random search, 20 trials: scores 0.775–0.819; the sensitivity table says which knobs matter (`docs/data/hpo_global.md`).
 
+### P079 — Learning curves
+
+Global heads 0.662 / 0.698 / 0.774 / 0.817 at 10 / 25 / 50 / 100 % of the training units; CBH 756 / 661 / 580 / 557 m at 10 / 25 / 50 / 100 % of the days.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

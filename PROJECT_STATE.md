@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | H — training regime (P073–P082); Stages A–G complete (P056 partial; P041 blocked) |
-| Last completed phase | P078 — Budgeted HPO |
-| Next phase | P079 — Learning curves; P041 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
+| Last completed phase | P079 — Learning curves |
+| Next phase | P080 — Regularization study; P041 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 complete on disk (2026-10-11); P047 pair table built. B0268 logging for P041 to start now (P041 BLOCKED). Missing public datasets need owner action (P015, cut-off 15 Oct). |
@@ -101,3 +101,4 @@
 | P076 | Stage-4: joint multi-task (frozen) | DONE | 2026-10-11 |
 | P077 | Stage-5: partial unfreeze | DONE | 2026-10-11 |
 | P078 | Budgeted HPO | DONE | 2026-10-11 |
+| P079 | Learning curves | DONE | 2026-10-11 |

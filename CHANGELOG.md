@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P079 — Learning curves (2026-10-11)
+- Learning curves: global heads at 10 / 25 / 50 / 100 % of the training units (0.662 / 0.698 / 0.774 / 0.817), CBH head at 10 / 25 / 50 / 100 % of the training days (756 / 661 / 580 / 557 m MAE).
+
 ### P078 — Budgeted HPO (2026-10-11)
 - Budgeted random search for the global heads (`scripts/hpo_global.py`): 20 trials, scores 0.775–0.819, sensitivity table (`docs/data/hpo_global.md`).
 
