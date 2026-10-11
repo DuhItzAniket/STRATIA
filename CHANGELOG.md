@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P051 — Feature cache (2026-10-11)
+- Frozen-feature caches (`stratia/features/backbones.py`, `cache.py`, `scripts/build_feature_cache.py`, `scripts/cache_cbh_frames.py`): pooled fp16 embeddings for every manifest image plus the 10-minute cloud-base-height frames for DINOv3 S/B/L, DINOv2 S/B, CLIP ViT-B/16 and SigLIP 2 B/16 at 224 px (ViT-S also at 512 px) and the ViT-S patch grid for the dense subsets, keyed by backbone, size and transform version with a fingerprint and a resumable build; `docs/data/feature_cache.md`. DINOv3 ViT-L runs in bfloat16 (fp16 overflowed); OpenAI CLIP is converted to safetensors once.
+
 ### P047 — Image–ceilometer pairing (2026-10-11)
 - Pair table at the ceilometer sites (`stratia/labels/cbh_pairs.py`, `scripts/make_cbh_pairs.py` → `data/cbh_pairs.parquet`): frames every 2 min joined to the P036 targets within 15 s, Sun-fitted pose required, zenith pixel and 10° ROI per pair; 104,683 daytime pairs, 104,683 in the day splits (test 21,859, train 71,867, val 10,957); new protocol file `data/splits/cbh_pairs.parquet` and lock entries (`test_lock.json` re-locked); report `docs/data/cbh_pairs.md`, figures. P044 refit of OLDLR/WESTE with a 15° prior gate (dome ghost tracks) and daily sampling; P049's `label_from_pairs` joins views to this table.
 
