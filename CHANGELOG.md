@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P057 — B6: segmentation baselines (2026-10-11)
+- Segmentation baselines (`stratia/baselines/segmentation.py`, `scripts/baseline_segmentation.py`): small U-Net from scratch and a linear probe on DINOv3 patch tokens, per-dataset IoU and the clear-sky collapse check; SAM 3 deferred.
+
 ### P056 — B5: small VLM (2026-10-11)
 - Qwen3-VL-2B zero-shot sanity check in fp16 on 100 val images of CCSN and MGCD (`scripts/baseline_vlm.py`); PARTIAL: no 4-bit, one prompt.
 
