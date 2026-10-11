@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P052 — B1: legacy CNN (2026-10-11)
+- Legacy MobileNetV3-L recipe on CCSN under a per-image random split and the grouped split, same pool and sizes, 3 seeds (`scripts/baseline_cnn.py --recipe legacy`): random val macro-F1 0.511 vs grouped val 0.588; the random val's leaked images (a near-duplicate in train, 24 of 255) score 0.146 against 0.543 for the clean ones (`docs/data/baseline_cnn.md`). The locked test rows are not used.
+
 ### P051 — Feature cache (2026-10-11)
 - Frozen-feature caches (`stratia/features/backbones.py`, `cache.py`, `scripts/build_feature_cache.py`, `scripts/cache_cbh_frames.py`): pooled fp16 embeddings for every manifest image plus the 10-minute cloud-base-height frames for DINOv3 S/B/L, DINOv2 S/B, CLIP ViT-B/16 and SigLIP 2 B/16 at 224 px (ViT-S also at 512 px) and the ViT-S patch grid for the dense subsets, keyed by backbone, size and transform version with a fingerprint and a resumable build; `docs/data/feature_cache.md`. DINOv3 ViT-L runs in bfloat16 (fp16 overflowed); OpenAI CLIP is converted to safetensors once.
 

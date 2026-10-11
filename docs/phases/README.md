@@ -55,3 +55,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P050](P050-metadata-dropout.md) | Metadata dropout | DONE |
 | [P047](P047-image-ceilometer-pairing.md) | Image–ceilometer pairing | DONE |
 | [P051](P051-feature-cache.md) | Feature cache | DONE |
+| [P052](P052-legacy-cnn.md) | B1: legacy CNN | DONE |

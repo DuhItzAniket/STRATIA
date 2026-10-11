@@ -24,4 +24,4 @@ select = ["E", "F", "W", "I", "B", "UP"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-markers = ["gpu: needs a CUDA GPU (skipped in CI)"]
+markers = ["gpu: needs a CUDA GPU (skipped in CI)", "slow: takes more than a few seconds (runs in CI)"]
