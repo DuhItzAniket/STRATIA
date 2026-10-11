@@ -384,4 +384,8 @@ Qwen3-VL-2B zero-shot sanity check (`docs/data/baseline_vlm.md`), one prompt, no
 
 dinov3_vits16_patch_probe: val mIoU 0.875, clear-sky cloud fraction 0.323. small_unet: val mIoU 0.867, clear-sky cloud fraction 0.237. The collapse check is the number the legacy prototype failed (`docs/data/baseline_segmentation.md`).
 
+### P058 — CBH baselines
+
+climatology_median: MAE 1147 m, skill +0.000. climatology_month_hour: MAE 1131 m, skill +0.014. etage_lookup: MAE 1124 m, skill +0.020. ridge_dinov3_vits16_512: MAE 699 m, skill +0.390. cnn_resnet18_logheight: MAE 724 m, skill +0.368. The ceilometer-supervised CNN is the C3 reference (`docs/data/baseline_cbh.md`).
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.
