@@ -424,4 +424,8 @@ Same decoder trunk, three layer classes on cloud pixels, trained on Almería: la
 
 Zenith-prior attention over an 8 × 8 pooled token grid: val MAE 566 m, skill +0.506 against climatology, 22 % below the ceilometer-supervised CNN (724 m) and below the ridge (699 m); no mode collapse (prediction histogram ≈ label histogram). *Finding:* with geometry dropout 0.3 the head learns a content-only solution (zeroing the geometry changes nothing, 566 m); trained without dropout it uses the geometry (551 m, and 765 m when it is removed). The dropout rate is a real trade between robustness to uncalibrated hosts and the use of calibration, not a free regulariser; P075 / P091 set it.
 
+### P068 — OOD score
+
+Energy + Mahalanobis on frozen features: leave-one-source-out AUROC 0.961–1.000. The Mahalanobis term reads camera identity (P029 again), the energy term adds nothing; a new camera will be called 'uncertain' until adaptation adds its features to the fit.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

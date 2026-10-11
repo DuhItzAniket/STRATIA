@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P068 — OOD / quality score (2026-10-11)
+- OOD score (`stratia/model/ood.py`, `scripts/ood_eval.py`): energy + Mahalanobis; leave-one-source-out AUROC 0.961–1.000 (mean 0.978), the Mahalanobis term carries it; night and glare flags; `docs/data/ood_eval.md`.
+
 ### P067 — CBH head (2026-10-11)
 - CBH head (`stratia/model/cbh.py`, `scripts/train_cbh_head.py`; pooled 8 × 8 token cache via `FeatureCache.build(pool=4)`): val MAE 566 m, skill +0.506 (P058 best 699 m / +0.390); with geometry dropout 0.3 the head ignores the geometry (zeroed: 566 m), without dropout it uses it (551 m vs 765 m zeroed); `docs/data/cbh_head.md`.
 

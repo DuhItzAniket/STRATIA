@@ -71,3 +71,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P065](P065-sky-parsing-head.md) | Sky-parsing head | DONE |
 | [P066](P066-layer-head.md) | Layer head | DONE |
 | [P067](P067-cbh-head.md) | CBH head | DONE |
+| [P068](P068-ood-quality-score.md) | OOD / quality score | DONE |
