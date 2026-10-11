@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P055 — B4: CLIP / SigLIP 2 (2026-10-11)
+- CLIP ViT-B/16 and SigLIP 2 zero-shot with name and WMO-definition prompts fixed in `configs/prompts.yaml` (`scripts/baseline_zeroshot.py` → `docs/data/baseline_zeroshot.md`; best 0.413) plus linear probes on their embeddings (P055 rows of `docs/data/baseline_probes.md`).
+
 ### P054 — B3: frozen probes (2026-10-11)
 - Linear and k-NN probes on the frozen caches, in-domain and LODO étage (`stratia/baselines/tasks.py`, `probes.py`, `scripts/baseline_probes.py` → `docs/data/baseline_probes.md`); best in-domain mean 0.765 (('dinov3_vitb16', 224)), best LODO étage mean 0.583 (('dinov3_vitb16', 224)). LODO amendment: folds carry a val role (config version 2; research design §8); test lock re-locked for the five LODO entries.
 

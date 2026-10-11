@@ -1,0 +1,37 @@
+# Zero-shot prompts for CLIP / SigLIP 2 (P055). Fixed here, before any test evaluation (PLAN guard: "prompt
+# overfitting to val"). Two prompt sets per class: `name` (the plain class name) and `definition` (a one-line WMO
+# International Cloud Atlas style description). Keys are the datasets' native labels (in-domain split strata).
+template: "a photo of the sky showing {}"
+sources:
+  ccsn:
+    Ci: {name: "cirrus clouds", definition: "cirrus: detached white filaments or narrow bands of ice crystals, fibrous or silky, high in the sky"}
+    Cs: {name: "cirrostratus clouds", definition: "cirrostratus: a transparent whitish veil of ice cloud covering the sky, often with a halo around the sun"}
+    Cc: {name: "cirrocumulus clouds", definition: "cirrocumulus: a thin white patch or sheet of very small cloudlets, grains or ripples, high in the sky"}
+    Ac: {name: "altocumulus clouds", definition: "altocumulus: a layer or patch of white or grey rounded cloudlets or rolls at middle level, with shading"}
+    As: {name: "altostratus clouds", definition: "altostratus: a greyish or bluish uniform sheet of cloud covering the sky, the sun visible as through ground glass"}
+    Ns: {name: "nimbostratus clouds", definition: "nimbostratus: a dark grey, thick, featureless cloud layer hiding the sun, with continuous rain or snow"}
+    Cu: {name: "cumulus clouds", definition: "cumulus: detached, dense clouds with sharp outlines, flat bases and brilliant white cauliflower tops"}
+    Sc: {name: "stratocumulus clouds", definition: "stratocumulus: a grey or whitish layer of rounded masses or rolls at low level, with dark parts, not fibrous"}
+    St: {name: "stratus clouds", definition: "stratus: a uniform grey low cloud layer like fog that does not touch the ground, sometimes giving drizzle"}
+    Cb: {name: "cumulonimbus clouds", definition: "cumulonimbus: a huge towering storm cloud, dense and dark with an anvil-shaped fibrous top"}
+    Ct: {name: "aircraft contrails", definition: "contrails: long thin straight white lines of condensation left by aircraft against the sky"}
+  mgcd:
+    cumulus: {name: "cumulus clouds", definition: "cumulus: detached, dense clouds with sharp outlines, flat bases and brilliant white cauliflower tops"}
+    altocumulus: {name: "altocumulus clouds", definition: "altocumulus: a layer or patch of white or grey rounded cloudlets or rolls at middle level, with shading"}
+    cirrus: {name: "cirrus clouds", definition: "cirrus: detached white filaments or narrow bands of ice crystals, fibrous or silky, high in the sky"}
+    clearsky: {name: "a clear blue sky with no clouds", definition: "clear sky: a cloudless blue sky"}
+    stratocumulus: {name: "stratocumulus clouds", definition: "stratocumulus: a grey or whitish layer of rounded masses or rolls at low level, with dark parts, not fibrous"}
+    cumulonimbus: {name: "cumulonimbus clouds", definition: "cumulonimbus: a huge towering storm cloud, dense and dark with an anvil-shaped fibrous top"}
+    mixed: {name: "a mixture of several cloud types", definition: "mixed clouds: several cloud types at different levels visible at the same time"}
+  swimcat:
+    A-sky: {name: "a clear blue sky", definition: "clear sky: a cloudless blue sky"}
+    B-pattern: {name: "patterned clouds", definition: "patterned clouds: a regular pattern of small cloud elements, ripples or rolls across the sky"}
+    C-thick-dark: {name: "thick dark clouds", definition: "thick dark clouds: dense grey or dark clouds blocking the sun"}
+    D-thick-white: {name: "thick white clouds", definition: "thick white clouds: dense, bright white clouds"}
+    E-veil: {name: "a thin veil of clouds", definition: "veil clouds: a thin, semi-transparent whitish veil of high cloud across the sky"}
+  montenegro:
+    Clear: {name: "a clear sky", definition: "clear sky: no clouds visible"}
+    Low clouds: {name: "low clouds", definition: "low clouds: stratus, stratocumulus or cumulus with bases below two kilometres"}
+    Middle clouds: {name: "middle clouds", definition: "middle clouds: altocumulus, altostratus or nimbostratus with bases between two and six kilometres"}
+    High clouds: {name: "high clouds", definition: "high clouds: cirrus, cirrocumulus or cirrostratus made of ice crystals above six kilometres"}
+    Clouds of vertical development: {name: "towering clouds of vertical development", definition: "clouds of vertical development: tall cumulus or cumulonimbus towers rising through several levels"}

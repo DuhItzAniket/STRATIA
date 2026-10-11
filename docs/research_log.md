@@ -372,4 +372,8 @@ ResNet-50 and ConvNeXt-T, 3 seeds, grouped splits (`docs/data/baseline_cnn.md`);
 
 Linear probes on frozen features are the strongest recognition baselines: best in-domain mean macro-F1 0.765 (('dinov3_vitb16', 224)), best LODO étage 0.583 (('dinov3_vitb16', 224)) over the CCSN, MGCD, Montenegro and Almería folds (`docs/data/baseline_probes.md`). Amendment: the LODO folds now carry a val role (the held-out source's in-domain val units) so criterion C1 can be judged on validation data; the five LODO test entries were re-locked, nothing else changed (research design §8).
 
+### P055 — CLIP / SigLIP 2
+
+Zero-shot with fixed prompts: best 0.413 mean macro-F1 (('clip_vitb16', 'definition')); linear probes on the same embeddings in `docs/data/baseline_probes.md`.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.
