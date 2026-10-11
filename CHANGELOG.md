@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P064 — Taxonomy & soft-label losses (2026-10-11)
+- Losses (`stratia/model/losses.py`) and CBH bins (`stratia/model/cbh_bins.py`): set-valued BCE, soft BCE, hierarchy consistency, CORAL, KL, dense CE, CBH CE + CRPS, CBH–étage consistency, all masked with an exact zero for empty masks (6 toy-gradient tests).
+
 ### P063 — Global heads (2026-10-11)
 - Global heads (`stratia/model/heads.py`): `AttentionPool`, `CoralHead` (rank-consistent oktas), `GlobalHeads` → genus / étage logits and oktas probabilities in the contract's shapes (4 tests).
 

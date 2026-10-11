@@ -408,4 +408,8 @@ Geometry enters as tokens added to the backbone tokens with a learned strength �
 
 Attention pool ⊕ CLS → genus / étage / oktas; oktas through CORAL (rank-consistent by construction, which the calibration phase relies on).
 
+### P064 — Losses
+
+Set-valued genus BCE with partial negatives (single-label datasets are not exhaustive), expert shares as soft targets, CORAL with soft cumulative targets, hierarchy consistency by noisy-OR, CBH ordinal CE + CRPS. Each has a toy test with a known gradient direction.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.
