@@ -1,6 +1,7 @@
 # CPU-only dependencies for CI (unit tests on synthetic data; no GPU, no Hugging Face token, no datasets).
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch==2.5.1+cpu
+torchvision==0.20.1+cpu   # timm needs it; pinned so the resolver does not pull a CUDA build
 numpy>=1.26,<2
 omegaconf
 pyyaml
@@ -9,6 +10,7 @@ pyarrow==25.0.1   # 26.0.0 (2026-10-09) is built against NumPy 2 and fails to im
 pillow
 scipy
 scikit-learn
+timm==1.0.30   # stratia/baselines/train_cnn.py (P052); pinned to requirements.lock
 matplotlib
 opencv-python-headless
 openpyxl
