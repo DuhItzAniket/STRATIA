@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P062 — SkyRay encoder (2026-10-11)
+- `GeometryEncoder` (`stratia/model/skyray.py`): tokens + α · SkyRay tokens, FiLM on CLS and tokens, `zenith_cos`; one traced graph serves known and unknown geometry (4 tests).
+
 ### P061 — Architecture spec (2026-10-11)
 - Architecture spec: `docs/architecture.md` (diagram, shape table, contract → module → loss map, frozen-feature training path), ADR-005 (heads: attention pool ⊕ CLS, CORAL oktas, light DPT-style dense decoder, zenith-prior CBH attention over 24 étage-aligned log bins + no-cloud, energy + Mahalanobis OOD), ADR-006 (losses: set-valued genus BCE with partial negatives, soft BCE, CORAL with soft cumulative targets, hierarchy consistency, dense CE, CBH ordinal CE + CRPS, layer consistency, Kendall weighting).
 

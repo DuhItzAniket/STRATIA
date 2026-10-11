@@ -65,3 +65,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P059](P059-baseline-leaderboard.md) | Baseline leaderboard | DONE |
 | [P060](P060-gate-g3.md) | Gate G3 — Baselines reproduced | DONE |
 | [P061](P061-architecture-spec.md) | Architecture spec | DONE |
+| [P062](P062-skyray-encoder.md) | SkyRay encoder | DONE |

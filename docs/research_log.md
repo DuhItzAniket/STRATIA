@@ -400,4 +400,8 @@ Baselines reproduced with acceptable seed variance and plausible against the lit
 
 The v1 design is fixed in `docs/architecture.md` with ADR-005 (heads) and ADR-006 (losses). Two choices matter for the paper: the CBH output is a distribution over 24 étage-aligned log bins (so the layer-consistency term is a sum over bins), and every loss is masked per sample so a batch can mix label types.
 
+### P062 — SkyRay encoder
+
+Geometry enters as tokens added to the backbone tokens with a learned strength α (initial 0.1) and as FiLM from the Sun vector; one traced graph serves known and unknown geometry. α is the first number to read in the geometry ablation.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.
