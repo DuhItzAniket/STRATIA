@@ -484,4 +484,8 @@ Seed std n/a; the table in the phase doc.
 
 GO: see `docs/data/gate_g4.md` and the phase doc.
 
+### P089 — Calibration
+
+Cross-fitted on validation units: the étage and oktas heads are calibrated as trained (ECE 0.023 / 0.030) and temperature scaling would worsen them; the genus native-class confidence needs T ≈ 4.5 (0.145 → 0.092); the CBH distributions are too wide and a conformal radius brings 80 % / 95 % coverage to 0.798 / 0.952 with the median unchanged.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P089 — Calibration (2026-10-11)
+- Calibration (`scripts/calibrate.py` → `configs/calibration.json`, `docs/data/calibration.md`): cross-fitted per-head temperatures (genus ECE 0.145 → 0.092; étage and oktas kept at T = 1, ECE 0.023 / 0.030), conformal CBH intervals (80 % coverage 0.874 raw → 0.798), OOD threshold at the 95th in-domain percentile.
+
 ### P082 — Gate G4 — Model vs baselines (2026-10-11)
 - Gate G4 (`scripts/gate_g4.py` → `docs/data/gate_g4.md`): GO against the pre-registered criteria on validation data.
 
