@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P076 — Stage-4: joint multi-task (frozen) (2026-10-11)
+- Stage-4 joint training (`scripts/train_joint.py`): étage 0.799, dense mIoU 0.881, CBH MAE 545 m against the single-task runs; task-gradient cosines logged (`docs/data/stage4_joint.md`).
+
 ### P075 — Stage-3: CBH head (2026-10-11)
 - Stage-3 CBH head regime (`--train-stations`, `--synthetic`, `--day-weight`, checkpoints, `stratia/train/cbh_data.py`): base MAE 557 m skill +0.514 over 3 seeds; held-out WESTE skill +0.448 with OLDLR-only training; + synthetic views 538 m.
 

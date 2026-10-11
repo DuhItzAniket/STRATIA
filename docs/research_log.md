@@ -456,4 +456,8 @@ Kendall weighting settles at sky 6.2 / layer 1.6 and recovers most of the sky-pa
 
 Seed std 10 m; trained on OLDLR alone the head keeps skill +0.448 on the never-seen WESTE site (C3 asks 0.10); the P049 synthetic views give the best single number (538 m); the overcast-day weighting does not help; the geometry remains unused at dropout 0.15 and 0.3.
 
+### P076 — Stage-4 joint
+
+All heads together: étage 0.799, dense 0.881, CBH 545 m (`docs/data/stage4_joint.md` lists the head-by-head deltas and the task-gradient cosines).
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

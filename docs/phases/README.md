@@ -79,3 +79,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P073](P073-stage1-global-heads.md) | Stage-1: global heads on cached features | DONE |
 | [P074](P074-stage2-dense-heads.md) | Stage-2: dense heads (frozen backbone) | DONE |
 | [P075](P075-stage3-cbh-head.md) | Stage-3: CBH head | DONE |
+| [P076](P076-stage4-joint.md) | Stage-4: joint multi-task (frozen) | DONE |
