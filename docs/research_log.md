@@ -448,4 +448,8 @@ AMP, accumulation, clipping, EMA, atomic checkpoints with RNG and epoch position
 
 On cached DINOv3 features the global heads reach val mean étage macro-F1 0.817 in-domain and 0.548 averaged over the four LODO folds (P054 probe reference 0.583). Montenegro: the model agrees with the majority étage set and the majority cover (±1 okta) at 1.047 and 1.027 of the leave-one-out human ceiling. *For the paper:* the LODO gain comes with the Eye2Sky étage rows (ceilometer lowest-base étage as a partial label), without them the LODO mean is 0.485.
 
+### P074 — Stage-2 dense heads
+
+Kendall weighting settles at sky 6.2 / layer 1.6 and recovers most of the sky-parsing loss of the fixed-weight joint run (mIoU 0.905, clear-sky cloud fraction 0.299); the layer head stays at 0.559.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

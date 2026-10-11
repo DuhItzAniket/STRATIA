@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P074 — Stage-2: dense heads (frozen backbone) (2026-10-11)
+- Stage-2 dense heads with Kendall weighting and the class-fraction monitor (`--kendall`, `stratia/train/dense_data.py`): val mIoU 0.905, layer mIoU 0.559, clear-sky cloud fraction 0.299.
+
 ### P073 — Stage-1: global heads on cached features (2026-10-11)
 - Stage-1 global heads on cached features (`stratia/train/data.py`, `global_eval.py`, `scripts/train_global_heads.py`): in-domain val mean étage macro-F1 0.817 (genus 0.626 CCSN, 0.812 MGCD), Montenegro agreement 1.047 / 1.027 of the human ceiling; LODO étage mean 0.485 (sources only) and 0.548 (+ Eye2Sky étage); `docs/data/stage1_global.md`.
 

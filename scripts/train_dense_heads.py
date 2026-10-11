@@ -19,123 +19,45 @@ import sys
 import time
 from pathlib import Path
 
-import cv2
 import numpy as np
 import pandas as pd
 import torch
 from omegaconf import OmegaConf
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from stratia.baselines import segmentation as S  # noqa: E402
-from stratia.data.image_cache import cache_path, read_rgb  # noqa: E402
 from stratia.data.registry import load_paths  # noqa: E402
-from stratia.data.segmentation import CLOUD, IGNORE  # noqa: E402
 from stratia.features.cache import FeatureCache  # noqa: E402
 from stratia.model import losses as L  # noqa: E402
+from stratia.model.balance import UncertaintyWeighting  # noqa: E402
 from stratia.model.dense import DenseHeads  # noqa: E402
+from stratia.train.dense_data import (  # noqa: E402
+    SIZE,
+    TokenMaskDataset,
+    _layer_cms,  # noqa: E402
+    b0268_files,
+    bootstrap_miou,
+    class_fractions,
+    evaluate,
+    layer_scores,
+)
 from stratia.utils.run import Run  # noqa: E402
 
 DOC = Path("docs/data/dense_heads.md")
 OUT = Path("data/dense_heads.parquet")
-SIZE = 512
-N_LAYER = 3
 
 
-class TokenMaskDataset(Dataset):
-    def __init__(self, rows: np.ndarray, patches, sky: list[np.ndarray], layer: list[np.ndarray], train: bool, seed: int = 0):
-        self.rows, self.patches, self.sky, self.layer, self.train = rows, patches, sky, layer, train
-        self.rng = np.random.default_rng(seed)
-
-    def __len__(self) -> int:
-        return len(self.rows)
-
-    def __getitem__(self, i: int):
-        tok = np.asarray(self.patches[self.rows[i]], dtype=np.float32)          # (1024, 384)
-        sky = cv2.resize(self.sky[i], (SIZE, SIZE), interpolation=cv2.INTER_NEAREST)
-        lay = cv2.resize(self.layer[i], (SIZE, SIZE), interpolation=cv2.INTER_NEAREST)
-        if self.train and self.rng.uniform() < 0.5:
-            side = int(np.sqrt(tok.shape[0]))
-            tok = tok.reshape(side, side, -1)[:, ::-1].reshape(side * side, -1)
-            sky, lay = sky[:, ::-1], lay[:, ::-1]
-        return (torch.from_numpy(np.ascontiguousarray(tok)), torch.from_numpy(np.ascontiguousarray(sky).astype(np.int64)),
-                torch.from_numpy(np.ascontiguousarray(lay).astype(np.int64)))
 
 
-@torch.no_grad()
-def evaluate(model: DenseHeads, dl: DataLoader, datasets: list[str], device: str, layers: bool) -> dict:
-    """Per-dataset confusion matrices for sky parsing (and layers on cloud pixels), plus per-image sky mIoU."""
-    model.eval()
-    cm_sky = {d: np.zeros((S.N_CLASSES, S.N_CLASSES), dtype=np.int64) for d in set(datasets)}
-    cm_lay = {d: np.zeros((N_LAYER, N_LAYER), dtype=np.int64) for d in set(datasets)}
-    per_image = []
-    k = 0
-    for tok, sky, lay in dl:
-        out = model(tok.to(device))
-        logits = torch.nn.functional.interpolate(out["sky_parse_logits"].float(), size=(SIZE, SIZE), mode="bilinear",
-                                                 align_corners=False)
-        pred = logits.argmax(1).cpu().numpy().astype(np.uint8)
-        if layers:
-            llog = torch.nn.functional.interpolate(out["layer_logits"].float(), size=(SIZE, SIZE), mode="bilinear",
-                                                   align_corners=False)
-            lpred = llog.argmax(1).cpu().numpy().astype(np.uint8)
-        for j in range(len(tok)):
-            d = datasets[k]
-            truth = sky[j].numpy().astype(np.uint8)
-            cm = S.confusion(pred[j], truth)
-            cm_sky[d] += cm
-            per_image.append((d, cm))
-            if layers:
-                lt = lay[j].numpy().astype(np.uint8)
-                keep = lt != IGNORE
-                if keep.any():
-                    cm_lay[d] += np.bincount(N_LAYER * lt[keep].astype(int) + lpred[j][keep].astype(int),
-                                             minlength=N_LAYER * N_LAYER).reshape(N_LAYER, N_LAYER)
-            k += 1
-    return {"sky": cm_sky, "layer": cm_lay, "per_image": per_image}
 
 
-def layer_scores(cm: np.ndarray) -> dict:
-    out = {}
-    for c, name in enumerate(("low", "mid", "high")):
-        if cm[c].sum() == 0:
-            continue
-        tp = cm[c, c]
-        out[name] = float(tp / max(cm[c].sum() + cm[:, c].sum() - tp, 1))
-    return out
 
 
-def bootstrap_miou(per_image: list, dataset: str | None, n: int = 1000, seed: int = 0, scorer=None) -> tuple[float, float]:
-    cms = [cm for d, cm in per_image if dataset is None or d == dataset]
-    if not cms:
-        return float("nan"), float("nan")
-    rng = np.random.default_rng(seed)
-    arr = np.stack(cms)
-    vals = []
-    for _ in range(n):
-        pick = rng.integers(len(arr), size=len(arr))
-        vals.append(scorer(arr[pick].sum(0)))
-    return float(np.percentile(vals, 2.5)), float(np.percentile(vals, 97.5))
 
 
-@torch.no_grad()
-def collapse_check(model: DenseHeads, frames: pd.DataFrame, cam_masks: list[np.ndarray], cache_root: Path, device: str) -> float:
-    from stratia.features.backbones import FrozenBackbone
 
-    bb = FrozenBackbone("dinov3_vits16")
-    fracs = []
-    model.eval()
-    for f, m in zip(frames.image_file, cam_masks, strict=True):
-        img = cv2.resize(read_rgb(cache_path(cache_root, f)), (SIZE, SIZE), interpolation=cv2.INTER_AREA)
-        x = torch.from_numpy(img.transpose(2, 0, 1))[None]
-        tokens = bb.forward(x, patches=True)["patches"].float().to(device)
-        logits = torch.nn.functional.interpolate(model(tokens)["sky_parse_logits"].float(), size=(SIZE, SIZE),
-                                                 mode="bilinear", align_corners=False)
-        pred = logits.argmax(1)[0].cpu().numpy()
-        fracs.append(float((pred[m] == CLOUD).mean()))
-    del bb
-    torch.cuda.empty_cache()
-    return float(np.mean(fracs)) if fracs else float("nan")
+
 
 
 def main() -> int:
@@ -149,6 +71,7 @@ def main() -> int:
     ap.add_argument("--layers", action="store_true", help="train the layer head too (P066)")
     ap.add_argument("--layer-weight", type=float, default=1.0)
     ap.add_argument("--clear-frames", type=int, default=200)
+    ap.add_argument("--kendall", action="store_true", help="P070 uncertainty weighting of the sky / layer losses")
     a = ap.parse_args()
     t0 = time.perf_counter()
     torch.manual_seed(a.seed)
@@ -176,13 +99,15 @@ def main() -> int:
     print(f"{tr.sum():,} train / {va.sum():,} val images; layers={'on' if a.layers else 'off'}", flush=True)
 
     model = DenseHeads(d_model=patches.shape[-1]).to(device)
+    weighting = UncertaintyWeighting(["sky", "layer"]).to(device) if (a.kendall and a.layers) else None
     n_params = sum(p.numel() for p in model.parameters())
-    opt = torch.optim.AdamW(model.parameters(), lr=a.lr, weight_decay=0.05)
+    params = list(model.parameters()) + (list(weighting.parameters()) if weighting is not None else [])
+    opt = torch.optim.AdamW(params, lr=a.lr, weight_decay=0.05)
     steps = a.epochs * len(dl_tr)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=a.lr, total_steps=steps, pct_start=0.1)
     scaler = torch.amp.GradScaler("cuda", enabled=device == "cuda")
     cfg = OmegaConf.create({"model": "dense_heads", "layers": a.layers, "epochs": a.epochs, "batch": a.batch, "lr": a.lr,
-                            "seed": a.seed, "layer_weight": a.layer_weight, "params": n_params,
+                            "seed": a.seed, "layer_weight": a.layer_weight, "kendall": a.kendall, "params": n_params,
                             "cache_fingerprint": cache.meta()["fingerprint"]})
     best, best_state, curves = None, None, []
     with Run(cfg, name=f"dense_{'sky_layer' if a.layers else 'sky'}_s{a.seed}", phase=a.phase) as run:
@@ -193,9 +118,13 @@ def main() -> int:
                 tok, sky, lay = tok.to(device, non_blocking=True), sky.to(device), lay.to(device)
                 with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=device == "cuda"):
                     out = model(tok)
-                loss = L.dense_ce(out["sky_parse_logits"].float(), sky)
-                if a.layers:
-                    loss = loss + a.layer_weight * L.dense_ce(out["layer_logits"].float(), lay)
+                sky_loss = L.dense_ce(out["sky_parse_logits"].float(), sky)
+                if a.layers and weighting is not None:
+                    loss, _ = weighting({"sky": sky_loss, "layer": L.dense_ce(out["layer_logits"].float(), lay)})
+                elif a.layers:
+                    loss = sky_loss + a.layer_weight * L.dense_ce(out["layer_logits"].float(), lay)
+                else:
+                    loss = sky_loss
                 opt.zero_grad(set_to_none=True)
                 scaler.scale(loss).backward()
                 scaler.unscale_(opt)
@@ -223,15 +152,26 @@ def main() -> int:
         ev = best["ev"]
         clear = S.clear_sky_frames(a.clear_frames)
         cam_masks = S.camera_masks(clear, data_root, SIZE) if len(clear) else []
-        frac = collapse_check(model, clear, cam_masks, cache_root, device) if len(clear) else float("nan")
+        from stratia.features.backbones import FrozenBackbone
+        bb = FrozenBackbone("dinov3_vits16")
+        clear_frac = class_fractions(model, clear.image_file.tolist(), cam_masks, cache_root, device, bb) if len(clear) else {}
+        b0268_frac = class_fractions(model, b0268_files(), None, cache_root, device, bb)
+        del bb
+        torch.cuda.empty_cache()
+        frac = clear_frac.get("cloud", float("nan"))
+        if weighting is not None:
+            print(f"  kendall weights: {weighting.weights()}", flush=True)
         rows_out = []
         for d, cm in [("all", sum(ev["sky"].values()))] + sorted(ev["sky"].items()):
             sc = S.scores_from_confusion(cm)
             lo, hi = bootstrap_miou(ev["per_image"], None if d == "all" else d,
                                     scorer=lambda c: S.scores_from_confusion(c).miou)
-            row = {"phase": a.phase, "model": "dense_heads" + ("+layers" if a.layers else ""), "seed": a.seed, "dataset": d,
+            tag = "dense_heads" + ("+layers" if a.layers else "") + ("+kendall" if weighting is not None else "")
+            row = {"phase": a.phase, "model": tag, "seed": a.seed, "dataset": d,
                    "miou": sc.miou, "miou_lo": lo, "miou_hi": hi, **{f"iou_{k}": v for k, v in sc.iou.items()},
-                   "clear_sky_cloud_fraction": frac, "best_epoch": best["epoch"], "run_id": run.run_id}
+                   "clear_sky_cloud_fraction": frac, "best_epoch": best["epoch"], "run_id": run.run_id,
+                   **{f"clear_frac_{k}": v for k, v in clear_frac.items()},
+                   **{f"b0268_frac_{k}": v for k, v in b0268_frac.items()}}
             if a.layers:
                 lcm = sum(ev["layer"].values()) if d == "all" else ev["layer"][d]
                 ls = layer_scores(lcm)
@@ -244,7 +184,8 @@ def main() -> int:
                                               scorer=lambda c: float(np.mean(list(layer_scores(c).values()) or [np.nan])))
                     row["layer_miou_lo"], row["layer_miou_hi"] = llo, lhi
             rows_out.append(row)
-        summary = {"val_miou": best["val_miou"], "best_epoch": best["epoch"], "clear_sky_cloud_fraction": frac}
+        summary = {"val_miou": best["val_miou"], "best_epoch": best["epoch"], "clear_sky_cloud_fraction": frac,
+                   "b0268_cloud_fraction": b0268_frac.get("cloud", float("nan"))}
         if a.layers:
             summary["val_layer_miou"] = best.get("val_layer_miou", float("nan"))
         run.finish(**summary)
@@ -260,24 +201,6 @@ def main() -> int:
     return 0
 
 
-@torch.no_grad()
-def _layer_cms(model: DenseHeads, dl: DataLoader, datasets: list[str], device: str) -> list[np.ndarray]:
-    """Per-image layer confusion matrices (for the bootstrap)."""
-    model.eval()
-    out = []
-    for tok, _, lay in dl:
-        llog = torch.nn.functional.interpolate(model(tok.to(device))["layer_logits"].float(), size=(SIZE, SIZE),
-                                               mode="bilinear", align_corners=False)
-        lpred = llog.argmax(1).cpu().numpy().astype(np.uint8)
-        for j in range(len(tok)):
-            lt = lay[j].numpy().astype(np.uint8)
-            keep = lt != IGNORE
-            cm = np.zeros((N_LAYER, N_LAYER), dtype=np.int64)
-            if keep.any():
-                cm = np.bincount(N_LAYER * lt[keep].astype(int) + lpred[j][keep].astype(int),
-                                 minlength=N_LAYER * N_LAYER).reshape(N_LAYER, N_LAYER)
-            out.append(cm)
-    return out
 
 
 def write_doc(df: pd.DataFrame) -> None:
@@ -289,8 +212,8 @@ def write_doc(df: pd.DataFrame) -> None:
              "intervals over val images, and the clear-sky collapse check (predicted-cloud fraction inside the camera mask on "
              "200 clear-sky Eye2Sky frames). The P057 token probe is the reference the decoder has to beat.", "",
              "| Phase | Model | Dataset | mIoU [95 % CI] | IoU sky | IoU cloud | IoU invalid | Layer mIoU [CI] | "
-             "low / mid / high IoU | Clear-sky cloud fraction | Probe mIoU |",
-             "|---|---|---|---|---|---|---|---|---|---|---|"]
+             "low / mid / high IoU | Clear-sky cloud fraction | B0268 cloud fraction | Probe mIoU |",
+             "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for _, r in df.sort_values(["phase", "model", "dataset"]).iterrows():
         pr = probe[(probe.model == "dinov3_vits16_patch_probe") & (probe.dataset == r.dataset)] if len(probe) else pd.DataFrame()
         pm = f"{pr.miou.mean():.3f}" if len(pr) else "-"
@@ -299,9 +222,10 @@ def write_doc(df: pd.DataFrame) -> None:
         lih = " / ".join(f"{r[k]:.3f}" if k in r and pd.notna(r[k]) else "-"
                          for k in ("layer_iou_low", "layer_iou_mid", "layer_iou_high"))
         inv = f"{r.iou_invalid:.3f}" if "iou_invalid" in r and pd.notna(r.iou_invalid) else "-"
+        b0 = f"{r.b0268_frac_cloud:.3f} " if "b0268_frac_cloud" in r and pd.notna(r.get("b0268_frac_cloud")) else "- "
         lines.append(f"| {r.phase} | {r.model} | {r.dataset} | {r.miou:.3f} [{r.miou_lo:.3f}, {r.miou_hi:.3f}] | "
                      f"{r.iou_sky:.3f} | "
-                     f"{r.iou_cloud:.3f} | {inv} | {lm} | {lih} | {r.clear_sky_cloud_fraction:.3f} | {pm} |")
+                     f"{r.iou_cloud:.3f} | {inv} | {lm} | {lih} | {r.clear_sky_cloud_fraction:.3f} | {b0}| {pm} |")
     lines += ["", "Rows in `data/dense_heads.parquet`; curves in each run's `metrics.jsonl` (phase P065 / P066)."]
     DOC.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
 
