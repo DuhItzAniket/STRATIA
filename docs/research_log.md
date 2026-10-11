@@ -412,4 +412,8 @@ Attention pool ⊕ CLS → genus / étage / oktas; oktas through CORAL (rank-con
 
 Set-valued genus BCE with partial negatives (single-label datasets are not exhaustive), expert shares as soft targets, CORAL with soft cumulative targets, hierarchy consistency by noisy-OR, CBH ordinal CE + CRPS. Each has a toy test with a known gradient direction.
 
+### P065 — Sky-parsing head
+
+A 0.6 M-parameter DPT-lite decoder on frozen DINOv3 tokens reaches val mIoU 0.919 against the token probe's 0.875 and labels 22% of ceilometer-clear Eye2Sky sky as cloud (probe 32 %, prototype 85–99 %). *For the paper:* the dense head on frozen features already beats a from-scratch U-Net and the probe on every dataset.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

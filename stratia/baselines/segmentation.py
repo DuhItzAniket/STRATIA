@@ -9,15 +9,18 @@ frames (ceilometer label "none", P047 pairs), which the legacy prototype got wro
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 
 import cv2
 import numpy as np
+import pandas as pd
 import torch
 from torch import nn
 from torch.utils.data import Dataset
 
+from ..data.eye2sky import load_mask, mask_path, station_calibrations
 from ..data.image_cache import cache_path, read_rgb
-from ..data.segmentation import CLOUD, IGNORE, SKY, SKY_INVALID
+from ..data.segmentation import CLOUD, IGNORE, SKY, SKY_INVALID, load_masks
 
 N_CLASSES = 3            # invalid, sky, cloud (the contract's fourth class, sun glare, has no labels here)
 IMAGENET_MEAN = torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1)
@@ -163,3 +166,44 @@ def probe_predict(model: TokenProbe, tokens: np.ndarray, side: int, out_size: in
     logits = model(x).permute(0, 2, 1).reshape(len(x), N_CLASSES, side, side)
     up = nn.functional.interpolate(logits, size=(out_size, out_size), mode="bilinear", align_corners=False)
     return up.argmax(1).cpu().numpy().astype(np.uint8)
+
+# ----------------------------------------------------------------------------------------------- data tables
+def seg_tables(data_root: Path) -> pd.DataFrame:
+    idx = pd.read_parquet("data/segmentation_index.parquet").rename(columns={"split": "native_split"})
+    idx["sample_id"] = idx.dataset + ":" + idx.image_file                 # the grouped split, not the dataset's own
+    split = pd.read_parquet("data/splits/in_domain.parquet", columns=["sample_id", "split"])
+    t = idx.merge(split, on="sample_id", how="left")
+    t = t[t.split.isin(["train", "val"])].reset_index(drop=True)        # test locked
+    return t
+
+
+def load_sky_masks(rows: pd.DataFrame, data_root: Path) -> list[np.ndarray]:
+    return [load_masks(d, data_root / m)[0] for d, m in zip(rows.dataset, rows.mask_file, strict=True)]
+
+
+def load_both_masks(rows: pd.DataFrame, data_root: Path) -> tuple[list[np.ndarray], list[np.ndarray]]:
+    """(sky-parse masks, layer masks) in the unified scheme; layer masks are all-IGNORE outside Almería."""
+    pairs = [load_masks(d, data_root / m) for d, m in zip(rows.dataset, rows.mask_file, strict=True)]
+    return [p[0] for p in pairs], [p[1] for p in pairs]
+
+
+def clear_sky_frames(n: int, seed: int = 0) -> pd.DataFrame:
+    p = Path("data/cbh_pairs.parquet")
+    if not p.exists():
+        return pd.DataFrame()
+    d = pd.read_parquet(p)
+    d = d[d.paired & d.daytime & (d.label == "none") & (d.confidence >= 0.9) & (d.utc.dt.minute % 10 == 0)]
+    return d.sample(min(n, len(d)), random_state=seed) if len(d) else d
+
+
+def camera_masks(frames: pd.DataFrame, data_root: Path, size: int) -> list[np.ndarray]:
+    meta = data_root / "Eye2Sky" / "asi_meta"
+    cache: dict[str, np.ndarray] = {}
+    out = []
+    for st, cid in zip(frames.station, frames.calib_id, strict=True):
+        if cid not in cache:
+            cal = next(c for c in station_calibrations(meta, st) if c.file == cid)
+            m = load_mask(mask_path(meta, cal)).astype(np.uint8)
+            cache[cid] = cv2.resize(m, (size, size), interpolation=cv2.INTER_NEAREST) > 0
+        out.append(cache[cid])
+    return out

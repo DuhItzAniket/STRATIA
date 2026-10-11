@@ -68,3 +68,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P062](P062-skyray-encoder.md) | SkyRay encoder | DONE |
 | [P063](P063-global-heads.md) | Global heads | DONE |
 | [P064](P064-taxonomy-soft-label-losses.md) | Taxonomy & soft-label losses | DONE |
+| [P065](P065-sky-parsing-head.md) | Sky-parsing head | DONE |

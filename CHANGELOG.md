@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P065 — Sky-parsing head (2026-10-11)
+- Dense decoder + sky-parsing head (`stratia/model/dense.py`, `scripts/train_dense_heads.py`): val mIoU 0.919 on the grouped segmentation val (P057 token probe 0.875), clear-sky cloud fraction 0.220 (probe 0.323); `docs/data/dense_heads.md`. P057's data helpers moved into `stratia/baselines/segmentation.py`.
+
 ### P064 — Taxonomy & soft-label losses (2026-10-11)
 - Losses (`stratia/model/losses.py`) and CBH bins (`stratia/model/cbh_bins.py`): set-valued BCE, soft BCE, hierarchy consistency, CORAL, KL, dense CE, CBH CE + CRPS, CBH–étage consistency, all masked with an exact zero for empty masks (6 toy-gradient tests).
 

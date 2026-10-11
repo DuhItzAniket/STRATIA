@@ -27,51 +27,16 @@ from torch.utils.data import DataLoader
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from stratia.baselines import segmentation as S  # noqa: E402
-from stratia.data.eye2sky import load_mask, mask_path, station_calibrations  # noqa: E402
+from stratia.baselines.segmentation import camera_masks, clear_sky_frames, load_sky_masks, seg_tables  # noqa: E402
 from stratia.data.image_cache import cache_path, read_rgb  # noqa: E402
 from stratia.data.registry import load_paths  # noqa: E402
-from stratia.data.segmentation import IGNORE, load_masks  # noqa: E402
+from stratia.data.segmentation import IGNORE  # noqa: E402
 from stratia.features.cache import FeatureCache  # noqa: E402
 from stratia.utils.run import Run  # noqa: E402
 
 DOC = Path("docs/data/baseline_segmentation.md")
 OUT = Path("data/baseline_segmentation.parquet")
 SEG_DATASETS = ("swimseg", "swinseg", "swinyseg", "shwimseg", "almeria")
-
-
-def seg_tables(data_root: Path) -> pd.DataFrame:
-    idx = pd.read_parquet("data/segmentation_index.parquet").rename(columns={"split": "native_split"})
-    idx["sample_id"] = idx.dataset + ":" + idx.image_file                 # the grouped split, not the dataset's own
-    split = pd.read_parquet("data/splits/in_domain.parquet", columns=["sample_id", "split"])
-    t = idx.merge(split, on="sample_id", how="left")
-    t = t[t.split.isin(["train", "val"])].reset_index(drop=True)        # test locked
-    return t
-
-
-def load_sky_masks(rows: pd.DataFrame, data_root: Path) -> list[np.ndarray]:
-    return [load_masks(d, data_root / m)[0] for d, m in zip(rows.dataset, rows.mask_file, strict=True)]
-
-
-def clear_sky_frames(n: int, seed: int = 0) -> pd.DataFrame:
-    p = Path("data/cbh_pairs.parquet")
-    if not p.exists():
-        return pd.DataFrame()
-    d = pd.read_parquet(p)
-    d = d[d.paired & d.daytime & (d.label == "none") & (d.confidence >= 0.9) & (d.utc.dt.minute % 10 == 0)]
-    return d.sample(min(n, len(d)), random_state=seed) if len(d) else d
-
-
-def camera_masks(frames: pd.DataFrame, data_root: Path, size: int) -> list[np.ndarray]:
-    meta = data_root / "Eye2Sky" / "asi_meta"
-    cache: dict[str, np.ndarray] = {}
-    out = []
-    for st, cid in zip(frames.station, frames.calib_id, strict=True):
-        if cid not in cache:
-            cal = next(c for c in station_calibrations(meta, st) if c.file == cid)
-            m = load_mask(mask_path(meta, cal)).astype(np.uint8)
-            cache[cid] = cv2.resize(m, (size, size), interpolation=cv2.INTER_NEAREST) > 0
-        out.append(cache[cid])
-    return out
 
 
 # ----------------------------------------------------------------------------------------------- U-Net
