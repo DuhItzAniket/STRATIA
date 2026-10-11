@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P072 — Training engine (2026-10-11)
+- Training engine (`stratia/train/engine.py`): AMP, accumulation, clipping, EMA, atomic checkpoint / resume with RNG and epoch position, NaN guard, early stopping; resume reproduces the uninterrupted run bit for bit (3 tests).
+
 ### P071 — Model sanity suite (2026-10-11)
 - Full model (`stratia/model/stratia.py`: backbone + geometry + heads, `forward` and `forward_tokens`) and the sanity suite (`stratia/model/sanity.py`): contract shapes, overfit one batch, shuffled labels at chance, constant input, determinism (5 tests on a fake backbone).
 

@@ -75,3 +75,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P069](P069-multi-dataset-sampler.md) | Multi-dataset sampler | DONE |
 | [P070](P070-multi-task-balancing.md) | Multi-task balancing | DONE |
 | [P071](P071-model-sanity-suite.md) | Model sanity suite | DONE |
+| [P072](P072-training-engine.md) | Training engine | DONE |

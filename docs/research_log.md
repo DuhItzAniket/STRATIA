@@ -440,4 +440,8 @@ Kendall weighting over present tasks and a task-gradient cosine monitor logged p
 
 Contract shapes, overfit one batch, shuffled labels at chance, constant input, determinism: the checks that would have caught the legacy pipeline bugs, run in CI on a fake backbone and before every Stage H run.
 
+### P072 — Training engine
+
+AMP, accumulation, clipping, EMA, atomic checkpoints with RNG and epoch position, NaN guard, early stopping on val; a resumed run is bit-identical to the uninterrupted one. Stage G complete.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.
