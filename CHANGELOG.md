@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P056 — B5: small VLM (2026-10-11)
+- Qwen3-VL-2B zero-shot sanity check in fp16 on 100 val images of CCSN and MGCD (`scripts/baseline_vlm.py`); PARTIAL: no 4-bit, one prompt.
+
 ### P055 — B4: CLIP / SigLIP 2 (2026-10-11)
 - CLIP ViT-B/16 and SigLIP 2 zero-shot with name and WMO-definition prompts fixed in `configs/prompts.yaml` (`scripts/baseline_zeroshot.py` → `docs/data/baseline_zeroshot.md`; best 0.413) plus linear probes on their embeddings (P055 rows of `docs/data/baseline_probes.md`).
 

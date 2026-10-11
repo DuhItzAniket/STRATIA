@@ -59,3 +59,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P053](P053-finetuned-cnns.md) | B2: fine-tuned CNNs | DONE |
 | [P054](P054-frozen-probes.md) | B3: frozen probes | DONE |
 | [P055](P055-clip-siglip.md) | B4: CLIP / SigLIP 2 | DONE |
+| [P056](P056-small-vlm.md) | B5: small VLM | PARTIAL |

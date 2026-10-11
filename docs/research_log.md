@@ -376,4 +376,8 @@ Linear probes on frozen features are the strongest recognition baselines: best i
 
 Zero-shot with fixed prompts: best 0.413 mean macro-F1 (('clip_vitb16', 'definition')); linear probes on the same embeddings in `docs/data/baseline_probes.md`.
 
+### P056 — Small VLM
+
+Qwen3-VL-2B zero-shot sanity check (`docs/data/baseline_vlm.md`), one prompt, no 4-bit on Windows: a sanity check, not a tuned baseline.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.
