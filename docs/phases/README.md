@@ -83,3 +83,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P077](P077-stage5-lora.md) | Stage-5: partial unfreeze | DONE |
 | [P078](P078-budgeted-hpo.md) | Budgeted HPO | DONE |
 | [P079](P079-learning-curves.md) | Learning curves | DONE |
+| [P080](P080-regularization-study.md) | Regularization study | DONE |

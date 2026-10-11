@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P080 — Regularization study (2026-10-11)
+- Regularisation study (global heads): weight decay, dropout, EMA, seeds (std n/a); table in `docs/phases/P080-regularization-study.md`.
+
 ### P079 — Learning curves (2026-10-11)
 - Learning curves: global heads at 10 / 25 / 50 / 100 % of the training units (0.662 / 0.698 / 0.774 / 0.817), CBH head at 10 / 25 / 50 / 100 % of the training days (756 / 661 / 580 / 557 m MAE).
 

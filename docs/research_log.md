@@ -472,4 +472,8 @@ Random search, 20 trials: scores 0.775–0.819; the sensitivity table says which
 
 Global heads 0.662 / 0.698 / 0.774 / 0.817 at 10 / 25 / 50 / 100 % of the training units; CBH 756 / 661 / 580 / 557 m at 10 / 25 / 50 / 100 % of the days.
 
+### P080 — Regularisation
+
+Seed std n/a; the table in the phase doc.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.
