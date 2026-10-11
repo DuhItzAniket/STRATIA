@@ -1,6 +1,6 @@
 # P044 — Sun position & calibration validation
 
-Status: DONE     Date: 2026-10-10     Commit: (this commit)
+Status: DONE     Date: 2026-10-10 (updated 2026-10-11 with the dense refit of the ceilometer sites, see §Update)     Commit: (this commit)
 
 ## Objective
 Make the Sun explicit (SPA per sample, ENU frame, the contract's Sun-aligned frame) and use it to validate the
@@ -87,6 +87,39 @@ on disk: AURIC and BARSE April–July 2022, OLDLR and WESTE 1 April 2022 (downlo
 - The status rule was set after seeing the data: 30 inliers was arbitrary and would have excluded two stations with
   one week each (51 and 30 clean detections); 15 inliers spanning ≥ 3 h keeps a whole-day track as the unit.
 - Thresholds of the detector come from measurements on AURIC, not from a prior.
+
+## Update 2026-10-11 (P047 prerequisite): dense refit of OLDLR and WESTE
+
+With the full April–July download on disk the two later calibrations (OLDLR from 22 April, WESTE from 27 June) had
+to be fitted; at the 7-day sampling they were **excluded** (1.0° and 4.7° medians). Two findings and two changes:
+
+1. **Whole-week false tracks.** Per-week fits showed alternating weeks: tight (0.1–0.5°) with a stable zenith pixel,
+   and 7–20° weeks where *all* detections lay on one consistent wrong track. The Q25 dome reflects a ghost of the
+   Sun mirrored through the image centre; in summer the real disc clips beyond the 400 px area limit (half
+   resolution) at high Sun and the detector took the ghost instead. Fix: detections are **gated to 15° around
+   the Sun position the declared orientation predicts** (0.1–9° accurate on these files, so a 15° gate cannot
+   bias a fit) and the area limit is 1,200 px (`scripts/sun_validation.py --gate-deg --max-area`; the gate needs a
+   reading on file, so a first run of a fresh repository runs ungated). The script also refits a subset of
+   stations (`--stations`) and merges with the records on file; the ceilometer sites are sampled every day.
+2. **The cameras are static.** With the gate, the fitted zenith pixel of OLDLR's January and April files agree to
+   1 px and WESTE's March and June files to 5 px; per-fortnight fits of the clean windows stay within 5–10 px over
+   April–July at both stations (10 px ≈ 1°). The remaining 0.7–0.9° medians in the later windows come from
+   centroid bias of the larger clipped disc at high Sun, not from pose error; the zenith region of interest of
+   P047 (10°, ~110 px radius) is insensitive to it.
+3. **Declared orientations drift from the Sun-measured ones by 0.2–11°** (OLDLR's April file is 11° off in
+   rotation although the camera did not move between its January and April files): declared orientations are
+   never the reference, only the gate's prior.
+
+| Calibration | Days | Detected | Inliers | Median | p90 | Declared reading | Fitted vs declared | Status |
+|---|---|---|---|---|---|---|---|---|
+| OLDLR_20220131 | 1–21 Apr (every day) | 110 | 70 | 0.436° | 0.912° | 0.486° | 0.258° | ok |
+| OLDLR_20220422 | 22 Apr–31 Jul (every day) | 224 | 134 | 0.882° | 1.905° | 9.345° | 10.878° | ok |
+| WESTE_20220307 | 1 Apr–26 Jun (every day) | 236 | 155 | 0.677° | 1.353° | 2.547° | 3.427° | ok |
+| WESTE_20220627 | 29 Jun–31 Jul (every day) | 92 | 44 | 0.940° | 1.797° | 0.924° | 0.463° | ok |
+
+Detection rate over 47,902 sampled frames: 1.8 % (229 detections removed by the gate). The AURIC and BARSE records
+(7-day sampling, ungated run) are unchanged. The convention table of `docs/data/sun_validation.md` now shows the
+last run's stations only; the reading itself is unchanged.
 
 ## Next phase
 P045 — Ray-map generator.

@@ -8,6 +8,11 @@ OCamCalib model, compute the Sun's East-North-Up direction with pvlib, and
   1. fit the rotation camera -> ENU (Kabsch with outlier trimming) and report its residuals;
   2. measure which reading of the calibration file's `external_orientation` [roll, pitch, yaw] agrees with the Sun;
   3. check the manifest's Sun columns against stratia.geometry.sun.
+Once a reading of the declared orientation exists (configs/camera_poses.yaml), detections are gated to within
+`--gate-deg` of the Sun position it predicts: the Q25 domes produce a ghost reflection of the Sun mirrored through
+the image centre that becomes the brightest compact blob when the real disc clips beyond the area limit (summer,
+high Sun), and whole-week false tracks followed from it before the gate. A declared orientation 0.1-3 deg off
+cannot bias a fit through a 15 deg gate. `--stations` refits a subset and merges with the records on file.
 
 Writes data/sun_detections.parquet (ignored), configs/camera_poses.yaml (committed: fitted poses + residuals +
 the established convention), docs/data/sun_validation.md and docs/data/figures/sun_validation_<station>.jpg.
@@ -31,14 +36,17 @@ from stratia.data.registry import load_paths  # noqa: E402
 from stratia.geometry.pose import (  # noqa: E402
     EYE2SKY_CANDIDATES,
     angular_error_deg,
+    eye2sky_convention,
     eye2sky_rotation,
     fit_rotation,
+    load_pose_meta,
+    load_pose_records,
     rotation_distance_deg,
     rotation_to_euler_zyx,
     save_pose_records,
 )
 from stratia.geometry.sun import azel_to_enu, sun_position  # noqa: E402
-from stratia.geometry.sun_detect import detect_sun  # noqa: E402
+from stratia.geometry.sun_detect import SunDetection, detect_sun  # noqa: E402
 
 FIG_DIR = Path("docs/data/figures")
 # A pose is "ok" with at least min_inliers clean detections spanning at least min_span_hours of a day (one clear day
@@ -67,7 +75,8 @@ def read_half(path: Path) -> np.ndarray:
     return img
 
 
-def detect_station(root: Path, meta: Path, station: str, day_step: int, minute_step: int, min_el: float) -> pd.DataFrame:
+def detect_station(root: Path, meta: Path, station: str, day_step: int, minute_step: int, min_el: float,
+                   max_area: int = 1200, gate_deg: float = 15.0, convention: str | None = None) -> pd.DataFrame:
     days = station_days(root, station)
     chosen = days[::day_step] if days else []
     if len(chosen) <= 3:                                  # a station with few days: sample them densely
@@ -88,6 +97,7 @@ def detect_station(root: Path, meta: Path, station: str, day_step: int, minute_s
         for cal_file, idx in by_cal.items():
             cal = next(c for c in cals if c.file == cal_file)
             sp = sun_position([names[i].utc for i in idx], cal.latitude, cal.longitude, cal.altitude)
+            r_decl = eye2sky_rotation(cal.external_orientation, convention) if convention else None
             if cal_file not in masks:
                 m = load_mask(mask_path(meta, cal)).astype(np.uint8)
                 masks[cal_file] = cv2.resize(m, (m.shape[1] // 2, m.shape[0] // 2), interpolation=cv2.INTER_NEAREST) > 0
@@ -95,7 +105,12 @@ def detect_station(root: Path, meta: Path, station: str, day_step: int, minute_s
                 el = float(sp.apparent_elevation.iloc[k])
                 if el < min_el:
                     continue
-                det = detect_sun(read_half(frames[i]), masks[cal_file])
+                det = detect_sun(read_half(frames[i]), masks[cal_file], max_area=max_area)
+                if det.ok and r_decl is not None:
+                    expected = r_decl.T @ azel_to_enu(float(sp.azimuth.iloc[k]), el)
+                    found = cal.model.pixel_to_ray(2 * det.u + 0.5, 2 * det.v + 0.5)
+                    if float(angular_error_deg(found, expected)) > gate_deg:
+                        det = SunDetection(False, reason="outside prior gate")
                 rows.append({"station": station, "calib_id": cal_file, "utc": names[i].utc,
                              "file": str(frames[i].relative_to(root)),
                              "detected": det.ok, "reason": det.reason, "u": 2 * det.u + 0.5, "v": 2 * det.v + 0.5,
@@ -183,18 +198,27 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--stations", nargs="*", default=None)
     ap.add_argument("--day-step", type=int, default=7)
+    ap.add_argument("--dense-stations", nargs="*", default=["OLDLR", "WESTE"],
+                    help="stations sampled every day (the ceilometer sites: every calibration window needs enough clean points)")
     ap.add_argument("--minute-step", type=int, default=5)
     ap.add_argument("--min-elevation", type=float, default=5.0)
+    ap.add_argument("--max-area", type=int, default=1200, help="largest accepted blob (half-resolution pixels)")
+    ap.add_argument("--gate-deg", type=float, default=15.0, help="accept detections within this angle of the declared prediction")
     a = ap.parse_args()
     t0 = time.perf_counter()
     root = Path(load_paths()["data_root"]) / "Eye2Sky"
     meta = root / "asi_meta"
     stations = a.stations or sorted({p.name.rsplit("_", 1)[1] for p in root.glob("2022/*/*/ASI_*") if p.is_dir()})
-    print(f"stations with images: {stations}", flush=True)
+    subset = bool(a.stations)
+    existing_meta, existing_records = load_pose_meta(), load_pose_records()
+    convention = eye2sky_convention(existing_meta)
+    print(f"stations with images: {stations}; prior gate: "
+          f"{'none (no reading on file yet)' if convention is None else f'{a.gate_deg} deg around ' + convention}", flush=True)
 
     frames, records, cand_tables, figs = [], {}, {}, []
     for station in stations:
-        det = detect_station(root, meta, station, a.day_step, a.minute_step, a.min_elevation)
+        step = 1 if station in a.dense_stations else a.day_step
+        det = detect_station(root, meta, station, step, a.minute_step, a.min_elevation, a.max_area, a.gate_deg, convention)
         if not len(det):
             continue
         frames.append(det)
@@ -228,23 +252,34 @@ def main() -> None:
         print("no calibration could be fitted (no images with a visible Sun?)")
         return
     all_det = pd.concat(frames, ignore_index=True)
-    all_det.to_parquet("data/sun_detections.parquet", index=False)
+    det_path = Path("data/sun_detections.parquet")
+    if subset and det_path.exists():
+        old = pd.read_parquet(det_path)
+        all_det = pd.concat([old[~old.station.isin(stations)], all_det], ignore_index=True)
+    all_det.to_parquet(det_path, index=False)
 
     # The declared-orientation reading: mean over calibrations of the median error, lowest wins.
     cand = pd.DataFrame(cand_tables)                     # rows = candidate names, columns = calib_id
     cand["mean"] = cand.mean(axis=1)
     cand = cand.sort_values("mean", kind="stable").sort_index(kind="stable").sort_values("mean", kind="stable")
-    winner = str(cand.index[0])
+    winner = str(existing_meta.get("eye2sky_convention") or cand.index[0]) if subset else str(cand.index[0])
     for calib_id, rec in records.items():
         cal = next(c for c in station_calibrations(meta, rec["station"]) if c.file == calib_id)
         rec["declared_convention_median_err_deg"] = round(float(cand.loc[winner, calib_id]), 4)
         rec["rotation_distance_fitted_vs_declared_deg"] = round(
             rotation_distance_deg(np.array(rec["R"]), eye2sky_rotation(cal.external_orientation, winner)), 4)
+    if subset:                                              # keep the other stations' records on file
+        for cid, rec in existing_records.items():
+            if rec.get("station") not in stations:
+                records[cid] = rec
     meta_out = {"generated_utc": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S+00:00"), "eye2sky_convention": winner,
                 "convention_mean_median_err_deg": round(float(cand["mean"].iloc[0]), 4),
                 "runner_up": str(cand.index[1]), "runner_up_mean_median_err_deg": round(float(cand["mean"].iloc[1]), 4),
                 "candidates_tested": int(len(cand)), "status_rule": STATUS_RULE,
-                "sampling": {"day_step": a.day_step, "minute_step": a.minute_step, "min_apparent_elevation_deg": a.min_elevation}}
+                "detector": {"max_area_half_res": a.max_area, "prior_gate_deg": a.gate_deg if convention else None},
+                "last_run_stations": list(stations),
+                "sampling": {"day_step": a.day_step, "dense_stations": list(a.dense_stations), "minute_step": a.minute_step,
+                             "min_apparent_elevation_deg": a.min_elevation}}
     save_pose_records(records, meta_out)
     consistency = manifest_check()
     write_report(records, cand, meta_out, all_det, consistency, figs)

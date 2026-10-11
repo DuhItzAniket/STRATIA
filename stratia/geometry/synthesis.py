@@ -8,8 +8,10 @@ carries exactly the geometry the model will see from the real B0268.
 
 Labels are inherited from the ceilometer at the source station (``inherit_label``): the cloud-base *height* of the
 zenith measurement is assigned to the view under the **flat-layer assumption** (a base height is a height, not a
-slant range, and the layer is taken as horizontally uniform over the few kilometres the view covers). The join to
-the P036 target table (nearest 30 s grid point within 15 s) is provisional until P047 fixes the pairing rule.
+slant range, and the layer is taken as horizontally uniform over the few kilometres the view covers).
+``inherit_label`` joins the P036 target table directly (nearest 30 s grid point within 15 s, valid windows);
+``label_from_pairs`` is the P047 rule: the view inherits the pair of its source frame from ``data/cbh_pairs.parquet``
+(same join plus the pose, mask and daytime requirements), so a view is labelled only when its source frame is a pair.
 """
 
 from __future__ import annotations
@@ -141,3 +143,22 @@ def inherit_label(targets: pd.DataFrame, utc, max_gap_s: float = 15.0) -> dict |
             "etage_wmo": row["etage_wmo"], "cbh_m": float(row["cbh_m"]) if pd.notna(row["cbh_m"]) else None,
             "cbh2_m": float(row["cbh2_m"]) if pd.notna(row["cbh2_m"]) else None, "layers": float(row["layers"]),
             "confidence": float(row["confidence"]), "mixed": bool(row["mixed"]), "assumption": "flat layer"}
+
+
+def label_from_pairs(pairs: pd.DataFrame, image_file: str) -> dict | None:
+    """The P047 pair of a source frame (by `image_file`), as the label dict `inherit_label` returns; None when the frame
+    is not a daytime pair with the zenith inside the mask. Pairs come from data/cbh_pairs.parquet (P047)."""
+    if pairs is None or not len(pairs):
+        return None
+    hit = pairs[pairs.image_file == image_file]
+    if not len(hit):
+        return None
+    row = hit.iloc[0]
+    if not (bool(row["paired"]) and bool(row["daytime"]) and bool(row["zenith_inside_mask"])):
+        return None
+    return {"ceilometer": row["ceilometer"], "target_time": row["time"], "gap_s": float(row["gap_s"]), "label": row["label"],
+            "etage_wmo": row["etage_wmo"], "cbh_m": float(row["cbh_m"]) if pd.notna(row["cbh_m"]) else None,
+            "cbh2_m": float(row["cbh2_m"]) if pd.notna(row["cbh2_m"]) else None, "layers": float(row["layers"]),
+            "confidence": float(row["confidence"]), "mixed": bool(row["mixed"]), "assumption": "flat layer",
+            "split": row.get("split"), "day_label_share": float(row["day_label_share"]) if "day_label_share" in row else None}
+

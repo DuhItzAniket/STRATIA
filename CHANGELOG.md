@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P047 — Image–ceilometer pairing (2026-10-11)
+- Pair table at the ceilometer sites (`stratia/labels/cbh_pairs.py`, `scripts/make_cbh_pairs.py` → `data/cbh_pairs.parquet`): frames every 2 min joined to the P036 targets within 15 s, Sun-fitted pose required, zenith pixel and 10° ROI per pair; 104,683 daytime pairs, 104,683 in the day splits (test 21,859, train 71,867, val 10,957); new protocol file `data/splits/cbh_pairs.parquet` and lock entries (`test_lock.json` re-locked); report `docs/data/cbh_pairs.md`, figures. P044 refit of OLDLR/WESTE with a 15° prior gate (dome ghost tracks) and daily sampling; P049's `label_from_pairs` joins views to this table.
+
 ### P050 — Metadata dropout (2026-10-10)
 - `GeometryDropout` (ray map / meta masked to the contract's null state, p = 0.3 each; `stratia/augment/dropout.py`) and the null-token path of the SkyRay encoder with meta FiLM (`stratia/model/skyray.py`); a stub model runs with and without metadata.
 

@@ -17,7 +17,8 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 LOCK_PATH = REPO_ROOT / "test_lock.json"
 FINAL_LOG = REPO_ROOT / "runs" / "final_eval_log.md"
 TEST_FILES = {"in_domain": ("source", "split", "test"), "lodo": ("fold", "role", "test"),
-              "held_out_station": ("variant", "role", "test")}
+              "held_out_station": ("variant", "role", "test"),
+              "cbh_pairs": ("station", "split", "test")}          # P047: cloud-base-height pairs per site
 
 
 def test_entries(splits_dir: str | Path) -> dict[str, dict]:

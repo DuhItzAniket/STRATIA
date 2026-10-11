@@ -1,5 +1,5 @@
 {
-  "locked_at": "2026-10-08T17:41:16Z",
+  "locked_at": "2026-10-11T04:00:09Z",
   "config_version": 1,
   "seed": 0,
   "manifest_sample_id_sha256_prefix": "464078b6d033dd39",
@@ -55,6 +55,14 @@
     "held_out_station/same_days/test": {
       "n": 14644,
       "sha256": "14acf274bb0b4bb2fcf75049f72acd36672f94fc881e0b126b48b7e22c26fde4"
+    },
+    "cbh_pairs/OLDLR/test": {
+      "n": 10700,
+      "sha256": "e01e7c41475db361162c731470d2419d54fd273b3ab21ba443f793be6d023646"
+    },
+    "cbh_pairs/WESTE/test": {
+      "n": 11159,
+      "sha256": "606fab4e2c41bafe2ff5223ec70a090ab33224f1946622d488585d71c989144a"
     }
   }
 }

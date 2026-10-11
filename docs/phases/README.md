@@ -53,3 +53,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P048](P048-augmentation-policy.md) | Augmentation policy | DONE |
 | [P049](P049-consumer-view-synthesis.md) | Consumer-view synthesis | DONE |
 | [P050](P050-metadata-dropout.md) | Metadata dropout | DONE |
+| [P047](P047-image-ceilometer-pairing.md) | Image–ceilometer pairing | DONE |

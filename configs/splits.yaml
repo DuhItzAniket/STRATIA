@@ -62,3 +62,14 @@ few_shot_target:
 
 # Published splits that are reported next to ours for comparison only (they leak: P026).
 published_for_comparison: [mgcd, almeria]
+
+# Cloud-base-height pairs at the ceilometer sites (P047, scripts/make_cbh_pairs.py -> data/splits/cbh_pairs.parquet).
+# Units are calendar days shared across the two stations; days already assigned by the in-domain Eye2Sky split keep
+# that assignment (same date -> same split, P027); the remaining days are assigned to `fractions` with the day's
+# dominant ceilometer label as the stratum. Night frames are never in the splits (daytime model).
+cbh_pairs:
+  stations: {OLDLR: CDLRA, WESTE: CDLRB}
+  cadence_s: 120            # one frame every two minutes (P027: adjacent frames are 82-92 % the same scene)
+  max_gap_s: 15             # nearest 30 s grid point of the P036 targets (P031 tolerance is the +-30 s window)
+  roi_deg: 10               # zenith region of interest recorded per pair (radius in pixels)
+  inherit_from: in_domain   # Eye2Sky day assignment of the in-domain split, where it exists

@@ -99,3 +99,19 @@ def test_inherit_label_nearest_grid_point():
     assert S.inherit_label(t, "2022-04-01T10:01:05Z") is None             # nearest grid point is invalid
     assert S.inherit_label(t, "2022-04-01T10:03:00Z") is None             # 60 s away: no grid point within 15 s
     assert S.inherit_label(t.iloc[0:0], "2022-04-01T10:00:00Z") is None
+
+
+def test_label_from_pairs_requires_a_daytime_pair_with_the_zenith_in_the_mask():
+    times = pd.to_datetime(["2022-04-01 10:00:00", "2022-04-01 10:02:00", "2022-04-01 22:00:00"], utc=True)
+    pairs = pd.DataFrame({"image_file": ["Eye2Sky/a.jpg", "Eye2Sky/b.jpg", "Eye2Sky/c.jpg"], "paired": [True, True, True],
+                          "daytime": [True, True, False], "zenith_inside_mask": [True, False, True], "ceilometer": "CDLRA",
+                          "time": times, "gap_s": 0.0, "label": ["low", "mid", "none"], "etage_wmo": ["low", "mid", "none"],
+                          "cbh_m": [900.0, 3000.0, np.nan], "cbh2_m": np.nan, "layers": 1.0, "confidence": 1.0, "mixed": False,
+                          "split": ["train", "train", None], "day_label_share": [0.5, 0.25, 0.25]})
+    lab = S.label_from_pairs(pairs, "Eye2Sky/a.jpg")
+    assert lab["label"] == "low" and lab["split"] == "train" and lab["day_label_share"] == 0.5
+    assert lab["assumption"] == "flat layer"
+    assert S.label_from_pairs(pairs, "Eye2Sky/b.jpg") is None              # zenith outside the mask
+    assert S.label_from_pairs(pairs, "Eye2Sky/c.jpg") is None              # night
+    assert S.label_from_pairs(pairs, "Eye2Sky/d.jpg") is None and S.label_from_pairs(pairs.iloc[0:0], "Eye2Sky/a.jpg") is None
+
