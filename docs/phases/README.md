@@ -63,3 +63,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P057](P057-segmentation-baselines.md) | B6: segmentation baselines | DONE |
 | [P058](P058-cbh-baselines.md) | B7: CBH baselines | DONE |
 | [P059](P059-baseline-leaderboard.md) | Baseline leaderboard | DONE |
+| [P060](P060-gate-g3.md) | Gate G3 — Baselines reproduced | DONE |

@@ -392,4 +392,8 @@ climatology_median: MAE 1147 m, skill +0.000. climatology_month_hour: MAE 1131 m
 
 `docs/data/baseline_leaderboard.md` is generated from the result files and names the best baseline per criterion; every number is validation-only.
 
+### P060 — Gate G3
+
+Baselines reproduced with acceptable seed variance and plausible against the literature; signed (`docs/phases/P060-gate-g3.md`).
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

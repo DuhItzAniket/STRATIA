@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P060 — Gate G3 — Baselines reproduced (2026-10-11)
+- Gate G3 signed (`docs/phases/P060-gate-g3.md`): seed variance and plausibility against the literature reviewed.
+
 ### P059 — Baseline leaderboard (2026-10-11)
 - `scripts/baseline_leaderboard.py` → `docs/data/baseline_leaderboard.md`: recognition (in-domain, LODO), protocol gap, segmentation, CBH, and the best-baseline references for criteria C1 and C3.
 
