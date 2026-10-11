@@ -72,3 +72,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P066](P066-layer-head.md) | Layer head | DONE |
 | [P067](P067-cbh-head.md) | CBH head | DONE |
 | [P068](P068-ood-quality-score.md) | OOD / quality score | DONE |
+| [P069](P069-multi-dataset-sampler.md) | Multi-dataset sampler | DONE |

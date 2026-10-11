@@ -428,4 +428,8 @@ Zenith-prior attention over an 8 × 8 pooled token grid: val MAE 566 m, skill +0
 
 Energy + Mahalanobis on frozen features: leave-one-source-out AUROC 0.961–1.000. The Mahalanobis term reads camera identity (P029 again), the energy term adds nothing; a new camera will be called 'uncertain' until adaptation adds its features to the fit.
 
+### P069 — Sampler
+
+Per-task batches, square-root dataset balance (τ = 0.5), label masks; observed shares match the config.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

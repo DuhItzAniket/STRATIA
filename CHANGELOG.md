@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P069 — Multi-dataset sampler (2026-10-11)
+- Multi-dataset sampler (`stratia/data/sampler.py`): per-task batches, p_d ∝ n_d^τ with an exact floor, label masks per head; observed shares match the config within 0.02 (3 tests).
+
 ### P068 — OOD / quality score (2026-10-11)
 - OOD score (`stratia/model/ood.py`, `scripts/ood_eval.py`): energy + Mahalanobis; leave-one-source-out AUROC 0.961–1.000 (mean 0.978), the Mahalanobis term carries it; night and glare flags; `docs/data/ood_eval.md`.
 
