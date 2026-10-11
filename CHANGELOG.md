@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P077 — Stage-5: partial unfreeze (2026-10-11)
+- Stage-5 LoRA on the backbone (`scripts/train_lora.py`, peft): étage 0.805 → 0.810, dense mIoU 0.869 → 0.877 frozen → LoRA (`docs/data/stage5_lora.md`).
+
 ### P076 — Stage-4: joint multi-task (frozen) (2026-10-11)
 - Stage-4 joint training (`scripts/train_joint.py`): étage 0.799, dense mIoU 0.881, CBH MAE 545 m against the single-task runs; task-gradient cosines logged (`docs/data/stage4_joint.md`).
 
