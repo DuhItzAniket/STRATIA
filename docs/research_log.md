@@ -404,4 +404,8 @@ The v1 design is fixed in `docs/architecture.md` with ADR-005 (heads) and ADR-00
 
 Geometry enters as tokens added to the backbone tokens with a learned strength α (initial 0.1) and as FiLM from the Sun vector; one traced graph serves known and unknown geometry. α is the first number to read in the geometry ablation.
 
+### P063 — Global heads
+
+Attention pool ⊕ CLS → genus / étage / oktas; oktas through CORAL (rank-consistent by construction, which the calibration phase relies on).
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

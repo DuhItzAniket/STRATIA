@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P063 — Global heads (2026-10-11)
+- Global heads (`stratia/model/heads.py`): `AttentionPool`, `CoralHead` (rank-consistent oktas), `GlobalHeads` → genus / étage logits and oktas probabilities in the contract's shapes (4 tests).
+
 ### P062 — SkyRay encoder (2026-10-11)
 - `GeometryEncoder` (`stratia/model/skyray.py`): tokens + α · SkyRay tokens, FiLM on CLS and tokens, `zenith_cos`; one traced graph serves known and unknown geometry (4 tests).
 
