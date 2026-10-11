@@ -452,4 +452,8 @@ On cached DINOv3 features the global heads reach val mean étage macro-F1 0.817 
 
 Kendall weighting settles at sky 6.2 / layer 1.6 and recovers most of the sky-parsing loss of the fixed-weight joint run (mIoU 0.905, clear-sky cloud fraction 0.299); the layer head stays at 0.559.
 
+### P075 — Stage-3 CBH head
+
+Seed std 10 m; trained on OLDLR alone the head keeps skill +0.448 on the never-seen WESTE site (C3 asks 0.10); the P049 synthetic views give the best single number (538 m); the overcast-day weighting does not help; the geometry remains unused at dropout 0.15 and 0.3.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

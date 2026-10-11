@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P075 — Stage-3: CBH head (2026-10-11)
+- Stage-3 CBH head regime (`--train-stations`, `--synthetic`, `--day-weight`, checkpoints, `stratia/train/cbh_data.py`): base MAE 557 m skill +0.514 over 3 seeds; held-out WESTE skill +0.448 with OLDLR-only training; + synthetic views 538 m.
+
 ### P074 — Stage-2: dense heads (frozen backbone) (2026-10-11)
 - Stage-2 dense heads with Kendall weighting and the class-fraction monitor (`--kendall`, `stratia/train/dense_data.py`): val mIoU 0.905, layer mIoU 0.559, clear-sky cloud fraction 0.299.
 
