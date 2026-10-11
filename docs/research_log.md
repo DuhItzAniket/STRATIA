@@ -364,4 +364,8 @@ Every frozen backbone the baselines use is cached once: pooled embeddings for 72
 
 The prototype's MobileNetV3-L recipe on CCSN, random versus grouped split with the same pool and sizes (3 seeds): random val macro-F1 0.511, grouped val 0.588. Inside the random val the leaked images (24 of 255 have a near-duplicate in train) score 0.146 against 0.543 for the clean ones. *For the paper:* the leakage effect is measured per image, not inferred from a split-level gap; the prototype's 70/15/15 split over the whole dataset is not reproduced because it would read the locked test rows.
 
+### P053 — Fine-tuned CNNs
+
+ResNet-50 and ConvNeXt-T, 3 seeds, grouped splits (`docs/data/baseline_cnn.md`); largest seed std 0.026. Fit verdicts are logged per run.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

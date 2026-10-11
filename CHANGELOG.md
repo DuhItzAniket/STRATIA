@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P053 — B2: fine-tuned CNNs (2026-10-11)
+- ResNet-50 and ConvNeXt-T fine-tuned on CCSN, MGCD, SWIMCAT and Montenegro, 3 seeds each (`stratia/baselines/train_cnn.py`, `scripts/baseline_cnn.py`), with per-epoch fit curves and verdicts; largest seed std 0.026.
+
 ### P052 — B1: legacy CNN (2026-10-11)
 - Legacy MobileNetV3-L recipe on CCSN under a per-image random split and the grouped split, same pool and sizes, 3 seeds (`scripts/baseline_cnn.py --recipe legacy`): random val macro-F1 0.511 vs grouped val 0.588; the random val's leaked images (a near-duplicate in train, 24 of 255) score 0.146 against 0.543 for the clean ones (`docs/data/baseline_cnn.md`). The locked test rows are not used.
 
