@@ -464,4 +464,8 @@ All heads together: étage 0.799, dense 0.881, CBH 545 m (`docs/data/stage4_join
 
 LoRA on the last blocks with augmentation: étage 0.805 → 0.810, dense 0.869 → 0.877 (frozen → LoRA on the same val images).
 
+### P078 — HPO
+
+Random search, 20 trials: scores 0.775–0.819; the sensitivity table says which knobs matter (`docs/data/hpo_global.md`).
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

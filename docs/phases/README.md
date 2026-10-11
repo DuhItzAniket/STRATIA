@@ -81,3 +81,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P075](P075-stage3-cbh-head.md) | Stage-3: CBH head | DONE |
 | [P076](P076-stage4-joint.md) | Stage-4: joint multi-task (frozen) | DONE |
 | [P077](P077-stage5-lora.md) | Stage-5: partial unfreeze | DONE |
+| [P078](P078-budgeted-hpo.md) | Budgeted HPO | DONE |

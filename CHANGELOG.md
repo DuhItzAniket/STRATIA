@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P078 — Budgeted HPO (2026-10-11)
+- Budgeted random search for the global heads (`scripts/hpo_global.py`): 20 trials, scores 0.775–0.819, sensitivity table (`docs/data/hpo_global.md`).
+
 ### P077 — Stage-5: partial unfreeze (2026-10-11)
 - Stage-5 LoRA on the backbone (`scripts/train_lora.py`, peft): étage 0.805 → 0.810, dense mIoU 0.869 → 0.877 frozen → LoRA (`docs/data/stage5_lora.md`).
 
