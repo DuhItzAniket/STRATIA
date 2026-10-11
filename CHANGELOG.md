@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P082 — Gate G4 — Model vs baselines (2026-10-11)
+- Gate G4 (`scripts/gate_g4.py` → `docs/data/gate_g4.md`): GO against the pre-registered criteria on validation data.
+
 ### P081 — Fit sign-off (2026-10-11)
 - Fit sign-off (`scripts/fit_report.py` → `docs/data/fit_report.md`): train/val gaps and verdicts, ECE per head, cross-fitted temperature for the CBH interval coverage.
 

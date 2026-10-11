@@ -480,4 +480,8 @@ Seed std n/a; the table in the phase doc.
 
 `docs/data/fit_report.md`: gaps, verdicts, ECE, CBH coverage after a cross-fitted temperature.
 
+### P082 — Gate G4
+
+GO: see `docs/data/gate_g4.md` and the phase doc.
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

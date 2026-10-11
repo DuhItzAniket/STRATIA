@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Current stage | H — training regime (P073–P082); Stages A–G complete (P056 partial; P041 blocked) |
-| Last completed phase | P081 — Fit sign-off |
-| Next phase | P082 — Gate G4 — Model vs baselines; P041 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
+| Current stage | H complete (P073–P082, Gate G4 GO); next Stage I — domain adaptation (P083–P088); P056 partial; P041 blocked |
+| Last completed phase | P082 — Gate G4 — Model vs baselines |
+| Next phase | P083 — Stage I, domain adaptation and B0268; P041 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 complete on disk (2026-10-11); P047 pair table built. B0268 logging for P041 to start now (P041 BLOCKED). Missing public datasets need owner action (P015, cut-off 15 Oct). |
@@ -17,7 +17,7 @@
 | G1 Data audit | P032 | 14 Oct | **Signed 2026-10-08** (`docs/data/data_card.md`) |
 | G2 Splits & labels | P042 | 18 Oct | **Signed 2026-10-10, conditional** (P041 deferred, latest before P083) |
 | G3 Baselines | P060 | 23 Oct | **Signed 2026-10-11** (`docs/phases/P060-gate-g3.md`) |
-| G4 Model vs baselines (CVPR go/no-go) | P082 | 3 Nov | — |
+| G4 Model vs baselines (CVPR go/no-go) | P082 | 3 Nov | **GO, 2026-10-11** (`docs/phases/P082-gate-g4.md`) |
 
 ## Phase log
 
@@ -104,3 +104,4 @@
 | P079 | Learning curves | DONE | 2026-10-11 |
 | P080 | Regularization study | DONE | 2026-10-11 |
 | P081 | Fit sign-off | DONE | 2026-10-11 |
+| P082 | Gate G4 — Model vs baselines | DONE | 2026-10-11 |
