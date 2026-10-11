@@ -54,12 +54,12 @@ class CacheMeta:
     n: int
     dim: int
     patch_tokens: int | None
-    mean_dim: int | None
     fingerprint: str
     created_utc: str
     git_sha: str
     seconds: float
     disk_bytes: int
+    mean_dim: int | None = None      # absent in caches built before P051's CLIP fix
 
     def to_json(self) -> str:
         return json.dumps(self.__dict__, indent=2)
@@ -110,15 +110,19 @@ class FeatureCache:
 
     # -- build ----------------------------------------------------------------------------------------------------
     def build(self, sample_ids: list[str], image_files: list[str], backbone, images_root: str | Path, patches: bool = False,
-              batch: int = 64, workers: int = 6, resume: bool = True, log=print) -> CacheMeta:
+              batch: int = 64, workers: int = 6, resume: bool = True, log=print, pool: int = 1) -> CacheMeta:
         """Extract features for `image_files` (P022 cached images) with `backbone` (a FrozenBackbone) and store them.
-        Resumes an interrupted build of the same fingerprint; refuses to overwrite a different one."""
-        fp = fingerprint(sample_ids, backbone.spec.hf_id, self.size, self.transform)
+        Resumes an interrupted build of the same fingerprint; refuses to overwrite a different one. `pool` > 1 stores
+        the patch grid average-pooled by pool x pool (a 32 x 32 grid with pool=4 becomes 8 x 8; P067)."""
+        fp = fingerprint(sample_ids, backbone.spec.hf_id, self.size, self.transform + (f"-pool{pool}" if pool > 1 else ""))
         self.dir.mkdir(parents=True, exist_ok=True)
         n, dim = len(sample_ids), backbone.dim
         mean_dim = int(getattr(backbone, "mean_dim", dim))
         side = self.size // backbone.spec.patch
-        n_tokens = side * side if patches else None
+        if patches and side % pool:
+            raise ValueError(f"grid side {side} is not divisible by pool {pool}")
+        side_out = side // pool
+        n_tokens = side_out * side_out if patches else None
         progress_path = self.dir / "progress.json"
         done = 0
         if progress_path.exists():
@@ -156,7 +160,11 @@ class FeatureCache:
                 cls[row:row + k] = out["cls"].cpu().numpy().astype(np.float16)
                 mean[row:row + k] = out["mean"].cpu().numpy().astype(np.float16)
                 if patches:
-                    patch_arr[row:row + k] = out["patches"].cpu().numpy().astype(np.float16)
+                    grid = out["patches"].float()
+                    if pool > 1:
+                        g = grid.transpose(1, 2).reshape(k, -1, side, side)
+                        grid = torch.nn.functional.avg_pool2d(g, pool).flatten(2).transpose(1, 2)
+                    patch_arr[row:row + k] = grid.cpu().numpy().astype(np.float16)
                 row += k
                 if time.perf_counter() - last_log > 30:
                     progress_path.write_text(json.dumps({"fingerprint": fp, "rows_done": row}), encoding="utf-8")

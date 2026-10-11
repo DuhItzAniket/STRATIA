@@ -11,7 +11,8 @@ Under `<cache_root>/features/`; built by `scripts/build_feature_cache.py`. Trans
 | `dinov3_vitl16_224_ffr1` | facebook/dinov3-vitl16-pretrain-lvd1689m | 224 | 72,974 | 1024 | - | 0.28 GB | 656 s | 35e9cb9f0ffe5eee |
 | `dinov3_vits16_224_ffr1` | facebook/dinov3-vits16-pretrain-lvd1689m | 224 | 72,974 | 384 | - | 0.10 GB | 129 s | f5b4dfc5ef4fc9c3 |
 | `dinov3_vits16_512_ffr1` | facebook/dinov3-vits16-pretrain-lvd1689m | 512 | 72,974 | 384 | - | 0.10 GB | 522 s | 9ba0acd971efe8ff |
+| `dinov3_vits16_512_ffr1-patches-cbh-pool4` | facebook/dinov3-vits16-pretrain-lvd1689m | 512 | 20,942 | 384 | 64 | 0.99 GB | 184 s | 0ff51db688988954 |
 | `dinov3_vits16_512_ffr1-patches-seg` | facebook/dinov3-vits16-pretrain-lvd1689m | 512 | 8,870 | 384 | 1024 | 6.51 GB | 78 s | 22860c71ff6d858e |
 | `siglip2_b16_224_ffr1` | google/siglip2-base-patch16-224 | 224 | 72,974 | 768 | - | 0.21 GB | 178 s | 4cf076919c2d64ee |
 
-Total on disk: 7.90 GB.
+Total on disk: 8.89 GB.

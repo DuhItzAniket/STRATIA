@@ -60,6 +60,7 @@ def main() -> int:
     ap.add_argument("--patches", choices=["none", "seg", "cbh", "all"], default="none")
     ap.add_argument("--cbh", action="store_true", help="include the 10-min cloud-base-height frames (P047)")
     ap.add_argument("--batch", type=int, default=64)
+    ap.add_argument("--pool", type=int, default=1, help="average-pool the stored patch grid by this factor (P067: 4)")
     ap.add_argument("--workers", type=int, default=6)
     a = ap.parse_args()
     t0 = time.perf_counter()
@@ -79,9 +80,10 @@ def main() -> int:
         pooled.build(rows.sample_id.tolist(), rows.image_file.tolist(), backbone, cache_root, patches=False, batch=a.batch,
                      workers=a.workers)
         if len(dense):
-            grid = FeatureCache(cache_root, key, size, transform=f"ffr1-patches-{a.patches}")
+            suffix = f"-pool{a.pool}" if a.pool > 1 else ""
+            grid = FeatureCache(cache_root, key, size, transform=f"ffr1-patches-{a.patches}{suffix}")
             grid.build(dense.sample_id.tolist(), dense.image_file.tolist(), backbone, cache_root, patches=True,
-                       batch=max(8, a.batch // 4), workers=a.workers)
+                       batch=max(8, a.batch // 4), workers=a.workers, pool=a.pool)
         del backbone
         import torch
 

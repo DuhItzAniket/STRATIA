@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P067 — CBH head (2026-10-11)
+- CBH head (`stratia/model/cbh.py`, `scripts/train_cbh_head.py`; pooled 8 × 8 token cache via `FeatureCache.build(pool=4)`): val MAE 566 m, skill +0.506 (P058 best 699 m / +0.390); with geometry dropout 0.3 the head ignores the geometry (zeroed: 566 m), without dropout it uses it (551 m vs 765 m zeroed); `docs/data/cbh_head.md`.
+
 ### P066 — Layer head (2026-10-11)
 - Layer head on the shared decoder trunk (`--layers`): Almería layer mIoU 0.559 [0.467, 0.661] (bootstrap 95 %), sky parsing 0.894 jointly.
 
