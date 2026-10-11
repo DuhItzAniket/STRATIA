@@ -84,3 +84,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P078](P078-budgeted-hpo.md) | Budgeted HPO | DONE |
 | [P079](P079-learning-curves.md) | Learning curves | DONE |
 | [P080](P080-regularization-study.md) | Regularization study | DONE |
+| [P081](P081-fit-sign-off.md) | Fit sign-off | DONE |

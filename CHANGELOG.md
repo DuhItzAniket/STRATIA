@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P081 — Fit sign-off (2026-10-11)
+- Fit sign-off (`scripts/fit_report.py` → `docs/data/fit_report.md`): train/val gaps and verdicts, ECE per head, cross-fitted temperature for the CBH interval coverage.
+
 ### P080 — Regularization study (2026-10-11)
 - Regularisation study (global heads): weight decay, dropout, EMA, seeds (std n/a); table in `docs/phases/P080-regularization-study.md`.
 
