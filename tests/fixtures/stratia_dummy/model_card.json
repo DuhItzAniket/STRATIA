@@ -2,8 +2,8 @@
   "contract_version": "1.0",
   "model_name": "stratia-dummy",
   "model_version": "1.0.0-demo",
-  "created_utc": "2026-10-21T14:43:33Z",
-  "git_sha": "98c756df805bad81df4ef5aecd46e0d0a2c49be4",
+  "created_utc": "2026-10-21T14:53:22Z",
+  "git_sha": "4b38ad83ee59dd38ff38bc6004331727727248e2",
   "input": {
     "height": 512,
     "width": 512,

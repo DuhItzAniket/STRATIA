@@ -191,16 +191,17 @@ def load_trained(parts: TrainedParts, backbone: nn.Module, d_model: int = 384) -
     return model, facts
 
 
-def dummy_model(d_model: int = 32, hidden: int = 64, seed: int = 0) -> ExportModel:
-    """A small, deterministic, untrained graph with the contract's interface (tests; CloudScope's contract test)."""
+def dummy_model(d_model: int = 16, hidden: int = 32, seed: int = 0) -> ExportModel:
+    """A small, deterministic, untrained graph with the contract's interface (tests; CloudScope's contract test).
+    Sized to stay under CloudScope's 100 KB fixture limit (tests/data/README.md there)."""
     torch.manual_seed(seed)
     net = STRATIA(None, d_model=d_model, dense=False, cbh=False, ood=False, global_hidden=hidden)
     ood = OodScore(hidden)
     with torch.no_grad():
         ood.fit(torch.randn(256, hidden), torch.randn(256, len(C.GENUS_CLASSES)))
     model = ExportModel(FakeBackboneWrapper(FakeBackbone(d_model, C.PATCH_SIZE)), net.geo, net.global_heads,
-                        GeometryEncoder(d_model), CbhHead(d_model), DenseHeads(d_model, width=32, mid=32, out=32), ood,
-                        {"genus": 2.0, "etage": 1.0, "oktas": 1.0, "cbh": 1.5})
+                        GeometryEncoder(d_model, hidden=32), CbhHead(d_model, hidden=32),
+                        DenseHeads(d_model, width=8, mid=8, out=8), ood, {"genus": 2.0, "etage": 1.0, "oktas": 1.0, "cbh": 1.5})
     return model.eval()
 
 

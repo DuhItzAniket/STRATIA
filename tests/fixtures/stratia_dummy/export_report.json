@@ -1,36 +1,36 @@
 {
-  "onnx_file": "tests\\fixtures\\stratia_dummy\\stratia_dummy.onnx",
-  "card_file": "tests\\fixtures\\stratia_dummy\\model_card.json",
-  "onnx_mb": 0.450134,
-  "onnx_sha256": "48ffc2d99c3c014d16a4518a24df83bbf6ef8a2d35fb676b2ec0a5eba8e86085",
+  "onnx_file": "tests/fixtures/stratia_dummy/stratia_dummy.onnx",
+  "card_file": "tests/fixtures/stratia_dummy/model_card.json",
+  "onnx_mb": 0.149987,
+  "onnx_sha256": "4f2b3e5996aeb1d0e0d717b291b44eff47cca22d6a9b2bacb557fc8a177c58fc",
   "parity_random": {
     "genus_logits": {
-      "max_abs": 1.1920928955078125e-07,
-      "max_rel": 5.541231189454265e-07,
+      "max_abs": 8.940696716308594e-08,
+      "max_rel": 3.111325668214704e-07,
       "shape": [
         4,
         12
       ]
     },
     "etage_logits": {
-      "max_abs": 1.4901161193847656e-07,
-      "max_rel": 4.542275746644009e-07,
+      "max_abs": 1.7881393432617188e-07,
+      "max_rel": 4.7423444016203575e-07,
       "shape": [
         4,
         3
       ]
     },
     "oktas_probs": {
-      "max_abs": 1.1920928955078125e-07,
-      "max_rel": 3.539516342243587e-07,
+      "max_abs": 6.705522537231445e-08,
+      "max_rel": 2.0704932524040487e-07,
       "shape": [
         4,
         9
       ]
     },
     "sky_parse_logits": {
-      "max_abs": 2.86102294921875e-06,
-      "max_rel": 1.279043999602436e-06,
+      "max_abs": 3.814697265625e-06,
+      "max_rel": 7.186538368841866e-07,
       "shape": [
         4,
         4,
@@ -39,8 +39,8 @@
       ]
     },
     "layer_logits": {
-      "max_abs": 2.4065375328063965e-06,
-      "max_rel": 1.2921618690597825e-06,
+      "max_abs": 2.86102294921875e-06,
+      "max_rel": 7.536224870818842e-07,
       "shape": [
         4,
         3,
@@ -49,16 +49,16 @@
       ]
     },
     "cbh_probs": {
-      "max_abs": 1.4901161193847656e-08,
-      "max_rel": 2.76811533694854e-07,
+      "max_abs": 1.1175870895385742e-08,
+      "max_rel": 1.9798248729330226e-07,
       "shape": [
         4,
         25
       ]
     },
     "ood_score": {
-      "max_abs": 4.76837158203125e-07,
-      "max_rel": 1.2264712268006406e-07,
+      "max_abs": 3.5762786865234375e-07,
+      "max_rel": 1.780003060503077e-07,
       "shape": [
         4,
         1
@@ -73,8 +73,8 @@
     "angle_deg_max": 0.048456642776727676,
     "angle_deg_mean": 0.03059319593012333
   },
-  "export_seconds": 3.3,
-  "latency_ms": 2.604000001156237,
+  "export_seconds": 2.5,
+  "latency_ms": 1.3324999999895226,
   "latency_runs": 5,
   "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel"
 }
