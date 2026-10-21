@@ -1,8 +1,8 @@
 {
   "onnx_file": "tests/fixtures/stratia_dummy/stratia_dummy.onnx",
   "card_file": "tests/fixtures/stratia_dummy/model_card.json",
-  "onnx_mb": 0.149987,
-  "onnx_sha256": "4f2b3e5996aeb1d0e0d717b291b44eff47cca22d6a9b2bacb557fc8a177c58fc",
+  "onnx_mb": 0.150024,
+  "onnx_sha256": "93cd72bbe3619c47330fc7a74998e56995e5b9a6c662f6419e1b4b4723ae7b9a",
   "parity_random": {
     "genus_logits": {
       "max_abs": 8.940696716308594e-08,
@@ -73,8 +73,8 @@
     "angle_deg_max": 0.048456642776727676,
     "angle_deg_mean": 0.03059319593012333
   },
-  "export_seconds": 2.5,
-  "latency_ms": 1.3324999999895226,
+  "export_seconds": 4.5,
+  "latency_ms": 4.035900001326809,
   "latency_runs": 5,
   "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel"
 }

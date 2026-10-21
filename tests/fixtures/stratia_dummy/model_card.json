@@ -2,8 +2,8 @@
   "contract_version": "1.0",
   "model_name": "stratia-dummy",
   "model_version": "1.0.0-demo",
-  "created_utc": "2026-10-21T14:53:22Z",
-  "git_sha": "4b38ad83ee59dd38ff38bc6004331727727248e2",
+  "created_utc": "2026-10-21T15:31:13Z",
+  "git_sha": "69847e1fd37dd23d99ce2a4e4640302b257fc92f",
   "input": {
     "height": 512,
     "width": 512,
@@ -79,14 +79,17 @@
   ],
   "calibration": {
     "temperatures": {
-      "genus": 1.0,
+      "genus": 2.0,
       "etage": 1.0,
       "oktas": 1.0,
-      "cbh": 1.0
+      "cbh": 1.5
     },
     "folded_into_graph": true,
-    "cbh_conformal_radius_cdf": {},
-    "fitted_on": "untrained dummy"
+    "cbh_conformal_radius_cdf": {
+      "80": 0.3,
+      "95": 0.45
+    },
+    "fitted_on": "untrained dummy: made-up values"
   },
   "ood_threshold": 1.0,
   "training_data": [

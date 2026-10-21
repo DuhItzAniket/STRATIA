@@ -198,7 +198,11 @@ def main() -> int:
     size = C.DEFAULT_INPUT_SIZE
     t0 = time.time()
     if a.dummy:
-        model, facts, trained = X.dummy_model(), {"patch_size": C.PATCH_SIZE, "mean": [0.0] * 3, "std": [1.0] * 3}, None
+        model, facts = X.dummy_model(), {"patch_size": C.PATCH_SIZE, "mean": [0.0] * 3, "std": [1.0] * 3}
+        # the dummy folds its own (made-up) temperatures into the graph: the card says so, like the real one
+        temperatures = {k: float(getattr(model, f"t_{k}")) for k in ("genus", "etage", "oktas", "cbh")}
+        trained = {"calibration": {"temperatures": temperatures, "cbh_conformal_radius": {"80": 0.3, "95": 0.45},
+                                   "ood_threshold": 1.0, "fitted_on": "untrained dummy: made-up values"}}
         name, threshold = "stratia_dummy.onnx", 1.0
     else:
         backbone, facts = X.hf_backbone("dinov3_vits16")
