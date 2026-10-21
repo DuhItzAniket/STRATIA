@@ -40,6 +40,11 @@ tqdm
 matplotlib
 tabulate                     # DataFrame.to_markdown for generated reports
 
+# Export (P096)
+onnx
+onnxruntime                  # parity check of the exported graph
+jsonschema                   # model-card validation
+
 # Development
 pytest
 ruff

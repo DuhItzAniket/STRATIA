@@ -88,3 +88,4 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P082](P082-gate-g4.md) | Gate G4 — Model vs baselines | DONE |
 | [P089](P089-calibration.md) | Calibration | DONE |
 | [P088](P088-robustness-suite.md) | Robustness suite | DONE |
+| [P096](P096-onnx-export.md) | ONNX export (FP32) and model card | PARTIAL |

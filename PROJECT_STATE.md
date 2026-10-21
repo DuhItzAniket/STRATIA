@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Current stage | H complete (P073–P082, Gate G4 GO); next Stage I — domain adaptation (P083–P088); P056 partial; P041 blocked |
-| Last completed phase | P088 — Robustness suite |
-| Next phase | P090 — Locked-test evaluation (once the B0268 column is decided), P091–P094; P083–P087 blocked on the B0268 frames; P041 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
+| Last completed phase | P096 — ONNX export (FP32) and model card (pulled forward for the AI-day demo of 2026-10-30; INT8 deferred) |
+| Next phase | CloudScope Stage F (P065–P072, the demo) with `models/stratia-1.0.0-demo/`; then P041 labels (two annotators labelling 393 B0268 frames of 18–21 Oct 2026) → P083 → reduced P084; P090 — Locked-test evaluation (once the B0268 column is decided), P091–P094; P083–P087 blocked on the B0268 frames; P041 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 complete on disk (2026-10-11); P047 pair table built. B0268 logging for P041 to start now (P041 BLOCKED). Missing public datasets need owner action (P015, cut-off 15 Oct). |
@@ -107,3 +107,4 @@
 | P082 | Gate G4 — Model vs baselines | DONE | 2026-10-11 |
 | P089 | Calibration | DONE | 2026-10-11 |
 | P088 | Robustness suite | DONE | 2026-10-11 |
+| P096 | ONNX export (FP32) and model card | PARTIAL (INT8 deferred) | 2026-10-21 |

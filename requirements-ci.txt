@@ -17,3 +17,6 @@ openpyxl
 pvlib
 pytest
 ruff
+onnx==1.23.2           # P096 export tests
+onnxruntime==1.31.0
+jsonschema==4.26.0

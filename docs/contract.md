@@ -38,6 +38,8 @@ Calibrated probabilities: hosts apply the per-head temperatures in the model car
 
 Validated against [`schemas/model_card.schema.json`](../schemas/model_card.schema.json). Required content: contract version, model name and version, creation time and git SHA, input specification (size, resize rule, mean/std, patch size), class lists, CBH bin edges, calibration temperatures and OOD threshold, training-data manifest hashes, licences (including "Built with DINOv3" attribution), and the evaluation report reference.
 
+Reference export (P096): `scripts/export_onnx.py` → `models/<version>/stratia.onnx` + `model_card.json` (the card is also embedded in the ONNX metadata under `stratia_model_card`; the P089 temperatures are folded into the graph, so hosts apply only `ood_threshold`). Untrained dummy with the same interface for host contract tests: `tests/fixtures/stratia_dummy/`.
+
 ## 5. Versioning
 
 `MAJOR.MINOR`. A change to any input or output name, shape, channel meaning or class order is a **major** change and must land in both repositories (STRATIA phase doc + CloudScope phase doc) before use. Adding optional fields to the model card is minor. Hosts refuse models whose major version they do not support.

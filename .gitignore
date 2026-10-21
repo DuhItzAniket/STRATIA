@@ -27,6 +27,7 @@ venv/
 *.ckpt
 *.safetensors
 *.onnx
+!tests/fixtures/**/*.onnx   # the small untrained dummy export (P096), CloudScope's contract test
 *.bin
 
 # ---------- Machine-specific configuration ----------

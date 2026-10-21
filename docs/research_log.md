@@ -492,4 +492,8 @@ Cross-fitted on validation units: the étage and oktas heads are calibrated as t
 
 Corruption table in `docs/data/robustness.md`: the weakest spots are sensor noise for étage, sun glare for sky parsing and sensor noise for cloud-base height; the P048 augmentations cover the photometric ones, which the LoRA stage can train against.
 
+### P096 — ONNX export (pulled forward)
+
+The Gate G4 model exported as one FP32 ONNX graph with the P089 calibration folded in (`docs/data/onnx_export.md`): parity with PyTorch ≤ 1.6e-4 absolute, 172 ms per 512 px frame on the laptop CPU, ray-map pooling in the graph within 0.05° of the training ray maps. First look at the owner's B0268 camera (four frames of 19 Oct 2026, nominal camera, zenith pose, no labels): finite and well-formed outputs, one of four frames above the OOD threshold, oktas 6–8 against 31–61 % cloud pixels from the sky-parse head, genus leaning to Ns / Cs. A cover over-estimate on an unseen consumer fisheye is the first thing P083 should quantify once the P041 labels exist (393 frames over four days, 18–21 Oct, two annotators in progress).
+
 Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.

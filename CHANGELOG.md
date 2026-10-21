@@ -4,6 +4,11 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P096 — ONNX export and model card (2026-10-21)
+- `stratia/export/onnx_model.py` + `scripts/export_onnx.py`: the Gate G4 model (DINOv3 ViT-S/16, global, dense and CBH heads, P089 calibration folded in) as one ONNX graph (opset 17, dynamic batch, FP32; `models/stratia-1.0.0-demo/`, 94.9 MB, git-ignored) with a validated `model_card.json` (also embedded in the ONNX metadata); parity vs ONNX Runtime ≤ 1.6e-4 absolute (≤ 5.5e-5 relative), 172 ms per frame on the laptop CPU; report `docs/data/onnx_export.md`.
+- Dummy export `tests/fixtures/stratia_dummy/` (0.45 MB, untrained, same interface) for CloudScope's contract test; `tests/test_export.py`; onnx, onnxruntime and jsonschema pinned.
+- Pulled forward from Stage K for the AI-day demo (2026-10-30); INT8 and the accuracy-drop report stay with P095/P097.
+
 ### P088 — Robustness suite (2026-10-11)
 - Robustness suite (`scripts/robustness_suite.py` → `docs/data/robustness.md`): eight corruptions on validation images with the backbone live; largest drops: étage F1 0.838 → 0.741 (sensor noise), sky mIoU 0.901 → 0.816 (sun glare), CBH MAE 606 → 1014 m (sensor noise).
 
