@@ -22,7 +22,7 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P016](P016-montenegro-parser.md) | Montenegro parser | DONE |
 | [P017](P017-mgcd-parser.md) | MGCD parser + weather | DONE |
 | [P018](P018-segmentation-loader.md) | Segmentation datasets loader | DONE |
-| [P019](P019-b0268-ingest.md) | B0268 ingest | PARTIAL |
+| [P019](P019-b0268-ingest.md) | B0268 ingest | DONE (closed 2026-10-23 with P041) |
 | [P020](P020-external-references.md) | External weak references (METAR) | PARTIAL |
 | [P021](P021-unified-schema.md) | Unified sample schema | DONE |
 | [P022](P022-loader-performance.md) | Loader performance | DONE |
@@ -44,8 +44,8 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P038](P038-split-generator.md) | Split generator | DONE |
 | [P039](P039-lock-test-sets.md) | Lock test sets | DONE |
 | [P040](P040-label-noise.md) | Label-noise estimation | DONE |
-| [P041](P041-b0268-labelling.md) | B0268 labelling protocol | BLOCKED |
-| [P042](P042-gate-g2.md) | Gate G2 — Splits & labels sign-off | DONE (conditional) |
+| [P041](P041-b0268-labelling.md) | B0268 labelling protocol | DONE (image-level; model annotators, no dense masks) |
+| [P042](P042-gate-g2.md) | Gate G2 — Splits & labels sign-off | DONE (condition on P041 met 2026-10-22, with caveat) |
 | [P043](P043-camera-models.md) | Camera models | DONE |
 | [P044](P044-sun-validation.md) | Sun position & calibration validation | DONE |
 | [P045](P045-ray-maps.md) | Ray-map generator | DONE |
@@ -86,6 +86,8 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P080](P080-regularization-study.md) | Regularization study | DONE |
 | [P081](P081-fit-sign-off.md) | Fit sign-off | DONE |
 | [P082](P082-gate-g4.md) | Gate G4 — Model vs baselines | DONE |
+| [P083](P083-b0268-zero-shot.md) | B0268 zero-shot evaluation | DONE |
+| [P084](P084-few-shot-adaptation.md) | Few-shot adaptation (reduced: heads only) | DONE (reduced; `stratia-1.0.1-demo` exported) |
 | [P089](P089-calibration.md) | Calibration | DONE |
 | [P088](P088-robustness-suite.md) | Robustness suite | DONE |
-| [P096](P096-onnx-export.md) | ONNX export (FP32) and model card | PARTIAL |
+| [P096](P096-onnx-export.md) | ONNX export (FP32) and model card | PARTIAL (INT8 deferred; 1.0.1-demo added) |

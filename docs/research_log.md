@@ -500,4 +500,71 @@ The Gate G4 model exported as one FP32 ONNX graph with the P089 calibration fold
 
 CloudScope Stage F ran the exported `stratia-1.0.0-demo` on replayed B0268 frames of 19 Oct 2026 (nominal fisheye model, zenith pose, Sun from the clock and site) and on the live B0268 at night. Daytime replay, 700 frames at 4656 x 3496: reliability score 0.9-1.2 against the threshold 1.457, so **no frame was flagged out-of-domain** (the four-frame preview of P096 had flagged one of four); top genus Ns (5) or Cs (2) on every frame, oktas 6 on nearly all, mean cover 0.66-0.69, mean cloud base about 5.1 km, p(cloud overhead) high. The frames of that day were mostly blue sky with cumulus and cirrus, so the cover and the genus are over-estimated on this camera: the first quantified item for P083 once the P041 labels exist. A night run (live camera, 42 frames) gave Cb on every frame with one frame flagged: the night flag (mean luminance below 8 %) did not fire on indoor-lit frames; P083 should add an explicit night rule.
 
-Open for later phases. P041 instantiates the few-shot B0268 protocol and re-locks the test sets with the B0268 days; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.
+### P041 — B0268 labelling
+
+393 frames of the owner's Arducam B0268 (4656 x 3496, 105 deg fisheye, zenith mount, site BLR01) were logged by the CloudScope sky logger over four afternoons at 30 s cadence and labelled per frame with the sheet of `DATA/B0268/labels/` (usable, oktas 0-9, low / mid / high cloud genus, lowest base guess, sun glare, obstruction, notes; the sheet's `guide` tab is authoritative). The plan asked for two human labellers. That guard is not met. The owner's and a friend's label sheets were lost in a disk failure on 2026-10-22, and all four sheets that exist were produced by language-model annotators, each from the same 2 x 2 contact sheets, independently and without seeing another sheet. Owner decision of 2026-10-22: sheets A and B are the P041 annotator pair, C and D a sensitivity set; human labels on a subset remain an owner item, and every B0268 number carries this caveat.
+
+| Sheet | Annotator | Role |
+|---|---|---|
+| A | Claude Fable 5 | protocol pair |
+| B | Claude Sonnet 5.5 | protocol pair |
+| C | Claude Fable 5.1 | sensitivity |
+| D | Claude Opus 5.5 | sensitivity |
+
+| Day | Frames | Sun elevation | Sky (raters' notes) |
+|---|---|---|---|
+| 2026-10-18 | 120 | 15 to 29 deg | altocumulus field with cumulus puffs, 4 to 7 oktas |
+| 2026-10-19 | 120 | 25 to 39 deg | blue sky, isolated cumulus and cirrus, 2 to 6 oktas |
+| 2026-10-20 | 120 | 27 to 40 deg | cumulus building under a cirrus / cirrostratus veil, Sun's disc in the frame, 3 to 7 oktas |
+| 2026-10-21 | 33 | 49 to 52 deg | hazy, about 1 okta; paused for rain; a dark towering mass after the pause |
+
+Every frame is usable and none is obscured. Agreement of the pair (`docs/data/b0268_labels.md`, `stratia/labels/b0268_labels.py`, `scripts/b0268_labels.py`; alpha = Krippendorff's alpha, agreement = leave-one-out against the other rater, 393 units):
+
+| Quantity | alpha | Agreement |
+|---|---|---|
+| oktas 0-8 (interval), within ±1 okta / exact | 0.808 | 0.771 / 0.430 |
+| étage set, exact | 0.845 | 0.911 |
+| étage low / mid / high present | 0.349 / 1.000 / 0.909 | 0.949 / 1.000 / 0.957 |
+| genus set, exact ('unsure' rows excluded) | 0.673 | 0.789 |
+| genus Ci / Ac / Cu / Cb / Cs present | 0.909 / 1.000 / 0.474 / 1.000 / -0.064 | 0.957 / 1.000 / 0.949 / 1.000 / 0.878 |
+| raw low_cloud / mid_cloud / high_cloud | 0.478 / 1.000 / 0.696 | 0.949 / 1.000 / 0.835 |
+| raw lowest_base_guess | 0.349 | 0.949 |
+| raw sun_glare (ordinal) | 0.487 | 0.679 |
+| raw obstruction | 0.623 | 0.982 |
+
+Four-way alpha over A to D, for reference: oktas 0.834, étage set 0.748, genus set 0.357, raw low_cloud 0.491, mid_cloud 1.000, high_cloud 0.279, sun_glare 0.675, obstruction 0.501. High cloud is the contested column (none against Ci on day 1; Ci against Ci+Cs against contrail on day 3). The B0268 ceiling for the C2-style comparison of P083 is the pair's agreement: étage set 0.911, oktas within ±1 0.771 (Montenegro's human ceiling: 0.852 and 0.873). Genus stays a soft target (share of raters), never a hard label; a model is scored on the étage set, total cover and genus in the raters' union. Targets: `data/b0268_targets.parquet` (pair), `data/b0268_targets_all.parquet` (A to D), `data/b0268_ceiling.parquet`; `scripts/map_labels.py` gives the 393 rows label_source "rater majority" and the 25 legacy frames "none".
+
+Protocol and re-lock. `stratia/data/splits.py` `few_shot_target` (`configs/splits.yaml`): the locked test day is the last calendar day with at least 100 labelled frames, 2026-10-20 (the 33-frame 2026-10-21 session is too small to be the test day); the adaptation days are 10-18, 10-19 and 10-21; k in {0, 1, 2} (k = 3 would leave nothing held out, so k = 2 replaces it); draws `k0_d0`, `k1_d0..2`, `k2_d0..2` with roles train / val / test in `data/splits/few_shot_target.parquet`. The manifest keeps the 52,032 locked rows in the same order (hash prefix `464078b6d033dd39` reproduced) and appends the 393 logged frames with the sidecar Sun (`scripts/build_manifest.py`; OLDLR / WESTE stay out). `test_lock.json` was re-locked with `--force`: 23 test sets, 73,376 ids; every previously locked test hash is unchanged (checked against `data/splits/hashes_before_P041.json`); new entries `in_domain/b0268/test` and `few_shot_target/*/test`; the LODO train files lost the 25 legacy b0268 rows, which `GLOBAL_SOURCES` never used; `scripts/check_test_lock.py` passes. Tests: `tests/test_b0268_labels.py`, `tests/test_few_shot_target.py` on the CSV copies of the sheets in `tests/fixtures/b0268_labels/`.
+
+### P083 — B0268 zero-shot evaluation
+
+The exported demo graph (`stratia-1.0.0-demo`, Gate G4 heads with the P089 calibration folded in) on the 273 labelled frames of the three adaptation days (draw `k0_d0`, role val; the locked 2026-10-20 untouched), nominal B0268 camera, zenith pose, manifest Sun, ONNX Runtime on the CPU at 221 ms per frame (`docs/data/b0268_zero_shot.md`, run `20261023T120741Z_b0268_zero_shot_6a9765a3d2`). The model is scored against each rater of the P041 pair and averaged, the way the ceiling (rater against rater: étage set 0.911, oktas within ±1 0.771) is measured, so no two-rater tie is broken.
+
+| Day | Frames | Étage set exact | Oktas within ±1 | Okta bias | Top genus in the rater's set |
+|---|---|---|---|---|---|
+| all | 273 | 0.031 (3 % of the ceiling) | 0.278 (36 %) | +2.40 | 0.300 |
+| 2026-10-18 | 120 | 0.046 | 0.492 | +1.13 | 0.633 |
+| 2026-10-19 | 120 | 0.000 | 0.075 | +3.14 | 0.008 |
+| 2026-10-21 | 33 | 0.091 | 0.242 | +4.27 | 0.152 |
+
+The honest out-of-distribution number is bad, and it is the global heads: the okta argmax is 6 or 8 on 268 of 273 frames (mean 6.9 against the raters' 4.2), the low étage is predicted on 1 % of frames where a rater names it on 98 %, the top genus is Ns on 152 frames and Cs on 38. The dense head transfers: the sky-parse cloud fraction has correlation 0.83 with the raters' mean cover (MAE 0.107), though it reads the hazy Sun-in-frame sky of 2026-10-21 as 36 % cloud on the 27 frames the raters put at 0 or 1 okta (the no-collapse bar is 20 %), and the glare class is never predicted. The OOD score flags 8 % of the frames (64 % on 2026-10-21, none on 2026-10-18): the detector sees this camera as inside its envelope while the heads are wrong on nearly every frame. Zeroing the geometry inputs (`--no-geometry`, run `20261023T121334Z_b0268_zero_shot_nogeo_a91d5de522`) gives the same picture (étage set 0.081, bias +2.74), so the gap is not in the ray map; the same heads on cached features (P084 draw `k0_d0`) give 0.040 / 0.359. All four raters as truth: 0.037 / 0.291. Consequences: the demo's cover and genus readouts are not trustworthy on this camera until P084 adapts the heads, the sky-parse overlay is, and the "uncertain" badge will stay off on most frames; the paper reports this number with the annotator caveat of P041.
+
+Open for later phases. P041 is done as far as the labels allow: the few-shot B0268 protocol is instantiated and the test sets are re-locked with the B0268 days; what remains of it is human labels on a subset of the frames (owner item) and the 100-frame dense masks the plan names; P042 reviews Stage D; P044 makes the sun explicit; P065's genus loss must handle `genus_alternatives` and may down-weight `label_noise_flags`; P047 pairs frames with `data/ceilometer_targets.parquet`; the evaluation CLI wires `require_final_reason`.
+
+### P084 — Few-shot adaptation on B0268 (reduced: heads only)
+
+Heads-only LP-FT of the Gate G4 global heads (`GeometryEncoder` + `GlobalHeads` on frozen DINOv3 features cached for the 393 labelled frames) with source replay, on the day-blocked draws of P041 (`scripts/adapt_b0268.py`, `docs/data/b0268_adaptation.md`). Truth and scoring as in P083 (each rater of the pair, averaged); the source check is the in-domain validation split (mean étage F1 over the sources, mean genus F1); the rule rejects a draw's model when either drops by more than 0.02. Seven configurations ran on the six draws (42 runs of 20–45 s on the RTX 4050): replay 4 / 8 / 16, LP learning rate 1e-3 / 3e-4, FT learning rate 1e-4 / 3e-5, LP only. Configuration `r16_lp3` (replay 16, LP 5 epochs at 3e-4 on the three output layers, FT 10 epochs at 1e-4 on every head parameter) kept the source best (worst drop 0.030, on one draw) with the second-largest gains; the choice used the held-out days, so its numbers carry the optimism of a selection among seven.
+
+| Draw (train -> held out) | Étage set | Oktas ±1 | Okta bias | Top genus in the rater's set | Source étage / genus F1 change | Rule |
+|---|---|---|---|---|---|---|
+| k1_d0 (18 -> 19, 21) | 0.026 -> 0.157 | 0.085 -> 0.170 | +3.59 -> +2.66 | 0.007 -> 0.739 | −0.006 / −0.030 | broken |
+| k1_d1 (19 -> 18, 21) | 0.072 -> 0.307 | 0.601 -> 0.892 | +1.38 -> −0.23 | 0.542 -> 0.938 | −0.009 / −0.011 | ok |
+| k1_d2 (21 -> 18, 19) | 0.029 -> 0.029 | 0.379 -> 0.713 | +1.91 -> +0.42 | 0.350 -> 0.479 | −0.013 / −0.015 | ok |
+| k2_d0 (18, 19 -> 21) | 0.121 -> 0.879 | 0.212 -> 0.924 | +4.58 -> +0.91 | 0.000 -> 0.788 | −0.019 / −0.014 | ok |
+| k2_d1 (18, 21 -> 19) | 0.000 -> 0.033 | 0.050 -> 0.554 | +3.33 -> +0.64 | 0.008 -> 0.775 | −0.006 / −0.016 | ok |
+| k2_d2 (19, 21 -> 18) | 0.058 -> 0.238 | 0.708 -> 0.975 | +0.50 -> −0.24 | 0.692 -> 0.983 | −0.005 / −0.004 | ok |
+| mean over the six | 0.051 -> 0.274 | 0.340 -> 0.705 | | 0.267 -> 0.784 | −0.010 / −0.015 | |
+
+What the table says. The okta bias is the transferable part: +2.4 oktas zero-shot, within ±1 on 55–98 % of the held-out frames after one or two days, on every draw, because cover varies within an afternoon. The étage set is not: 2026-10-19 (120 frames whose étage sets, by the raters, no training on the other days matches) stays at 0.00–0.03, 2026-10-18 reaches 0.15–0.24, 2026-10-21 reaches 0.73–0.88 once another afternoon is in training. A day is one afternoon from one camera, so the held-out étage number is a property of the day pair and bimodal; the mean over draws hides it. That is the memorisation guard working. Forgetting grew with less replay and a larger LP step (`base`, replay 4, LP 1e-3: worst drop 0.043; LP only at 1e-3: 0.052) and shrank with 16x replay; the legacy "10x over-biases" did not repeat: at 16x the held-out gains were within 0.03 of 4x on oktas and larger on the étage set.
+
+Final model and export. Run `20261023T123549Z_adapt_b0268_final_r16_lp3_76502c7936` (all three adaptation days, 273 frames, same configuration, seed 0): source étage F1 0.805 (0.817), genus F1 0.701 (0.719), regression 0.018, inside the rule. One of the six draws (`k1_d0`) was outside it by 0.010 on genus F1, so the pre-registered condition "no draw breaks the rule" is not met and the export is a recorded deviation (every configuration had at least one such draw). The P089 calibration was refitted on the adapted heads (`configs/calibration_1.0.1.json`, `docs/data/calibration_1.0.1.md`: genus T 5.00 with ECE 0.156 -> 0.073; étage and oktas keep T = 1; OOD threshold 1.497, 21.9 % of SWIM patches flagged against 25.3 %) and folded into `models/stratia-1.0.1-demo/stratia.onnx` (94.9 MB, SHA-256 `66e22ed1…`, parity ≤ 1.5e-4, CPU 163 ms; card `1.0.1-demo`; dense and CBH heads unchanged). Through the exported graph, on the 273 frames it was adapted on (a fit check, not an evaluation; run `20261023T123919Z_b0268_adapted_adapted_fit_c47e02b737`): étage set 0.905 (the pair's ceiling is 0.911), oktas within ±1 0.681 (0.771), bias +0.32, top genus in the rater's set 0.989, 1.5 % of frames flagged OOD (8.4 % before), sky-parse cover correlation 0.83 as before. The gap between 0.905 fitted and 0.274 held out is the size of the day effect: the demo model is fitted to the demo camera's three afternoons, and its only unbiased B0268 number will be the locked 2026-10-20 at P090, through this graph, once.

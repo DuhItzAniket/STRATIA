@@ -1,6 +1,6 @@
 # P096 — ONNX export (FP32) and model card
 
-Status: PARTIAL     Date: 2026-10-21     Commit: (this commit)
+Status: PARTIAL     Date: 2026-10-21 (1.0.1-demo added 2026-10-23)     Commit: (this commit)
 
 Pulled forward from Stage K for the AI-day demo of 2026-10-30 (owner decision 2026-10-16): CloudScope needs the
 deployed model and its card now (CloudScope P065–P068). The FP32 export and the model card are done; the INT8
@@ -48,6 +48,14 @@ opset ≥ 17, dynamic batch, PyTorch ↔ ONNX Runtime parity ≤ 1e-4, plus a `m
    head says 6–8 while the sky-parse head finds 31–61 % cloud pixels, and the genus head leans to Ns / Cs on a
    camera it has never seen. Recorded as the first domain-shift observation for P083 / P084 (the labels of P041
    are being made by two annotators now).
+6. `1.0.1-demo` (2026-10-23, P084): the same script on the adapted global run
+   `20261023T123549Z_adapt_b0268_final_r16_lp3_76502c7936` with `--calibration configs/calibration_1.0.1.json`
+   (P089's procedure refitted on the adapted heads, `docs/data/calibration_1.0.1.md`) and `--no-report` (this
+   document and `docs/data/onnx_export.md` stay the 1.0.0 record): `models/stratia-1.0.1-demo/stratia.onnx`,
+   94.9 MB, SHA-256 `66e22ed1…`, parity max |Δ| 1.5e-4 (dense logits) / ≤ 4.1e-5 (global outputs), contract OK,
+   CPU batch-1 163 ms; `model_card.json` (`model_version` `1.0.1-demo`) and `export_report.json` committed next to
+   the 1.0.0 ones; dense and CBH heads unchanged. An adapted run's config carries the P073 keys (`name`, `lodo`,
+   `eye2sky_etage`, `hidden`, `dropout`, `kendall`), so `calibrate.py` and this script read it like a global run.
 
 ## Verification
 - `tests/test_export.py` (5 tests, CPU, dummy graph): contract names / shapes / probabilities, torch ↔ ORT parity
@@ -69,7 +77,10 @@ opset ≥ 17, dynamic batch, PyTorch ↔ ONNX Runtime parity ≤ 1e-4, plus a `m
       172 ms per frame, enough for the demo).
 - [x] `model_card.json` validates against the schema; embedded in the ONNX metadata as well.
 - [ ] Accuracy-drop report — not applicable to the FP32 export (parity report instead); due with INT8.
-- [ ] Contract test passes in CloudScope — CloudScope P065 (next; the dummy fixture is for it).
+- [x] Contract test passes in CloudScope — CloudScope P065 to P072 (2026-10-22): the dummy fixture
+  `tests/data/stratia/stratia_dummy.onnx` with its card and reference vectors passes CloudScope's model-card, engine
+  and geometry tests on every CI job (CloudScope run 30, commit `681858d`), and the real `stratia-1.0.0-demo` ran
+  live on the B0268 through DirectML (CloudScope Gate F, GO).
 
 ## Fit & data-risk notes
 No training. The export changes two things against the validation numbers of P082 / P089: the ray map is pooled

@@ -2,12 +2,12 @@
 
 | Field | Value |
 |---|---|
-| Current stage | H complete (P073–P082, Gate G4 GO); next Stage I — domain adaptation (P083–P088); P056 partial; P041 blocked |
-| Last completed phase | P096 — ONNX export (FP32) and model card (pulled forward for the AI-day demo of 2026-10-30; INT8 deferred) |
-| Next phase | CloudScope Stage F (P065–P072, the demo) with `models/stratia-1.0.0-demo/`; then P041 labels (two annotators labelling 393 B0268 frames of 18–21 Oct 2026) → P083 → reduced P084; P090 — Locked-test evaluation (once the B0268 column is decided), P091–P094; P083–P087 blocked on the B0268 frames; P041 — Image–ceilometer pairing (once the OLDLR/WESTE download is complete; rerun scripts/sun_validation.py first for the 22 Apr OLDLR and 27 Jun WESTE calibrations); P041 (B0268 labelling) runs whenever the logger frames exist, latest before P083 |
+| Current stage | I in progress — P083 and P084 (reduced) done 2026-10-23, P088 done; P085–P087 deferred; P041 done with model annotators (human labels an owner item); P056 partial |
+| Last completed phase | P084 — Few-shot adaptation on B0268 (reduced: heads only; `models/stratia-1.0.1-demo/` exported from the adapted heads) |
+| Next phase | AI-day demo 2026-10-30 on `models/stratia-1.0.1-demo/` (CloudScope installs it through AI > Models…, 1.0.0-demo kept for roll back); then P090 — Locked-test evaluation through the exported graph with the B0268 day 2026-10-20 once, P091–P094; P085–P087 when the deadline allows |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
-| Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 complete on disk (2026-10-11); P047 pair table built. B0268 logging for P041 to start now (P041 BLOCKED). Missing public datasets need owner action (P015, cut-off 15 Oct). |
+| Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 complete on disk (2026-10-11); P047 pair table built. B0268: 393 frames labelled by two model annotators (P041 DONE 2026-10-23); human labels on a subset remain an owner item. Missing public datasets need owner action (P015) |
 | Compute | RTX 4050 Laptop 6 GB, 16 GB RAM; DINOv3 S/B/L access verified 2026-10-04 |
 
 ## Gates
@@ -15,7 +15,7 @@
 | Gate | Phase | Target date | Status |
 |---|---|---|---|
 | G1 Data audit | P032 | 14 Oct | **Signed 2026-10-08** (`docs/data/data_card.md`) |
-| G2 Splits & labels | P042 | 18 Oct | **Signed 2026-10-10, conditional** (P041 deferred, latest before P083) |
+| G2 Splits & labels | P042 | 18 Oct | **Signed 2026-10-10, conditional**; condition met 2026-10-22 with a caveat (P041 labels from model annotators) |
 | G3 Baselines | P060 | 23 Oct | **Signed 2026-10-11** (`docs/phases/P060-gate-g3.md`) |
 | G4 Model vs baselines (CVPR go/no-go) | P082 | 3 Nov | **GO, 2026-10-11** (`docs/phases/P082-gate-g4.md`) |
 
@@ -41,7 +41,7 @@
 | P016 | Montenegro parser | DONE | 2026-10-04 |
 | P017 | MGCD parser + weather | DONE | 2026-10-04 |
 | P018 | Segmentation datasets loader | DONE | 2026-10-04 |
-| P019 | B0268 ingest | PARTIAL | 2026-10-04 |
+| P019 | B0268 ingest | DONE (closed with P041) | 2026-10-23 |
 | P020 | External weak references (METAR) | PARTIAL | 2026-10-04 |
 | P021 | Unified sample schema | DONE | 2026-10-04 |
 | P022 | Loader performance | DONE | 2026-10-04 |
@@ -63,8 +63,8 @@
 | P038 | Split generator | DONE | 2026-10-08 |
 | P039 | Lock test sets | DONE | 2026-10-08 |
 | P040 | Label-noise estimation | DONE | 2026-10-08 |
-| P041 | B0268 labelling protocol | BLOCKED | 2026-10-10 |
-| P042 | Gate G2 — Splits & labels sign-off | DONE (conditional) | 2026-10-10 |
+| P041 | B0268 labelling protocol | DONE (image-level; model annotators, no dense masks) | 2026-10-23 |
+| P042 | Gate G2 — Splits & labels sign-off | DONE (condition met 2026-10-22, with caveat) | 2026-10-23 |
 | P043 | Camera models | DONE | 2026-10-10 |
 | P044 | Sun position & calibration validation | DONE | 2026-10-10 |
 | P045 | Ray-map generator | DONE | 2026-10-10 |
@@ -105,6 +105,8 @@
 | P080 | Regularization study | DONE | 2026-10-11 |
 | P081 | Fit sign-off | DONE | 2026-10-11 |
 | P082 | Gate G4 — Model vs baselines | DONE | 2026-10-11 |
+| P083 | B0268 zero-shot evaluation | DONE | 2026-10-23 |
+| P084 | Few-shot adaptation (reduced: heads only) | DONE (reduced) | 2026-10-23 |
 | P089 | Calibration | DONE | 2026-10-11 |
 | P088 | Robustness suite | DONE | 2026-10-11 |
-| P096 | ONNX export (FP32) and model card | PARTIAL (INT8 deferred) | 2026-10-21 |
+| P096 | ONNX export (FP32) and model card | PARTIAL (INT8 deferred; 1.0.1-demo added 2026-10-23) | 2026-10-21 |

@@ -1,0 +1,159 @@
+{
+  "contract_version": "1.0",
+  "model_name": "stratia",
+  "model_version": "1.0.1-demo",
+  "created_utc": "2026-10-23T12:37:51Z",
+  "git_sha": "2ff064894ef984fc94cbd26325f1a5bf113192c1",
+  "input": {
+    "height": 512,
+    "width": 512,
+    "patch_size": 16,
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "resize": "full-frame resize of the whole frame to 512 x 512 (OpenCV INTER_AREA), no crop, no camera-mask zeroing (the heads were trained on transform ffr1 without it); then scale to [0, 1] and normalise with mean / std"
+  },
+  "genus_classes": [
+    "Ci",
+    "Cc",
+    "Cs",
+    "Ac",
+    "As",
+    "Ns",
+    "Sc",
+    "St",
+    "Cu",
+    "Cb",
+    "clear",
+    "contrail"
+  ],
+  "etage_classes": [
+    "low",
+    "mid",
+    "high"
+  ],
+  "sky_parse_classes": [
+    "invalid",
+    "sky",
+    "cloud",
+    "sun_glare"
+  ],
+  "layer_classes": [
+    "low",
+    "mid",
+    "high"
+  ],
+  "cbh_bin_edges_m": [
+    0.0,
+    100.0,
+    139.0,
+    195.0,
+    271.0,
+    379.0,
+    528.0,
+    737.0,
+    1028.0,
+    1434.0,
+    2000.0,
+    2294.0,
+    2632.0,
+    3020.0,
+    3464.0,
+    3974.0,
+    4559.0,
+    5230.0,
+    6000.0,
+    6735.0,
+    7560.0,
+    8485.0,
+    9524.0,
+    10691.0,
+    12000.0
+  ],
+  "calibration": {
+    "temperatures": {
+      "genus": 5.0,
+      "etage": 1.0,
+      "oktas": 1.0,
+      "cbh": 1.2394
+    },
+    "folded_into_graph": true,
+    "cbh_conformal_radius_cdf": {
+      "80": 0.3265,
+      "95": 0.4376
+    },
+    "fitted_on": "validation rows (cross-fit reported; parameters fitted on all validation rows)"
+  },
+  "ood_threshold": 1.4975,
+  "training_data": [
+    {
+      "dataset": "STRATIA manifest (CCSN, MGCD, SWIMCAT, SWIMSEG/SWINSEG, Montenegro, Almeria, Eye2Sky; docs/data/data_card.md)",
+      "manifest_sha256": "c41841f43cc488d73c65772b58ccde673a1d13c04e86c1e2a44b10eb4c646e78"
+    }
+  ],
+  "licences": [
+    "Apache-2.0 (STRATIA code and head weights)",
+    "DINOv3 License (backbone weights facebook/dinov3-vits16-pretrain-lvd1689m): Built with DINOv3",
+    "training datasets keep their own licences (docs/data/data_card.md)"
+  ],
+  "evaluation_report": "docs/data/onnx_export.md; docs/data/gate_g4.md; docs/data/calibration.md",
+  "backbone": "facebook/dinov3-vits16-pretrain-lvd1689m",
+  "outputs_note": {
+    "cbh_probs": "24 height bins (edges cbh_bin_edges_m) + index 24 = no cloud overhead",
+    "ood_score": "z-scored energy + Mahalanobis average; above ood_threshold = show as uncertain",
+    "ray_map": "the 32 x 32 contract ray map is average-pooled to 8 x 8 inside the graph for the global and cloud-base heads; the dense heads use the full 32 x 32 token grid"
+  },
+  "trained_from": {
+    "global_run": "20261023T123549Z_adapt_b0268_final_r16_lp3_76502c7936",
+    "cbh_run": "20261011T101553Z_cbh_head_s0_[P075_base]_e286609cd2",
+    "dense_run": "20261011T150404Z_dense_sky_layer_s0_dcd14f4833"
+  },
+  "head_summaries": {
+    "global_summary": {
+      "regression": 0.01762222689604398,
+      "verdict_ok": 1.0,
+      "source_mean_etage_f1": 0.8054289174101846,
+      "source_mean_genus_f1": 0.7012304473334734
+    },
+    "cbh_summary": {
+      "val_mae_m": 566.1000823338694,
+      "val_skill": 0.5063573174514774,
+      "val_crps": 0.027265796437859535,
+      "val_coverage_80": 0.9166666666666666,
+      "null_geometry_mae_m": 565.8210286563863,
+      "best_epoch": 8.0
+    },
+    "dense_summary": {
+      "val_miou": 0.9042024573821656,
+      "best_epoch": 14.0,
+      "clear_sky_cloud_fraction": 0.29043260153271544,
+      "b0268_cloud_fraction": 0.44830215454101563,
+      "val_layer_miou": 0.5582998642048528
+    }
+  },
+  "onnx": {
+    "opset": 17,
+    "dynamic_axes": "batch",
+    "inputs": [
+      "image",
+      "ray_map",
+      "meta"
+    ],
+    "outputs": [
+      "genus_logits",
+      "etage_logits",
+      "oktas_probs",
+      "sky_parse_logits",
+      "layer_logits",
+      "cbh_probs",
+      "ood_score"
+    ]
+  }
+}

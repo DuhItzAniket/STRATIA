@@ -22,7 +22,8 @@ from torch.utils.data import Dataset
 
 from ..contract import ETAGE_CLASSES, GENUS_CLASSES, N_OKTAS
 from ..data.eye2sky import load_mask, mask_path, station_calibrations
-from ..geometry.pose import load_pose_records, pose_for
+from ..geometry.cameras import camera_for
+from ..geometry.pose import Pose, load_pose_records, pose_for
 from ..geometry.raymap import meta_vector, patch_rays, ray_map
 from ..geometry.sun import sun_position
 from ..labels.ontology import load_ontology
@@ -167,6 +168,55 @@ def eye2sky_etage_rows(root: str | Path = REPO_ROOT, include_test: bool = False,
     return pd.DataFrame(rows)
 
 
+def b0268_rows(root: str | Path = REPO_ROOT, targets_path: str = "data/b0268_targets.parquet",
+               draw: str | None = None) -> pd.DataFrame:
+    """The labelled B0268 frames (P041) as global rows in the `global_rows` layout, the Montenegro way: genus shares
+    plus the clear and contrail shares (exhaustive votes: every class known), étage shares with weight 1, the oktas
+    distribution; split = the frame's role in the few-shot `draw` (train / val / test) or 'val' without a draw;
+    unit = calendar day. The rows carry the manifest Sun (sun_azimuth_deg, sun_zenith_deg) for GeometryCache."""
+    root = Path(root)
+    targets = pd.read_parquet(root / targets_path).drop(columns=["image_file"], errors="ignore")
+    man = pd.read_parquet(root / "data/manifest.parquet",
+                          columns=["sample_id", "dataset", "image_file", "utc", "sun_azimuth_deg", "sun_zenith_deg"])
+    man = man[man.dataset == "b0268"].copy()
+    man["item_id"] = man.image_file.str.rsplit("/", n=1).str[-1].str.rsplit(".", n=1).str[0]
+    d = targets.merge(man, on="item_id", how="inner")
+    role: dict[str, str] = {}
+    if draw is not None:
+        few = pd.read_parquet(root / "data/splits/few_shot_target.parquet")
+        few = few[few.draw == draw]
+        if not len(few):
+            raise ValueError(f"unknown few-shot draw {draw!r}")
+        role = dict(zip(few.sample_id, few.role, strict=True))
+    rows = []
+    for r in d.itertuples(index=False):
+        if not isinstance(r.etage_share, str):
+            continue                                              # no usable annotation
+        genus = np.zeros(G, np.float32)
+        for g, v in (json.loads(r.genus_share) if isinstance(r.genus_share, str) else {}).items():
+            genus[GIDX[g]] = float(v)
+        genus[GIDX["clear"]] = float(r.clear_share or 0.0)
+        genus[GIDX["contrail"]] = float(r.contrail_share or 0.0)
+        etage = np.zeros(E, np.float32)
+        for e, v in json.loads(r.etage_share).items():
+            etage[EIDX[e]] = float(v)
+        oktas = np.zeros(N_OKTAS, np.float32)
+        for k, v in (json.loads(r.oktas_dist) if isinstance(r.oktas_dist, str) else {}).items():
+            oktas[int(k)] = float(v)
+        mask_o = bool(oktas.sum() > 0)
+        if mask_o:
+            oktas /= oktas.sum()
+        rows.append({"sample_id": r.sample_id, "dataset": "b0268", "source": "b0268", "split": role.get(r.sample_id, "val"),
+                     "unit": r.day, "genus_set": genus, "genus_alt": False, "genus_neg": np.ones(G, np.float32),
+                     "mask_genus": True, "etage": etage, "etage_w": np.ones(E, np.float32), "mask_etage": True,
+                     "oktas": oktas, "mask_oktas": mask_o, "calib_id": "b0268_nominal", "station": None, "utc": r.utc,
+                     "native_label": None, "image_file": r.image_file, "day": r.day, "item_id": r.item_id,
+                     "sun_azimuth_deg": float(r.sun_azimuth_deg), "sun_zenith_deg": float(r.sun_zenith_deg)})
+    out = pd.DataFrame(rows)
+    out["has_geometry"] = True
+    return out.reset_index(drop=True)
+
+
 # ----------------------------------------------------------------------------------------------- geometry
 @dataclass
 class GeometryCache:
@@ -201,6 +251,17 @@ class GeometryCache:
             for i, az, zen in zip(part.index, sun.azimuth.to_numpy(), sun.apparent_zenith.to_numpy(), strict=True):
                 rms[i] = ray_map(cal.model, pose, float(az), float(zen), out_size=SIZE, patch=POOL_PATCH, rays=rays)
                 metas[i] = meta_vector(float(zen))
+        # B0268 rows (P041 / P084): the nominal fisheye, a zenith pose and the manifest Sun carried by b0268_rows()
+        if "dataset" in rows and "sun_zenith_deg" in rows:
+            b0268 = rows[(rows.dataset == "b0268") & rows.sun_zenith_deg.notna()]
+            if len(b0268):
+                camera = camera_for("b0268", 4656, 3496)
+                pose = Pose(R=np.eye(3), source="declared", calib_id="nominal")
+                rays = patch_rays(camera, None, SIZE, POOL_PATCH)
+                for i, az, zen in zip(b0268.index, b0268.sun_azimuth_deg.to_numpy(), b0268.sun_zenith_deg.to_numpy(),
+                                      strict=True):
+                    rms[i] = ray_map(camera, pose, float(az), float(zen), out_size=SIZE, patch=POOL_PATCH, rays=rays)
+                    metas[i] = meta_vector(float(zen))
         if cache_file:
             Path(cache_file).parent.mkdir(parents=True, exist_ok=True)
             np.savez_compressed(cache_file, sample_id=rows.sample_id.to_numpy(), ray_maps=rms, metas=metas)
