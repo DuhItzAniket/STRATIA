@@ -40,7 +40,7 @@ Every native label mapped through `configs/ontology.yaml` (P033) to a set-valued
 | Dataset | Rows | Genus set | of which alternatives | Étage set | Clear | Contrail | Cloud, genus unknown | No label | Conflicts merged |
 |---|---|---|---|---|---|---|---|---|---|
 | almeria | 818 | 0 | 0 | 818 | 83 | 0 | 735 | 0 | 0 |
-| b0268 | 25 | 0 | 0 | 0 | 0 | 0 | 0 | 25 | 0 |
+| b0268 | 418 | 393 | 0 | 393 | 0 | 0 | 0 | 25 | 0 |
 | ccsn | 2,543 | 2,543 | 200 | 2,345 | 0 | 199 | 0 | 0 | 200 |
 | eye2sky | 29,288 | 0 | 0 | 0 | 0 | 0 | 0 | 29,288 | 0 |
 | mgcd | 8,000 | 6,980 | 4,204 | 4,099 | 1,338 | 0 | 1,020 | 0 | 0 |

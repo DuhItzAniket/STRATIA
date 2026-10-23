@@ -43,7 +43,12 @@ def main() -> None:
     m = pd.read_parquet("data/manifest.parquet")
     frac = pd.read_parquet("data/mask_cloud_fraction.parquet") if Path("data/mask_cloud_fraction.parquet").exists() else None
     conflicts = pd.read_parquet("data/label_conflicts.parquet") if Path("data/label_conflicts.parquet").exists() else None
-    labels = mp.apply_mapping(m, ont, frac, conflicts)
+    b0268 = None
+    if Path("data/b0268_targets.parquet").exists():                       # P041: the rater pair's majority per frame
+        from stratia.labels.b0268_labels import majority_sets
+
+        b0268 = majority_sets(pd.read_parquet("data/b0268_targets.parquet"))
+    labels = mp.apply_mapping(m, ont, frac, conflicts, b0268)
     labels.to_parquet("data/labels.parquet", index=False)
     summ = mp.summary(labels)
     reasons = labels.excluded_reason.dropna().value_counts()

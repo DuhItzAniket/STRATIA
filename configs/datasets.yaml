@@ -129,10 +129,13 @@ datasets:
     source_url: "local (CloudScope sky logger)"
     licence: "Owner's data"
     licence_status: verified
-    local_path: "My Sample"
-    expected_images: 25
+    local_paths: {legacy: "My Sample", logger: "B0268"}
+    expected_images: 418
     status: partial
-    notes: "Legacy 25 frames (one 5-minute window). New captures arrive via CloudScope tools/sky_logger with JSON sidecars."
+    notes: >-
+      25 legacy frames (one 5-minute window, EXIF only) plus 393 CloudScope sky-logger frames with JSON sidecars
+      (B0268/BLR01/<day>/, four afternoons 2026-10-18..21, 30 s cadence) and the rater sheets of P041 in B0268/labels/.
+      Partial: the plan asks for six or more days.
 
   hbmcd:
     name: "HBMCD — HuaYun BJUT-MIP Cloud Dataset"

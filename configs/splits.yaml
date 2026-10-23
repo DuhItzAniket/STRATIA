@@ -60,8 +60,14 @@ held_out_station:
 few_shot_target:
   dataset: b0268
   unit: day
-  shots_days: [0, 1, 3]
+  # P041 (2026-10-22): four labelled afternoons exist (the plan assumed six or more). The locked test day is the
+  # last day with at least `min_frames_per_test_day` labelled frames (2026-10-20, 120 frames; the 33-frame
+  # 2026-10-21 session is too small to be the test day); the other three days are adaptation days, so k = 3 would
+  # leave nothing held out and k = 2 replaces it. The legacy unlabelled frames are not part of the protocol.
+  shots_days: [0, 1, 2]
   repeats: 5
+  test_days: 1
+  min_frames_per_test_day: 100
 
 # Published splits that are reported next to ours for comparison only (they leak: P026).
 published_for_comparison: [mgcd, almeria]

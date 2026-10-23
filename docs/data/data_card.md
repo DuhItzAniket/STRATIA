@@ -23,12 +23,13 @@ Bengaluru) with the AI assistant that wrote this repository; no funding.
 | CCSN | 2,543 | consumer photographs, 256–400 px | 11 classes (10 genera + contrail) | undated | web | CC0-1.0 |
 | Montenegro | 2,522 | fixed low-cost camera, 640 px, 20 min | 5–9 raters: altitude class, N, Nh, h, CL, CM, CH | 3 Oct – 17 Dec 2025 | Montenegro | CC-BY-4.0 |
 | Almería (DLR) | 818 | fisheye all-sky, 512 px (Kontas + 3 test cameras) | 5-class masks (camera, sky, low, mid, high); official train/val/test | 2017–2021 (file names) | PSA Almería, ES | CC-BY-4.0 |
-| B0268 (ours) | 25 | consumer wide-angle USB, legacy frames | none yet (P041) | 27 Sep 2026 | Bengaluru, IN | owner |
+| B0268 (ours) | 418 | Arducam B0268 fisheye USB, 4656 x 3496, zenith mount: 25 legacy frames + 393 sky-logger frames at 30 s | image-level labels on the 393 logged frames by the P041 annotator pair (A, B; language models, not human labellers) with sheets C, D for sensitivity; none on the legacy frames | 27 Sep 2026 (legacy); 18–21 Oct 2026, four afternoons (logged) | Bengaluru, IN (BLR01) | owner |
 | Ceilometers CDLRA, CDLRB | 1,359,329 records | Lufft CHM15k, 15 s | lowest base, layers, flags | Apr–Jul 2022, 118 days each | Oldenburg region, DE | CDLA-Sharing-1.0 |
 
-Totals: 11 image sources, 6 camera types, 52,032 images, 1.36 M ceilometer records. Not obtained: DeepSky and WEBCAM
-(owners asked, no reply), HBMCD and GRSCD (Baidu links not reachable), LenghuSky-8 labels; GRSCD is treated as the
-same source as MGCD (P028).
+Totals: 11 image sources, 6 camera types, 52,032 images, 1.36 M ceilometer records (P041, 2026-10-22: the 393
+logged B0268 frames are appended to the manifest after the 52,032 locked rows, 52,425 in all). Not obtained:
+DeepSky and WEBCAM (owners asked, no reply), HBMCD and GRSCD (Baidu links not reachable), LenghuSky-8 labels;
+GRSCD is treated as the same source as MGCD (P028).
 
 **What is in the images besides sky.** Fixed structure (fisheye corners, horizon objects, mounts) covers 36–37 %
 of an Eye2Sky frame, 25 % of MGCD, 26 % of Almería; Eye2Sky carries a burned-in text block (top left), Montenegro a
@@ -45,9 +46,10 @@ checks in `configs/datasets.yaml`, `docs/data/acquisition.md`). Eye2Sky images f
 downloaded for April–July 2022; the manifest ingests 1–9 April (nine days per station) to keep the audit and the
 image cache tractable; the two ceilometer stations (CDLRA at OLDLR, CDLRB at WESTE) have **no images on disk**, so no
 image–ceilometer pair exists yet (open item, Paper B). B0268 frames are the 25 legacy captures of the CloudScope
-project; the sky-logger campaign for the labelled B0268 set (P041) has not started. Timestamps: Eye2Sky from file
-names (UTC), Montenegro from local time stated as UTC+1 (daylight saving not verified), Almería from file names
-(time zone not stated, taken as UTC; no sun position derived), B0268 from EXIF (assumed UTC+5.5 h).
+project plus the 393 frames its sky logger wrote over four afternoons (18–21 Oct 2026; P041), each with a JSON
+sidecar. Timestamps: Eye2Sky from file names (UTC), Montenegro from local time stated as UTC+1 (daylight saving
+not verified), Almería from file names (time zone not stated, taken as UTC; no sun position derived), legacy
+B0268 from EXIF (assumed UTC+5.5 h), logged B0268 from the sidecars (UTC, site, Sun, pointing).
 
 ## 4. Preprocessing, cleaning, labelling
 
@@ -109,7 +111,7 @@ reports, never silent edits of labels or files.
 | DeepSky, WEBCAM, HBMCD, GRSCD not obtained | fewer sources; GRSCD counted as MGCD | P015 cut-off 15 Oct | no |
 | Almería and Montenegro time zones not verified; no Almería sun position | day blocks safe, hour-level analyses approximate | data card note; P044 ray maps for Almería unavailable | no |
 | WMO code-table wording written from memory | appendix must be checked against WMO-No. 306 | P033 open item, before the paper | no |
-| B0268 labelled set does not exist | OOD evaluation waits | owner logging now; P041 | no |
+| B0268 labels come from language-model annotators (P041), not the two human labellers of the plan; four days instead of six or more | OOD and adaptation numbers (P083, P084) carry that caveat; the day-blocked protocol has one locked test day | owner: human labels on a subset; P083 / P084 | no |
 | CCSN label noise and cross-étage conflicts | genus scores on CCSN capped | P034 merges sets; test exclusion | no |
 
 ## 9. Gate G1 sign-off

@@ -54,3 +54,12 @@ gate is signed conditionally eight days early to let Stage E start.
 
 ## Next phase
 P043 — Camera models (Stage E).
+
+## Note of 2026-10-22: the condition on P041 is met
+P041 closed on 2026-10-22, before P083 as required: 393 B0268 frames over four afternoons are labelled by two
+independent annotators and the agreement is reported in `docs/data/b0268_labels.md` (étage set 0.911, oktas within
+±1 okta 0.771). The B0268 test day (2026-10-20) is locked; `test_lock.json` was re-locked with the new sets and
+every pre-existing test hash is unchanged. Caveat: the two annotators are language models (Claude Fable 5 and
+Claude Sonnet 5.5), not the two humans the plan names; the human labels were lost in a disk failure. The human
+guard of P041 is not met, human labels on a subset remain an owner item, and the dense-mask half of P041 is not
+done. The gate's signature stands as written above; nothing in Stage E through Stage H consumed B0268 labels.

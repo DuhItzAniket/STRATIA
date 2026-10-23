@@ -1,12 +1,16 @@
 {
-  "locked_at": "2026-10-11T04:42:01Z",
+  "locked_at": "2026-10-22T17:48:53Z",
   "config_version": 2,
   "seed": 0,
-  "manifest_sample_id_sha256_prefix": "464078b6d033dd39",
+  "manifest_sample_id_sha256_prefix": "c41841f43cc488d7",
   "tests": {
     "in_domain/almeria/test": {
       "n": 164,
       "sha256": "48ed5729ab8b002428a347cfd6aa264c844dcc9be741b739ea3600ecbfa4316c"
+    },
+    "in_domain/b0268/test": {
+      "n": 120,
+      "sha256": "197c34643ecd15e007e8db835df752636f05f8b99744bae84695f5d5ccafea0a"
     },
     "in_domain/ccsn/test": {
       "n": 512,
@@ -63,6 +67,34 @@
     "cbh_pairs/WESTE/test": {
       "n": 11159,
       "sha256": "606fab4e2c41bafe2ff5223ec70a090ab33224f1946622d488585d71c989144a"
+    },
+    "few_shot_target/k0_d0/test": {
+      "n": 120,
+      "sha256": "197c34643ecd15e007e8db835df752636f05f8b99744bae84695f5d5ccafea0a"
+    },
+    "few_shot_target/k1_d0/test": {
+      "n": 120,
+      "sha256": "197c34643ecd15e007e8db835df752636f05f8b99744bae84695f5d5ccafea0a"
+    },
+    "few_shot_target/k1_d1/test": {
+      "n": 120,
+      "sha256": "197c34643ecd15e007e8db835df752636f05f8b99744bae84695f5d5ccafea0a"
+    },
+    "few_shot_target/k1_d2/test": {
+      "n": 120,
+      "sha256": "197c34643ecd15e007e8db835df752636f05f8b99744bae84695f5d5ccafea0a"
+    },
+    "few_shot_target/k2_d0/test": {
+      "n": 120,
+      "sha256": "197c34643ecd15e007e8db835df752636f05f8b99744bae84695f5d5ccafea0a"
+    },
+    "few_shot_target/k2_d1/test": {
+      "n": 120,
+      "sha256": "197c34643ecd15e007e8db835df752636f05f8b99744bae84695f5d5ccafea0a"
+    },
+    "few_shot_target/k2_d2/test": {
+      "n": 120,
+      "sha256": "197c34643ecd15e007e8db835df752636f05f8b99744bae84695f5d5ccafea0a"
     }
   }
 }

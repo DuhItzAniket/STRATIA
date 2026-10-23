@@ -30,7 +30,7 @@ unrepeatable here. The official splits are reported only as "published protocol"
 | **In-domain, blocked** (per source) | performance on a source with no leakage | 70 % of units | 20 % of units (10 % val) | greedy stratified assignment of units; conflict-merged images (P026) never in test |
 | **Leave-one-dataset-out (LODO)** | transfer to an unseen source (the paper's main claim, H1, criterion C1) | train + val units of all other sources | the held-out source minus its in-domain val units (locked); its in-domain val units are the LODO *val* set (model selection, gate G4) — amendment of 2026-10-11, config version 2 | folds: CCSN, MGCD, Montenegro, SWIM family, Almería |
 | **Held-out station** (Eye2Sky) | transfer to an unseen camera of the same type | AURIC | BARSE | two variants: same days (shared weather) and disjoint days (P027) |
-| **Few-shot target** (B0268) | adaptation to the user's camera | k whole days of B0268 (k = 0, 1, 3) plus the sources | the remaining B0268 days | repeated over day draws; the B0268 test days are locked when P041 delivers the labels |
+| **Few-shot target** (B0268) | adaptation to the user's camera | k whole adaptation days of B0268 (k = 0, 1, 2) plus the sources | *val*: the other adaptation days (the gain is measured here); *test*: the locked day 2026-10-20 | P041 (2026-10-22): 393 labelled frames over 4 days; the locked test day is the last day with >= 100 labelled frames; every combination of k adaptation days is a draw (7 draws: `k0_d0`, `k1_d0`..`k1_d2`, `k2_d0`..`k2_d2`); k = 2 replaces k = 3 because 4 days leave 3 adaptation days; B0268 is excluded from LODO training |
 | **Published protocol** (MGCD, Almería) | comparison with the literature | their train split | their test split | leaks by construction; reported, never used for model selection |
 
 Stratification balances each source's native labels across its splits (CCSN genera, MGCD sky types, SWIMCAT
@@ -56,6 +56,25 @@ weights); the split only decides membership.
   with an 11-day gap that would cost a sixth of the data).
 - No class-uniform resampling and no removal of duplicates: groups stay whole and are counted once in the data card.
 - No image-level random split anywhere, not even for ablations.
+- **B0268 (P041, 2026-10-22).** Four labelled afternoons exist, not the six the plan asked for. The rule for the
+  locked test day was fixed before any number was looked at: the last `test_days` (1) calendar days with at least
+  `min_frames_per_test_day` (100) labelled frames. It picks 2026-10-20 (120 frames); the 33-frame 2026-10-21
+  session is too small. The adaptation days are 2026-10-18, 2026-10-19 and 2026-10-21. The draws are every
+  combination of k adaptation days for k in {0, 1, 2}, at most `repeats` (5) per k, so none is dropped:
+
+  | Draw | Train days | Val days (gain measured here) | Test |
+  |---|---|---|---|
+  | `k0_d0` | none | 10-18, 10-19, 10-21 (273 frames) | 10-20 (120) |
+  | `k1_d0` / `k1_d1` / `k1_d2` | 10-18 / 10-19 / 10-21 | the other two (153 / 153 / 240) | 10-20 (120) |
+  | `k2_d0` / `k2_d1` / `k2_d2` | 10-18+10-19 / 10-18+10-21 / 10-19+10-21 | 10-21 / 10-19 / 10-18 (33 / 120 / 120) | 10-20 (120) |
+
+  The locked day is never evaluated before the final run. The in-domain assignment of b0268 (`in_domain/b0268/*`,
+  5 units: the 4 labelled days and the legacy day) is vestigial: it mirrors the protocol (test = the locked day,
+  everything else train) so the lock carries one notion of the target's test set, but b0268 is not a training
+  source (`stratia.train.data.GLOBAL_SOURCES`) and `lodo_folds` excludes the few-shot target from every LODO
+  training set. The 25 unlabelled legacy frames are not part of the protocol. No buffer day between the test day
+  and the adaptation days: 2026-10-19 and 2026-10-21 are adjacent to it, which is the same choice as for Eye2Sky
+  and Almería above.
 
 ## 5. Sizes to expect
 

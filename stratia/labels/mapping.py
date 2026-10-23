@@ -104,20 +104,41 @@ def map_mask_row(dataset: str, cloud_fraction: float, low: float, mid: float, hi
             "excluded_reason": f"{dataset}: mask labels only (no genus)"}
 
 
+def map_b0268_row(t) -> dict:
+    """A B0268 frame from the P041 rater majority (`stratia.labels.b0268_labels.majority_sets`): étages and genera
+    named by at least half of the raters; clear when the majority saw no cloud."""
+    genera = None if t.genus_set is None or (isinstance(t.genus_set, float)) else list(t.genus_set)
+    etages = None if t.etage_set is None or (isinstance(t.etage_set, float)) else list(t.etage_set)
+    present = None if t.cloud_present is None or (isinstance(t.cloud_present, float) and pd.isna(t.cloud_present)) \
+        else bool(t.cloud_present)
+    extra = t.extra if isinstance(t.extra, str) else None
+    if extra == "clear":                     # as every other dataset's clear class: a known empty genus set, not an exclusion
+        return {"genus_set": [], "genus_alternatives": False, "extra": "clear", "etage_set": [], "cloud_present": False,
+                "excluded_reason": None}
+    reason = None if genera else "b0268: the raters named no genus by majority"
+    return {"genus_set": genera, "genus_alternatives": False, "extra": extra, "etage_set": etages, "cloud_present": present,
+            "excluded_reason": reason}
+
+
 def apply_mapping(manifest: pd.DataFrame, ont: Ontology, mask_fractions: pd.DataFrame | None = None,
-                  conflicts: pd.DataFrame | None = None) -> pd.DataFrame:
+                  conflicts: pd.DataFrame | None = None, b0268_majority: pd.DataFrame | None = None) -> pd.DataFrame:
     """Labels for every manifest row; `mask_fractions` is P030's per-image table (dataset, image_file, cloud_fraction,
-    low, mid, high); `conflicts` is P026's pair table (i, j manifest positions, kind, conflict, dataset_i)."""
+    low, mid, high); `conflicts` is P026's pair table (i, j manifest positions, kind, conflict, dataset_i);
+    `b0268_majority` is P041's per-frame majority table (item_id = frame id = the image file's stem)."""
     rows = []
     frac = None
     if mask_fractions is not None:
         frac = mask_fractions.set_index("image_file")
+    b0268 = b0268_majority.set_index("item_id") if b0268_majority is not None else None
     for r in manifest.itertuples(index=False):
         base = {"sample_id": r.sample_id, "dataset": r.dataset, "label_source": "none", "label_conflict": False}
+        stem = r.image_file.rsplit("/", 1)[-1].rsplit(".", 1)[0]
         if r.dataset in CLASS_DATASETS and isinstance(r.source_label, str):
             base.update(map_class(ont, r.dataset, r.source_label), label_source="native class")
         elif r.dataset == "montenegro":
             base.update(map_montenegro(ont, r.source_label, r.cl_dist, r.cm_dist, r.ch_dist), label_source="rater majority")
+        elif r.dataset == "b0268" and b0268 is not None and stem in b0268.index:
+            base.update(map_b0268_row(b0268.loc[stem]), label_source="rater majority")
         elif r.dataset in MASK_DATASETS and frac is not None and r.image_file in frac.index:
             f = frac.loc[r.image_file]
             base.update(map_mask_row(r.dataset, f.cloud_fraction, f.low, f.mid, f.high), label_source="mask")

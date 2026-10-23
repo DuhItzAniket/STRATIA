@@ -70,26 +70,37 @@ def main() -> int:
 
     # ---- protocols --------------------------------------------------------------------------------------------
     in_domain = sp.in_domain_split(table, config)
+    labelled = (labels.reindex(m.sample_id).label_source == "rater majority")        # P041: the B0268 frames with rater labels
+    labelled.index = m.sample_id.values
+    few = sp.few_shot_target(m, labelled, config)
+    in_domain = sp.align_target_with_few_shot(in_domain, few, config, m)          # b0268: test = the locked days, else train
     lodo = sp.lodo_folds(in_domain, config)
     station = sp.held_out_station(m, in_domain, config)
-    problems = sp.verify(in_domain, lodo, station, m, [g_exact, g_copy, g_near], blocks)
+    problems = sp.verify(in_domain, lodo, station, m, [g_exact, g_copy, g_near], blocks) + sp.verify_few_shot(few)
     counts, strata = sp.summary_tables(in_domain)
     print(counts.to_string(index=False), flush=True)
     for p in problems:
         print("FAILED:", p, flush=True)
     if problems:
         return 1
-    hashes = sp.split_hashes(in_domain, lodo, station)
+    hashes = sp.split_hashes(in_domain, lodo, station, few)
     out = Path("data/splits")
     out.mkdir(parents=True, exist_ok=True)
     in_domain.to_parquet(out / "in_domain.parquet", index=False)
     lodo.to_parquet(out / "lodo.parquet", index=False)
     station.to_parquet(out / "held_out_station.parquet", index=False)
+    if len(few):
+        few.to_parquet(out / "few_shot_target.parquet", index=False)
     (out / "hashes.json").write_text(json.dumps({"config_version": config["version"], "seed": config["seed"], "files": hashes},
                                                 indent=2), encoding="utf-8")
+    few_note = ("The few-shot B0268 protocol (`few_shot_target`) is not instantiated: no labelled B0268 frames."
+                if not len(few) else
+                f"Few-shot B0268 protocol (P041): {few.sample_id.nunique():,} labelled frames over "
+                f"{few.day.nunique()} days; locked test day(s) {sorted(few[few.role == 'test'].day.unique())}; "
+                f"draws {sorted(few.draw.unique())} (k train days, the other adaptation days held out as val). The in-domain "
+                "assignment of b0268 is vestigial: b0268 is not a training source (stratia.train.data.GLOBAL_SOURCES).")
     notes = [
-        "The few-shot B0268 protocol (`few_shot_target`) is not instantiated: B0268 has one day of frames; it is generated "
-        "when P041 delivers the labelled days.",
+        few_note,
         "Eye2Sky has no image-level labels; its in-domain split (by shared dates) serves self-supervised and CBH work (P047).",
         f"Units: {in_domain.unit.nunique():,} over {len(in_domain):,} images; the largest unit has "
         f"{int(in_domain.groupby('unit').size().max()):,} images.",

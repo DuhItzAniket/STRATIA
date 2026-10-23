@@ -30,6 +30,7 @@ LICENCES = {"ccsn": "CC0-1.0", "mgcd": "research use; terms by agreement", "swim
 # The manifest holds nine Eye2Sky days per station (the audit and the image cache were built on them, P021-P032);
 # the April-July download on disk is ingested for the ceilometer-site work when those images arrive (P047).
 EYE2SKY_DAYS = ("2022-04-01", "2022-04-09")
+EYE2SKY_IMAGE_STATIONS = ("AURIC", "BARSE")      # the held-out-station protocol's cameras; OLDLR / WESTE are CBH sites (P047)
 
 
 def ccsn(root: Path) -> pd.DataFrame:
@@ -80,10 +81,16 @@ def montenegro(root: Path) -> pd.DataFrame:
 
 
 def eye2sky(root: Path) -> pd.DataFrame:
+    """The two image stations (AURIC, BARSE) over EYE2SKY_DAYS. The cloud-base stations OLDLR and WESTE (downloaded
+    2026-10-10 for P047) are paired with the ceilometers by scripts/make_cbh_pairs.py and cached as `eye2sky_cbh`
+    rows; they are not manifest rows, so the manifest keeps the row order every position-keyed table (duplicates,
+    near-duplicate pairs, caches) and the test lock of 2026-10-11 depend on."""
     base, meta = root / "Eye2Sky", root / "Eye2Sky" / "asi_meta"
     rows, cals = [], {}
     for f in sorted((base / "2022").rglob("*.jpg")):
         n = parse_image_name(f)
+        if n.station not in EYE2SKY_IMAGE_STATIONS:
+            continue
         if not (EYE2SKY_DAYS[0] <= pd.Timestamp(n.utc).strftime("%Y-%m-%d") <= EYE2SKY_DAYS[1]):
             continue
         if n.station not in cals:
@@ -98,10 +105,13 @@ def eye2sky(root: Path) -> pd.DataFrame:
 
 
 def b0268(root: Path) -> pd.DataFrame:
-    df = ingest_folder(root / "My Sample", root)
+    """The 25 legacy frames (`My Sample`, EXIF only) and the sky-logger sessions (`B0268/BLR01/<day>/`, JSON
+    sidecars with the Sun, the site and the zenith pointing; P041)."""
+    parts = [ingest_folder(root / folder, root) for folder in ("My Sample", "B0268/BLR01") if (root / folder).exists()]
+    df = pd.concat(parts, ignore_index=True)
     return pd.DataFrame({"dataset": "b0268", "image_file": df.image_file, "camera_id": "b0268", "camera_type": "wide_angle_usb",
                          "site": "BLR", "utc": df.utc, "time_source": df.time_source, "latitude": df.latitude,
-                         "longitude": df.longitude, "official_split": "none"})
+                         "longitude": df.longitude, "official_split": "none", "width": df.width, "height": df.height})
 
 
 def add_sun(df: pd.DataFrame) -> pd.DataFrame:
@@ -129,7 +139,11 @@ def main() -> int:
     df["has_layers"] = df.has_layers.fillna(False).astype(bool)
     inv = pd.read_parquet("data/inventory.parquet", columns=["relpath", "width", "height"])
     inv = inv.rename(columns={"relpath": "image_file"})
+    own = df.set_index("image_file")[["width", "height"]] if "width" in df else None    # the B0268 ingest reads its headers
     df = df.drop(columns=[c for c in ("width", "height") if c in df]).merge(inv, on="image_file", how="left")
+    if own is not None:
+        for col in ("width", "height"):
+            df[col] = df[col].fillna(df.image_file.map(own[col]))
     df = add_sun(df)
     df = empty_columns(df)
     df["width"], df["height"] = df.width.astype("Int64"), df.height.astype("Int64")

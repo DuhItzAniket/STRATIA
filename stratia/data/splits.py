@@ -10,6 +10,7 @@ test. Leave-one-dataset-out folds and the held-out-station protocol are derived 
 from __future__ import annotations
 
 import hashlib
+import itertools
 from collections import Counter
 from pathlib import Path
 
@@ -128,12 +129,14 @@ def lodo_folds(in_domain: pd.DataFrame, config: dict) -> pd.DataFrame:
     rows = []
     unit_sources = in_domain.groupby("unit").source.agg(set)
     carve_val = int(config.get("version", 1)) >= 2
+    target = config.get("few_shot_target", {}).get("dataset")          # the adaptation target is never a LODO training source
     for fold in config["lodo"]["folds"]:
         held = in_domain[in_domain.source == fold]
         val = held[held.split == "val"] if carve_val else held.iloc[0:0]
         test = held[~held.sample_id.isin(val.sample_id)]
         tainted = {u for u, srcs in unit_sources.items() if fold in srcs}
-        train = in_domain[(in_domain.source != fold) & in_domain.split.isin(["train", "val"]) & ~in_domain.unit.isin(tainted)]
+        train = in_domain[(in_domain.source != fold) & (in_domain.source != target) & in_domain.split.isin(["train", "val"])
+                          & ~in_domain.unit.isin(tainted)]
         rows.append(pd.DataFrame({"fold": fold, "sample_id": test.sample_id.values, "role": "test"}))
         if len(val):
             rows.append(pd.DataFrame({"fold": fold, "sample_id": val.sample_id.values, "role": "val"}))
@@ -158,6 +161,83 @@ def held_out_station(manifest: pd.DataFrame, in_domain: pd.DataFrame, config: di
         rows.append(pd.DataFrame({"variant": variant, "sample_id": train.sample_id.values, "role": "train"}))
         rows.append(pd.DataFrame({"variant": variant, "sample_id": test.sample_id.values, "role": "test"}))
     return pd.concat(rows, ignore_index=True)
+
+
+def few_shot_target(manifest: pd.DataFrame, labelled: pd.Series, config: dict) -> pd.DataFrame:
+    """Few-shot target protocol (docs/splits.md section 2; P041). Over the labelled frames of the target dataset: the
+    locked test days are the last `test_days` calendar days that hold at least `min_frames_per_test_day` frames (a
+    fixed rule, declared before any number was looked at); every other labelled day is an adaptation day. For each
+    k in `shots_days` below the number of adaptation days, every combination of k adaptation days (at most `repeats`
+    of them, drawn with the seed) is one draw: role 'train' for the k days, 'val' for the remaining adaptation days
+    (the held-out days a gain is measured on) and 'test' for the locked days. k = 0 is the zero-shot draw."""
+    spec = config["few_shot_target"]
+    n_test = int(spec.get("test_days", 1))
+    if n_test < 1:
+        raise ValueError("few_shot_target.test_days must be at least 1")
+    ids = labelled.index[labelled.fillna(False).astype(bool).to_numpy()]
+    part = manifest[(manifest.dataset == spec["dataset"]) & manifest.sample_id.isin(ids)]
+    day = pd.to_datetime(part.utc, utc=True).dt.strftime("%Y-%m-%d")
+    if day.isna().any():
+        raise ValueError(f"few_shot_target: {int(day.isna().sum())} labelled frames without a timestamp cannot be day-blocked")
+    table = pd.DataFrame({"sample_id": part.sample_id.values, "day": day.values})
+    counts = table.day.value_counts()
+    big = sorted(d for d in counts.index if counts[d] >= int(spec.get("min_frames_per_test_day", 1)))
+    test_days = big[-n_test:] if big else []
+    adapt_days = sorted(d for d in counts.index if d not in test_days)
+    rng = np.random.default_rng(int(config.get("seed", 0)))
+    out = []
+    for k in spec["shots_days"]:
+        if k and k >= len(adapt_days):            # k = 0 always exists; k = all adaptation days would hold nothing out
+            continue
+        combos = list(itertools.combinations(adapt_days, k))
+        if len(combos) > int(spec.get("repeats", len(combos))):
+            pick = sorted(rng.choice(len(combos), int(spec["repeats"]), replace=False))
+            combos = [combos[i] for i in pick]
+        for d_i, combo in enumerate(combos):
+            role = np.where(table.day.isin(test_days), "test", np.where(table.day.isin(combo), "train", "val"))
+            out.append(pd.DataFrame({"draw": f"k{k}_d{d_i}", "shots": k, "sample_id": table.sample_id.values,
+                                     "day": table.day.values, "role": role}))
+    columns = ["draw", "shots", "sample_id", "day", "role"]
+    return pd.concat(out, ignore_index=True)[columns] if out else pd.DataFrame(columns=columns)
+
+
+def align_target_with_few_shot(in_domain: pd.DataFrame, few: pd.DataFrame, config: dict,
+                               manifest: pd.DataFrame | None = None) -> pd.DataFrame:
+    """The in-domain split of the few-shot target dataset mirrors the protocol: every frame of its locked test days
+    is 'test' (by calendar day when the manifest is given, so unlabelled frames of those days are locked too),
+    every other frame (adaptation days and unlabelled frames) is 'train', so the lock carries one notion of the
+    target's test set. The other sources are untouched (their assignment does not depend on the target's)."""
+    out = in_domain.copy()
+    target = config.get("few_shot_target", {}).get("dataset")
+    if target is None or not len(few):
+        return out
+    test_ids = set(few[few.role == "test"].sample_id)
+    if manifest is not None:
+        test_days = set(few[few.role == "test"].day)
+        m = manifest[manifest.dataset == target]
+        days = pd.to_datetime(m.utc, utc=True).dt.strftime("%Y-%m-%d")
+        test_ids |= set(m.sample_id[days.isin(test_days).to_numpy()])
+    rows = out.source == target
+    out.loc[rows, "split"] = np.where(out.loc[rows, "sample_id"].isin(test_ids), "test", "train")
+    return out
+
+
+def verify_few_shot(few: pd.DataFrame) -> list[str]:
+    """Every draw: the same test days; no day in two roles; k train days exactly."""
+    problems = []
+    if not len(few):
+        return problems
+    test_sets = few[few.role == "test"].groupby("draw").day.agg(lambda s: tuple(sorted(set(s))))
+    if test_sets.nunique() != 1:
+        problems.append("few-shot: the test days differ between draws")
+    for draw, part in few.groupby("draw"):
+        roles = part.groupby("day").role.nunique()
+        if (roles > 1).any():
+            problems.append(f"few-shot draw {draw}: a day has two roles")
+        k = int(part.shots.iloc[0])
+        if part[part.role == "train"].day.nunique() != k:
+            problems.append(f"few-shot draw {draw}: {part[part.role == 'train'].day.nunique()} train days for k = {k}")
+    return problems
 
 
 # ------------------------------------------------------------------------------------------------- verification
@@ -204,7 +284,8 @@ def sha256_of_ids(ids) -> str:
     return hashlib.sha256("\n".join(sorted(map(str, ids))).encode("utf-8")).hexdigest()
 
 
-def split_hashes(in_domain: pd.DataFrame, lodo: pd.DataFrame, station: pd.DataFrame) -> dict:
+def split_hashes(in_domain: pd.DataFrame, lodo: pd.DataFrame, station: pd.DataFrame,
+                 few: pd.DataFrame | None = None) -> dict:
     out = {}
     for (source, split), part in in_domain.groupby(["source", "split"]):
         out[f"in_domain/{source}/{split}"] = {"n": len(part), "sha256": sha256_of_ids(part.sample_id)}
@@ -212,6 +293,9 @@ def split_hashes(in_domain: pd.DataFrame, lodo: pd.DataFrame, station: pd.DataFr
         out[f"lodo/{fold}/{role}"] = {"n": len(part), "sha256": sha256_of_ids(part.sample_id)}
     for (variant, role), part in station.groupby(["variant", "role"]):
         out[f"held_out_station/{variant}/{role}"] = {"n": len(part), "sha256": sha256_of_ids(part.sample_id)}
+    if few is not None and len(few):
+        for (draw, role), part in few.groupby(["draw", "role"]):
+            out[f"few_shot_target/{draw}/{role}"] = {"n": len(part), "sha256": sha256_of_ids(part.sample_id)}
     return out
 
 
