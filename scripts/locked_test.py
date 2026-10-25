@@ -723,9 +723,11 @@ def main() -> int:
             payload = {"meta": meta, "reason": a.reason, "models": MODELS,
                        "graphs": {k: str(v.relative_to(ROOT)) for k, v in GRAPHS.items()},
                        "headline": head, "rows": df.to_dict(orient="records")}
-            RESULTS_JSON.write_text(json.dumps(payload, indent=1, ensure_ascii=False), encoding="utf-8")
+            # LF line endings: the committed bytes (git normalises) are the hashed bytes
+            RESULTS_JSON.write_text(json.dumps(payload, indent=1, ensure_ascii=False), encoding="utf-8", newline="\n")
             digest = sha256_file(RESULTS_JSON)
-            RESULTS_JSON.with_suffix(".sha256").write_text(f"{digest}  {RESULTS_JSON.name}\n", encoding="utf-8")
+            RESULTS_JSON.with_suffix(".sha256").write_text(f"{digest}  {RESULTS_JSON.name}\n", encoding="utf-8",
+                                                           newline="\n")
             print(f"results {RESULTS_JSON} sha256 {digest}", flush=True)
         if head:
             write_doc(df, head, meta, a.split)

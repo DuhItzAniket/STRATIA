@@ -86,8 +86,11 @@ evaluation with its reason, and the paper says so.
 3. Second evaluation, 11:39 UTC, run `20261025T113929Z_locked_test_test_f2f212f294`, 288 s on the RTX 4050,
    500 cluster-bootstrap resamples: complete. Both reasons are in `runs/final_eval_log.md` (git-ignored; the
    two entries are quoted under Verification). Outputs: `results/P090_locked_test.json` (SHA-256
-   `e2b4833066699d9dbbe9dc8ec37abc519ffaab798140564613758ed738df58fb`, in `results/P090_locked_test.sha256`),
+   `7e978fdc78bc6465b2b1b111346e2bfc5a3b9b54335b3c8966e5d11effb6ebba`, in `results/P090_locked_test.sha256`),
    `docs/data/locked_test.md` (every number), `data/locked_test_test.parquet`.
+   The JSON was first committed with CRLF line endings and a hash of those bytes (`e2b48330…`); git stores it
+   with LF, so the file was normalised to LF and the hash recomputed on the stored bytes (`7e978fdc…`) in the
+   follow-up commit; the content is unchanged.
 
 ## Verification
 Final-evaluation log (two entries, lock `2026-10-22T17:48:53Z`, manifest prefix `c41841f43cc488d7`):
