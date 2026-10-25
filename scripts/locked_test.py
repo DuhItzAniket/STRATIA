@@ -148,6 +148,24 @@ def global_logits(model: G.GlobalModel, ds: D.GlobalDataset, idx: np.ndarray, de
     return {"genus": np.concatenate(gen), "pooled": np.concatenate(pooled)}
 
 
+def val_thresholds(probs: np.ndarray, truth: np.ndarray, grid=T.THRESHOLD_GRID) -> np.ndarray:
+    """Per-column thresholds that maximise that column's F1 on the given (validation) rows; 0.5 where the column has
+    no positive. `T.tuned_thresholds` returns predictions on its own rows, so it cannot carry thresholds to other rows."""
+    thr = np.full(truth.shape[1], 0.5)
+    for j in range(truth.shape[1]):
+        if truth[:, j].sum() == 0:
+            continue
+        best_t, best_f1 = 0.5, -1.0
+        for t in grid:
+            p = probs[:, j] > t
+            tp = (p & (truth[:, j] == 1)).sum()
+            f1 = 2 * tp / max(2 * tp + (p & (truth[:, j] == 0)).sum() + (~p & (truth[:, j] == 1)).sum(), 1)
+            if f1 > best_f1:
+                best_t, best_f1 = t, f1
+        thr[j] = best_t
+    return thr
+
+
 def score_rows(rows: pd.DataFrame, pred: dict[str, np.ndarray], idx: np.ndarray) -> dict:
     part = rows.iloc[idx].reset_index(drop=True)
     return G.score_dataset(part, {k: v[idx] for k, v in pred.items()})
@@ -240,7 +258,7 @@ def section_lodo(rec: Records, split: str, data_root: Path, cache_root: Path, de
         full_e = (np.stack(rows.etage_w.to_numpy()[ev]) >= 1.0).all(1)
         if full_v.any() and full_e.any():
             truth_v = (np.stack(rows.etage.to_numpy()[va])[full_v] > 0.5).astype(int)
-            thr = T.tuned_thresholds(pred["etage"][va][full_v], truth_v)
+            thr = val_thresholds(pred["etage"][va][full_v], truth_v)
             truth_e = (np.stack(rows.etage.to_numpy()[ev])[full_e] > 0.5).astype(int)
             hat = (pred["etage"][ev][full_e] > thr).astype(int)
             rec.add("lodo", fold, name, "etage_f1_valtuned", T.multilabel_macro_f1(truth_e, hat), n=int(full_e.sum()),
@@ -663,6 +681,11 @@ def main() -> int:
     data_root, cache_root = Path(paths["data_root"]), Path(paths["cache_root"])
     device = "cuda" if torch.cuda.is_available() else "cpu"
     rec = Records()
+    out = ROOT / "data" / f"locked_test_{a.split}.parquet"
+
+    def save() -> None:                         # after every section: a crash keeps the numbers already computed
+        rec.frame().to_parquet(out, index=False)
+
     cfg = OmegaConf.create({"split": a.split, "final": a.final, "bootstrap": a.bootstrap, "sections": list(a.only),
                             "models": MODELS, "graphs": {k: str(v) for k, v in GRAPHS.items()},
                             "lock_prefix": lock["manifest_sample_id_sha256_prefix"]})
@@ -673,19 +696,24 @@ def main() -> int:
         print(f"locked-test evaluation on `{a.split}` rows ({device}); sections {a.only}", flush=True)
         if "indomain" in a.only:
             section_indomain(rec, a.split, data_root, cache_root, device, a.bootstrap, with_ood="ood" in a.only)
+            save()
         if "lodo" in a.only:
             section_lodo(rec, a.split, data_root, cache_root, device, a.bootstrap)
+            save()
         if "probe" in a.only:
             section_probe(rec, a.split, cache_root, a.bootstrap)
+            save()
         if "dense" in a.only:
             section_dense(rec, a.split, data_root, cache_root, device, a.bootstrap)
+            save()
         if "cbh" in a.only:
             section_cbh(rec, a.split, data_root, cache_root, device, a.bootstrap)
+            save()
         if "b0268" in a.only:
             section_b0268(rec, a.split, a.bootstrap, phase)
+            save()
         df = rec.frame()
-        out = ROOT / "data" / f"locked_test_{a.split}.parquet"
-        df.to_parquet(out, index=False)
+        save()
         head = headline(df) if set(a.only) == set(SECTIONS) else []
         meta = {"run_id": run.run_id, "git_sha": _git("rev-parse", "--short", "HEAD"),
                 "lock_prefix": lock["manifest_sample_id_sha256_prefix"], "n_boot": a.bootstrap, "split": a.split,
