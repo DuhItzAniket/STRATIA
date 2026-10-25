@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Current stage | I in progress — P083 and P084 (reduced) done 2026-10-23, P088 done; P085–P087 deferred; P041 done with model annotators (human labels an owner item); P056 partial |
-| Last completed phase | P084 — Few-shot adaptation on B0268 (reduced: heads only; `models/stratia-1.0.1-demo/` exported from the adapted heads) |
-| Next phase | AI-day demo 2026-10-30 on `models/stratia-1.0.1-demo/` (CloudScope installs it through AI > Models…, 1.0.0-demo kept for roll back); then P090 — Locked-test evaluation through the exported graph with the B0268 day 2026-10-20 once, P091–P094; P085–P087 when the deadline allows |
+| Current stage | J in progress — P090 locked test DONE 2026-10-25 (the numbers the paper reports; `results/P090_locked_test.json`); P089 done; P091–P094 open; Stage I: P083, P084 (reduced), P088 done, P085–P087 deferred; P056 partial |
+| Last completed phase | P090 — Locked-test evaluation: C2 holds (0.926 / 0.963 of the human ceiling), C3 holds on three of four components (CBH skill 0.536 OLDLR, 0.436 held-out WESTE, MAE 872 m vs ridge 1,096; the calibrated 80 % interval covers 0.720), C1 fails on both clauses (LODO 0.540 vs probe 0.529; in-domain genus 0.706 vs 0.733); B0268 locked day: adapted 1.0.1-demo oktas ±1 0.671, étage set 0.463, zero-shot at the floor |
+| Next phase | P091 — Ablations (validation data; the test numbers are final), then P092–P094, P097 release and the paper (P098–P100; CVPR registration 10 Nov, paper 16 Nov 2026); AI-day demo 2026-10-30 on `stratia-1.0.1-demo` (installed in CloudScope, rehearsed 2026-10-25); P085–P087 when the deadline allows |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 complete on disk (2026-10-11); P047 pair table built. B0268: 393 frames labelled by two model annotators (P041 DONE 2026-10-23); human labels on a subset remain an owner item. Missing public datasets need owner action (P015) |
@@ -108,5 +108,6 @@
 | P083 | B0268 zero-shot evaluation | DONE | 2026-10-23 |
 | P084 | Few-shot adaptation (reduced: heads only) | DONE (reduced) | 2026-10-23 |
 | P089 | Calibration | DONE | 2026-10-11 |
+| P090 | Locked-test evaluation (once) | DONE (two evaluations; the first crashed before anything was saved) | 2026-10-25 |
 | P088 | Robustness suite | DONE | 2026-10-11 |
 | P096 | ONNX export (FP32) and model card | PARTIAL (INT8 deferred; 1.0.1-demo added 2026-10-23) | 2026-10-21 |

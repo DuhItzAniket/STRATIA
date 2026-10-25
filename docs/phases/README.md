@@ -89,5 +89,6 @@ One document per phase of [`../PLAN.md`](../PLAN.md), written from [`TEMPLATE.md
 | [P083](P083-b0268-zero-shot.md) | B0268 zero-shot evaluation | DONE |
 | [P084](P084-few-shot-adaptation.md) | Few-shot adaptation (reduced: heads only) | DONE (reduced; `stratia-1.0.1-demo` exported) |
 | [P089](P089-calibration.md) | Calibration | DONE |
+| [P090](P090-locked-test.md) | Locked-test evaluation (once) | DONE (two evaluations, the first crashed; `results/P090_locked_test.json`) |
 | [P088](P088-robustness-suite.md) | Robustness suite | DONE |
 | [P096](P096-onnx-export.md) | ONNX export (FP32) and model card | PARTIAL (INT8 deferred; 1.0.1-demo added) |
