@@ -16,10 +16,11 @@ global validity.
 \paragraph{Camera identity.} Dataset identity is linearly readable from the features at 99.7\,\% and remains so
 after training; our protocol holds cameras out rather than pretending otherwise, and the OOD state exists because a
 new camera \emph{will} be recognised as new. Zero-shot on such a camera is near zero; three afternoons of labels
-were needed. The owner's camera also has only a declared zenith pointing with no measured rotation about it, so
-its ray maps carry the right zenith angles but an unknown azimuth offset to the Sun; the geometry it feeds the
-model is partly uninformative (geometry dropout makes that a valid input), and the adaptation numbers include
-this.
+were needed. The owner's camera also had only a declared zenith pointing when it was adapted and tested; a
+Sun-track fit on its logged frames afterwards puts the optical axis about $13^\circ$ off the zenith and the frame
+about $160^\circ$ rotated, with the declared pose $107^\circ$ off the Sun in the median. The geometry it fed the
+model was therefore uninformative (geometry dropout makes that a valid input), and the adaptation numbers include
+this; a checkerboard calibration and the fitted pose are the first things to do before the next adaptation.
 
 \paragraph{Labels.} The mid \'etage is rare on four of five sources and is the one the model misses; glare breaks
 the sky parse; the human ceiling comes from one five-rater set whose test portion is two blocks of days. The

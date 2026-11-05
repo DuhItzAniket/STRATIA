@@ -229,3 +229,33 @@ poses:
     - '2022-07-29'
     declared_convention_median_err_deg: 0.1556
     rotation_distance_fitted_vs_declared_deg: 0.0893
+  BLR01_b0268_nominal:
+    station: BLR01
+    camera: b0268
+    model: nominal datasheet fisheye (P042, provisional)
+    status: insufficient
+    R:
+    - - -0.9295451449451508
+      - -0.2938919919625361
+      - -0.22265066936614036
+    - - 0.3029458363619095
+      - -0.9529830737314321
+      - -0.006861589639050092
+    - - -0.21016575301385507
+      - -0.07382925058324943
+      - 0.9748741447071178
+    roll_deg: -4.330861743026864
+    pitch_deg: 12.132065968462896
+    yaw_deg: 161.94881672993083
+    n_detections: 269
+    n_inliers: 267
+    span_hours: 71.85426138888889
+    median_err_deg: 9.07986889059276
+    p90_err_deg: 15.977608542582944
+    declared_median_err_deg: 106.8042691290893
+    days:
+    - '2026-10-18'
+    - '2026-10-19'
+    - '2026-10-21'
+    generated_utc: '2026-11-05T18:11:58+00:00'
+    source: scripts/b0268_sun_track.py
