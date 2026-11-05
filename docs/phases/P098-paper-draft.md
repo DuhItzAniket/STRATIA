@@ -32,9 +32,11 @@ numbers); full draft by 6 Nov.
    two evaluations of P090 are stated in the data section ("read once, with the reason logged").
 
 ## Deviations from the plan
-- No TeX installation on the machine: the draft has not been compiled. Compile on Overleaf (upload `paper/`) or
-  with `pdflatex main; bibtex main; pdflatex main; pdflatex main`; expect only spacing fixes. Page count and
-  figure placement are to be checked there.
+- Compiled on 2026-11-06 with MiKTeX (installed with the owner's permission): `pdflatex main; bibtex main;
+  pdflatex main; pdflatex main` gives 8 pages including the references, no overfull boxes, no undefined references
+  or citations, after two layout fixes (the wide tables as `table*`, the efficiency table's labels shortened).
+  `supp.tex` compiles to 22 pages clean. The PDFs are build products (not committed); any machine with TeX
+  reproduces them from `paper/`.
 - The Montenegro test interval is blank in Table 1 (two blocks of days; the bootstrap is undefined), as recorded at
   P090.
 

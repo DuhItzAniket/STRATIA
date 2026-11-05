@@ -1,15 +1,14 @@
 \section{Efficiency}
 
-The deployed graph (\texttt{models\textbackslash\{\}stratia-1.0.1-demo\textbackslash\{\}stratia.onnx}, 512 x 512 input), run \texttt{20261105T141627Z\_efficiency\_578b90289f} on the laptop.
+The deployed graph (\texttt{models\textbackslash\{\}stratia-1.0.1-demo\textbackslash\{\}stratia.onnx}, 512 x 512 input), run \texttt{20261105T141627Z\_\allowbreak{}efficiency\_\allowbreak{}578b90289f} on the laptop.
 
 \subsection{Parameters}
 
-{\scriptsize\setlength{\tabcolsep}{3pt}
-\begin{longtable}{ll}
+\begin{center}{\scriptsize\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{15.6cm}l}
 \toprule
 Component & Parameters \\
 \midrule
-\endhead
 backbone (DINOv3 ViT-S/16, frozen) & 21.597 M \\
 SkyRay encoder, global & 0.101 M \\
 global heads & 0.996 M \\
@@ -20,18 +19,18 @@ OOD score (buffers) & 0.263 M \\
 total trainable above the backbone & 1.760 M \\
 total & 23.356 M \\
 \bottomrule
-\end{longtable}}
+\end{tabular}}
+\end{center}
 
 FLOPs per frame (one forward pass at 512 x 512): \textbf{45.7 GFLOPs}, of which the backbone 44.3 GFLOPs; everything above the backbone costs 1.40 GFLOPs.
 
 \subsection{Latency}
 
-{\scriptsize\setlength{\tabcolsep}{3pt}
-\begin{longtable}{lllll}
+\begin{center}{\scriptsize\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{8.7cm}lllp{5.2cm}}
 \toprule
 Setting & Median ms & p95 ms & Runs & Note \\
 \midrule
-\endhead
 pytorch fp32, RTX 4050, batch 1 & 19.5 & 23.7 & 20 &  \\
 pytorch autocast fp16, RTX 4050, batch 1 & 15.0 & 16.2 & 20 &  \\
 pytorch fp32, RTX 4050, batch 8 (per frame) & 16.5 & 16.5 & 10 &  \\
@@ -40,7 +39,8 @@ the desktop application ONNX Runtime DirectML (NVIDIA GeForce RTX 4050 Laptop GP
 the desktop application ONNX Runtime CPU, batch 1 & 148.7 & 153.7 & 20 & preprocess 29 ms (host resize of a 16 MP frame) \\
 Raspberry Pi 5 & --- & --- & --- & not measured: no Raspberry Pi 5 on hand \\
 \bottomrule
-\end{longtable}}
+\end{tabular}}
+\end{center}
 
 GPU: NVIDIA GeForce RTX 4050 Laptop GPU; CPU: Intel64 Family 6 Model 183 Stepping 1, GenuineIntel. The the desktop application rows come from \texttt{cloudscope-aibench} (ONNX Runtime 1.24 inside the desktop application) and are the numbers the demo runs at; the PyTorch rows are the research model without export. NFR-PERF-05 (the desktop application) asks for the latency targets here.
 

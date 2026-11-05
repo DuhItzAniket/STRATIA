@@ -1,6 +1,6 @@
 \section{Data card}
 
-Written in the spirit of \emph{Datasheets for Datasets} (Gebru et al.) for the collection of public sky-camera datasets and our own captures that STRATIA trains and evaluates on. Every number below comes from a Stage C report under \texttt{docs/data/}; the card is the sign-off of that audit. Date: 2026-10-08. Manifest: \texttt{data/manifest.parquet}, 52,032 rows, \texttt{sample\_id} content hash \texttt{464078b6d033dd39} (first 16 hex digits of SHA-256 over the ordered ids).
+Written in the spirit of \emph{Datasheets for Datasets} (Gebru et al.) for the collection of public sky-camera datasets and our own captures that STRATIA trains and evaluates on. Every number below comes from a Stage C report under \texttt{docs/data/}; the card is the sign-off of that audit. Date: 2026-10-08. Manifest: \texttt{data/manifest.parquet}, 52,032 rows, \texttt{sample\_\allowbreak{}id} content hash \texttt{464078b6d033dd39} (first 16 hex digits of SHA-256 over the ordered ids).
 
 \subsection{1. Motivation}
 
@@ -8,12 +8,11 @@ STRATIA is a single-camera sky-understanding model (cloud genus and étage, tota
 
 \subsection{2. Composition}
 
-{\scriptsize\setlength{\tabcolsep}{3pt}
-\begin{longtable}{lllllll}
+\begin{center}{\scriptsize\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{2.2cm}lp{2.5cm}p{2.5cm}p{1.7cm}ll}
 \toprule
 Source & Images & Camera & Labels shipped & Time span & Site & Licence \\
 \midrule
-\endhead
 Eye2Sky (AURIC, BARSE) & 29,288 & fisheye all-sky, 2,112 px, 30 s & none (ceilometer targets at other stations) & 1–9 Apr 2022 in the manifest (Apr–Jul on disk) & Oldenburg region, DE & CDLA-Sharing-1.0 \\
 SWIM family: SWIMSEG 1,013, SWINSEG 115, SWINySEG 6,768, SWIMCAT 784, SHWIMSEG 156 & 8,836 & WSI crops and patches, 125–600 px & binary sky/cloud masks; SWIMCAT 5 categories & undated & Singapore & CC-BY-NC-4.0 \\
 MGCD & 8,000 & fisheye all-sky, 1,024 px & 7 sky types, official 4,000/4,000 split & undated & Tianjin, CN & research use by agreement \\
@@ -23,13 +22,14 @@ Almería (DLR) & 818 & fisheye all-sky, 512 px (Kontas + 3 test cameras) & 5-cla
 B0268 (ours) & 418 & Arducam B0268 fisheye USB, 4656 x 3496, zenith mount: 25 legacy frames + 393 sky-logger frames at 30 s & image-level labels on the 393 logged frames by the P041 annotator pair (A, B; language models, not human labellers) with sheets C, D for sensitivity; none on the legacy frames & 27 Sep 2026 (legacy); 18–21 Oct 2026, four afternoons (logged) & Bengaluru, IN (BLR01) & authors \\
 Ceilometers CDLRA, CDLRB & 1,359,329 records & Lufft CHM15k, 15 s & lowest base, layers, flags & Apr–Jul 2022, 118 days each & Oldenburg region, DE & CDLA-Sharing-1.0 \\
 \bottomrule
-\end{longtable}}
+\end{tabular}}
+\end{center}
 
 Totals: 11 image sources, 6 camera types, 52,032 images, 1.36 M ceilometer records (P041, 2026-10-22: the 393 logged B0268 frames are appended to the manifest after the 52,032 locked rows, 52,425 in all). Not obtained: DeepSky and WEBCAM (authorss asked, no reply), HBMCD and GRSCD (Baidu links not reachable), LenghuSky-8 labels; GRSCD is treated as the same source as MGCD (P028).
 
-\textbf{What is in the images besides sky.} Fixed structure (fisheye corners, horizon objects, mounts) covers 36–37 \% of an Eye2Sky frame, 25 \% of MGCD, 26 \% of Almería; Eye2Sky carries a burned-in text block (top left), Montenegro a timestamp and a logo (\texttt{docs/data/shortcuts\_report.md}, masks in \texttt{cache/features/camera\_stats\_224.npz}).
+\textbf{What is in the images besides sky.} Fixed structure (fisheye corners, horizon objects, mounts) covers 36–37 \% of an Eye2Sky frame, 25 \% of MGCD, 26 \% of Almería; Eye2Sky carries a burned-in text block (top left), Montenegro a timestamp and a logo (\texttt{docs/data/shortcuts\_\allowbreak{}report.md}, masks in \texttt{cache/features/camera\_\allowbreak{}stats\_\allowbreak{}224.npz}).
 
-\textbf{Label distributions} (\texttt{docs/data/imbalance\_report.md}): class sets are nearly balanced (largest/smallest 2–3); Montenegro is 58 \% low cloud with raters almost never above 1.5 km and U-shaped oktas; the segmentation sets hold 1.4 \% clear and 2.7 \% overcast frames; ceilometer records are 34 \% "no cloud overhead", 34 \% low, 20 \% mid, 12 \% high.
+\textbf{Label distributions} (\texttt{docs/data/imbalance\_\allowbreak{}report.md}): class sets are nearly balanced (largest/smallest 2–3); Montenegro is 58 \% low cloud with raters almost never above 1.5 km and U-shaped oktas; the segmentation sets hold 1.4 \% clear and 2.7 \% overcast frames; ceilometer records are 34 \% "no cloud overhead", 34 \% low, 20 \% mid, 12 \% high.
 
 \subsection{3. Collection process}
 
@@ -39,19 +39,19 @@ Public sources were downloaded from their official records (Zenodo, GitHub, inst
 
 \begin{itemize}
 \item \textbf{Cache:} every image decoded once and stored at a longest side of 768 px (\texttt{cache/img768}, 3.16 GB); models read the cache (P022).
-\item \textbf{Integrity (P023):} all 52,032 images decode; no corrupt, empty, mis-sized, rotated or odd-mode file; 43 featureless clear-sky patches flagged "blank" and kept. \texttt{docs/data/integrity\_report.md}.
-\item \textbf{Exact duplicates (P024):} 661 images in 312 within-dataset groups (SWINySEG 533, SWIMSEG 52, CCSN 34, SWIMCAT 34, SHWIMSEG 6, Almería 2), none across datasets; one \texttt{group\_id} per group at split time. \texttt{docs/data/duplicates\_report.md}.
-\item \textbf{Near-duplicates (P025):} copies (dihedral pHash $<$= 2) and same scenes (DINOv3 cosine $>$= 0.97): 14,112 images in 1,656 groups; \textbf{34.6 \% of SWINySEG are flipped, rotated or re-encoded copies of SWIMSEG/SWINSEG}; MGCD's 8,000 images are about 227 scenes. The SWIM family is one source. \texttt{docs/data/near\_duplicates\_report.md}.
-\item \textbf{Label conflicts (P026):} 7.9 \% of CCSN images carry a second genus on a copy of themselves; MGCD labels are per sequence; Montenegro raters reach no majority on cloud height for 39 \% of images; SWIMSEG images annotated twice agree on 95 \% of pixels. Policy: flag, never auto-correct; conflicting pictures never in a test split; training labels decided by the harmonisation. \texttt{docs/data/label\_conflicts\_report.md}.
-\item \textbf{Temporal structure (P027):} Eye2Sky frames are the same scene 82–92 \% of the time at 30 s and reach the different-day level after 8.5–17 h (block = calendar day); Montenegro stays correlated across days (block = 7-day run); Almería day blocks; the two Eye2Sky stations are correlated but not duplicates. \texttt{docs/data/temporal\_report.md}.
-\item \textbf{Shortcuts (P029):} the dataset is readable from frozen features at 99.7 \%, the Eye2Sky station at 100 \% from the sky alone, the hour of day at 4–6$\times$ chance; Montenegro's text strip predicts its class above chance. Mitigations: out-of-camera protocol, per-camera masks, resolution normalisation, explicit sun input. \texttt{docs/data/shortcuts\_report.md}.
-\item \textbf{Ceilometer (P014, P031):} streams 99.998 \% complete; 3.5–6.1 \% of records flagged (rain, window, optics, errors); CDLRA's laser-ageing bit on 58 \% of records is a warning, not an error; pairing tolerance $\pm$30 s. \texttt{docs/data/ceilometer\_qc.md}.
+\item \textbf{Integrity (P023):} all 52,032 images decode; no corrupt, empty, mis-sized, rotated or odd-mode file; 43 featureless clear-sky patches flagged "blank" and kept. \texttt{docs/data/integrity\_\allowbreak{}report.md}.
+\item \textbf{Exact duplicates (P024):} 661 images in 312 within-dataset groups (SWINySEG 533, SWIMSEG 52, CCSN 34, SWIMCAT 34, SHWIMSEG 6, Almería 2), none across datasets; one \texttt{group\_\allowbreak{}id} per group at split time. \texttt{docs/data/duplicates\_\allowbreak{}report.md}.
+\item \textbf{Near-duplicates (P025):} copies (dihedral pHash $<$= 2) and same scenes (DINOv3 cosine $>$= 0.97): 14,112 images in 1,656 groups; \textbf{34.6 \% of SWINySEG are flipped, rotated or re-encoded copies of SWIMSEG/SWINSEG}; MGCD's 8,000 images are about 227 scenes. The SWIM family is one source. \texttt{docs/data/near\_\allowbreak{}duplicates\_\allowbreak{}report.md}.
+\item \textbf{Label conflicts (P026):} 7.9 \% of CCSN images carry a second genus on a copy of themselves; MGCD labels are per sequence; Montenegro raters reach no majority on cloud height for 39 \% of images; SWIMSEG images annotated twice agree on 95 \% of pixels. Policy: flag, never auto-correct; conflicting pictures never in a test split; training labels decided by the harmonisation. \texttt{docs/data/label\_\allowbreak{}conflicts\_\allowbreak{}report.md}.
+\item \textbf{Temporal structure (P027):} Eye2Sky frames are the same scene 82–92 \% of the time at 30 s and reach the different-day level after 8.5–17 h (block = calendar day); Montenegro stays correlated across days (block = 7-day run); Almería day blocks; the two Eye2Sky stations are correlated but not duplicates. \texttt{docs/data/temporal\_\allowbreak{}report.md}.
+\item \textbf{Shortcuts (P029):} the dataset is readable from frozen features at 99.7 \%, the Eye2Sky station at 100 \% from the sky alone, the hour of day at 4–6$\times$ chance; Montenegro's text strip predicts its class above chance. Mitigations: out-of-camera protocol, per-camera masks, resolution normalisation, explicit sun input. \texttt{docs/data/shortcuts\_\allowbreak{}report.md}.
+\item \textbf{Ceilometer (P014, P031):} streams 99.998 \% complete; 3.5–6.1 \% of records flagged (rain, window, optics, errors); CDLRA's laser-ageing bit on 58 \% of records is a warning, not an error; pairing tolerance $\pm$30 s. \texttt{docs/data/ceilometer\_\allowbreak{}qc.md}.
 \item \textbf{Labels (Stage D):} \texttt{configs/ontology.yaml} maps every native class to WMO genus sets or excludes it (P033); mapping, soft labels, ceilometer targets, splits and the test lock follow in P034–P039.
 \end{itemize}
 
 \subsection{5. Uses}
 
-Intended: training and evaluating single-camera sky understanding with the protocol of \texttt{docs/research\_design.md}: leave-one-dataset-out and held-out-station tests, day- or week-blocked splits, square-root source sampling and class-balanced losses (P030), macro metrics with per-source and per-sun-zenith reporting, CBH scored against the ceilometer at the same site only (a cloud base 15 km away differs by 255 m at the median and disagrees on presence 18 \% of the time). Not intended: pooled accuracies over mixed sources without per-source numbers (they measure "which camera"); any claim about genera for SWIMCAT (appearance categories only); training a general cloud-height model on Montenegro's height code (local, low-cloud, no majority for 39 \% of images); any use of the SWIM family beyond non-commercial research (CC-BY-NC); commercial use of MGCD without its agreement.
+Intended: training and evaluating single-camera sky understanding with the protocol of \texttt{docs/research\_\allowbreak{}design.md}: leave-one-dataset-out and held-out-station tests, day- or week-blocked splits, square-root source sampling and class-balanced losses (P030), macro metrics with per-source and per-sun-zenith reporting, CBH scored against the ceilometer at the same site only (a cloud base 15 km away differs by 255 m at the median and disagrees on presence 18 \% of the time). Not intended: pooled accuracies over mixed sources without per-source numbers (they measure "which camera"); any claim about genera for SWIMCAT (appearance categories only); training a general cloud-height model on Montenegro's height code (local, low-cloud, no majority for 39 \% of images); any use of the SWIM family beyond non-commercial research (CC-BY-NC); commercial use of MGCD without its agreement.
 
 \subsection{6. Distribution}
 
@@ -63,12 +63,11 @@ Maintained in the STRATIA repository by its author; versioned by the manifest co
 
 \subsection{8. Known limitations and open items}
 
-{\scriptsize\setlength{\tabcolsep}{3pt}
-\begin{longtable}{llll}
+\begin{center}{\scriptsize\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{5.2cm}p{5.2cm}p{3.4cm}l}
 \toprule
 Item & Effect & Owner / phase & Blocks G1? \\
 \midrule
-\endhead
 No images at the ceilometer sites (OLDLR, WESTE) & no image–CBH pairs; Paper B training impossible until downloaded & authors download; P036 (targets ready), P047 (pairing) & no (Paper A unaffected) \\
 Manifest holds 9 of \textasciitilde{}120 Eye2Sky days per station & few day blocks for Eye2Sky splits & P038 decides whether to ingest more days at a lower cadence & no \\
 DeepSky, WEBCAM, HBMCD, GRSCD not obtained & fewer sources; GRSCD counted as MGCD & P015 cut-off 15 Oct & no \\
@@ -77,16 +76,16 @@ WMO code-table wording written from memory & appendix must be checked against WM
 B0268 labels come from language-model annotators (P041), not the two human labellers of the plan; four days instead of six or more & OOD and adaptation numbers (P083, P084) carry that caveat; the day-blocked protocol has one locked test day & authors: human labels on a subset; P083 / P084 & no \\
 CCSN label noise and cross-étage conflicts & genus scores on CCSN capped & P034 merges sets; test exclusion & no \\
 \bottomrule
-\end{longtable}}
+\end{tabular}}
+\end{center}
 
 \subsection{9. Gate G1 sign-off}
 
-{\scriptsize\setlength{\tabcolsep}{3pt}
-\begin{longtable}{ll}
+\begin{center}{\scriptsize\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{9.9cm}p{6.8cm}}
 \toprule
 Check & Status \\
 \midrule
-\endhead
 Every image decodes and matches the manifest (P023) & passed \\
 Exact and near-duplicate groups defined for the splits (P024, P025) & passed \\
 Label conflicts listed with a policy (P026) & passed \\
@@ -97,7 +96,8 @@ Imbalance measured, sampling chosen (P030) & passed \\
 Ceilometer QC and pairing tolerance (P031) & passed \\
 Blockers for Paper A & \textbf{0} \\
 \bottomrule
-\end{longtable}}
+\end{tabular}}
+\end{center}
 
 Signed: STRATIA author, 2026-10-08 (commit of P032). Paper B's data dependency (images at the ceilometer sites) is recorded above as an open item, not a G1 blocker.
 

@@ -46,9 +46,9 @@ def test_markdown_becomes_latex_with_escapes_tables_lists_and_figures(tmp_path):
     conv = mod.Converter(tmp_path / "figures", tmp_path / "fig")
     tex = conv.convert(SAMPLE, "Sample")
     assert r"\section{Sample}" in tex and "Title (dropped)" not in tex
-    assert r"\subsection{A section with \textbf{bold}, \texttt{code\_with\_underscore} and a link}" in tex
+    assert r"\subsection{A section with \textbf{bold}, \texttt{code\_\allowbreak{}with\_\allowbreak{}underscore} and a link}" in tex
     assert r"5 \% and R\&D, a $\geq$ 0.9 bound, a 512 $\times$ 512 frame, $-$3 and the authors' the desktop application camera" in tex  # noqa: E501
-    assert r"\begin{longtable}{lll}" in tex and r"ccsn & val & 0.719 [0.68, 0.76] \\" in tex and r"\endhead" in tex
+    assert r"\begin{tabular}{lll}" in tex and r"ccsn & val & 0.719 [0.68, 0.76] \\" in tex and r"\end{center}" in tex
     assert r"\begin{itemize}" in tex and r"\item first item with \texttt{x}" in tex and r"\begin{enumerate}" in tex
     assert r"\includegraphics[width=0.9\linewidth]{supp/fig/picture.png}" in tex and (tmp_path / "fig" / "picture.png").exists()
     assert r"\begin{verbatim}" in tex and "raw $ verbatim & text" in tex
@@ -72,5 +72,5 @@ def test_build_from_the_committed_documents(tmp_path):
         assert f"\\input{{supp/sec_{name}}}" in main
     for sec in sections:
         text = re.sub(r"\\begin\{verbatim\}.*?\\end\{verbatim\}", "", sec.read_text(encoding="utf-8"), flags=re.S)
-        assert text.count(r"\begin{longtable}") == text.count(r"\end{longtable}"), sec.name
+        assert text.count(r"\begin{tabular}") == text.count(r"\end{tabular}"), sec.name
         assert "CloudScope" not in text and "DuhItzAniket" not in text, sec.name

@@ -55,3 +55,4 @@ paper/**/*.pdf
 .DS_Store
 Thumbs.db
 !results/*.parquet
+paper/**/*.brf

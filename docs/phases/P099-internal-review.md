@@ -61,10 +61,15 @@ committed results support.
   `PROJECT_STATE.md`, `CHANGELOG.md`, `docs/research_log.md` and `docs/phases/` (they name the author and the
   application) or submit the code only after the decision.
 
-### Compile and page budget (owner, Overleaf)
-- [ ] `pdflatex` ×2 + `bibtex`; fix overfull lines; check that Table 1 fits the column (it may need `table*`).
-- [ ] Eight pages of content plus references; the architecture figure is `figure*`.
-- [ ] Figure 2 (confusion) and Figure 3 (CBH scatter) readable at column width.
+### Compile and page budget
+- [x] Compiled with MiKTeX on 2026-11-06: `pdflatex` ×3 + `bibtex`, no overfull boxes, no undefined references or
+  citations; Tables 1–5 and 7 are `table*`, Table 6 (efficiency) one column.
+- [x] 8 pages including the references (the references start on page 7), so the content is under the eight-page
+  limit; the architecture figure is `figure*`.
+- [x] Figure 2 (confusion) and Figure 3 (CBH scatter) checked at column width in the rendered pages.
+- [x] `supp.tex` compiles to 22 pages, clean (tables chunked into plain `tabular`s, text-heavy columns as
+  paragraph columns).
+- [ ] Owner: read the PDFs once end to end (main.pdf 8 pages, supp.pdf 22 pages).
 
 ### Mentor read
 - [ ] One pass by the mentor on the claims in the abstract and the two failed criteria.

@@ -1,13 +1,12 @@
 \section{The model as a sixth annotator}
 
-The Gate G4 global heads (\texttt{indomain\_e2s}, EMA) answer the 511 Montenegro validation images the way the 5 human raters did: an étage set from the altitude class and a cover in oktas. Krippendorff's alpha over the raters with and without the model, and each rater against the majority (étage set) or the median within $\pm$1 okta (cover) of the others, as in P035. Validation units only; the locked test is P090. Run \texttt{20261105T135320Z\_human\_ceiling\_model\_2500933325}.
+The Gate G4 global heads (\texttt{indomain\_\allowbreak{}e2s}, EMA) answer the 511 Montenegro validation images the way the 5 human raters did: an étage set from the altitude class and a cover in oktas. Krippendorff's alpha over the raters with and without the model, and each rater against the majority (étage set) or the median within $\pm$1 okta (cover) of the others, as in P035. Validation units only; the locked test is P090. Run \texttt{20261105T135320Z\_\allowbreak{}human\_\allowbreak{}ceiling\_\allowbreak{}model\_\allowbreak{}2500933325}.
 
-{\scriptsize\setlength{\tabcolsep}{3pt}
-\begin{longtable}{llll}
+\begin{center}{\scriptsize\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lp{13.5cm}ll}
 \toprule
 Quantity & Metric & Value & n \\
 \midrule
-\endhead
 étage set & alpha, humans only & 0.659 &  \\
 étage set & alpha, humans + STRATIA & 0.684 &  \\
 étage set & leave-one-out agreement, STRATIA vs the others' majority & 0.932 & 486 \\
@@ -23,7 +22,8 @@ oktas 0-8 & leave-one-out agreement, humans (min / max) & 0.808 / 0.964 &  \\
 oktas 0-8 & pairwise agreement, model-human (mean over raters) & 0.857 &  \\
 oktas 0-8 & pairwise agreement, human-human (mean over pairs) & 0.874 &  \\
 \bottomrule
-\end{longtable}}
+\end{tabular}}
+\end{center}
 
 \begin{figure}[h]
 \centering

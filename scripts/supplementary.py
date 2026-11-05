@@ -56,9 +56,23 @@ _ESCAPE = [("\\", r"\textbackslash{}"), ("{", r"\{"), ("}", r"\}"), ("%", r"\%")
            ("_", r"\_"), ("$", r"\$"), ("~", r"\textasciitilde{}"), ("^", r"\textasciicircum{}"), ("<", "$<$"), (">", "$>$")]
 
 
+def column_spec(rows: list[list[str]], width: int, char_cm: float, text_cm: float = 17.2, long_chars: int = 28) -> str:
+    """Column spec: natural width for short columns, paragraph columns sharing the rest of the text width for the
+    text-heavy ones (so that a table never runs past the margin)."""
+    lens = [max(len(r[c]) for r in rows) for c in range(width)]
+    long_cols = [c for c in range(width) if lens[c] > long_chars]
+    if not long_cols:
+        return "l" * width
+    short_cm = sum(min(lens[c], long_chars) * char_cm for c in range(width) if c not in long_cols) + 0.25 * width
+    avail = max(text_cm - short_cm, 3.0)
+    total = sum(min(lens[c], 90) for c in long_cols)
+    return "".join(f"p{{{avail * min(lens[c], 90) / total:.1f}cm}}" if c in long_cols else "l" for c in range(width))
+
+
 class Converter:
     def __init__(self, fig_src: Path, fig_dst: Path, fig_prefix: str = "supp/fig/"):
         self.fig_src, self.fig_dst, self.fig_prefix = fig_src, fig_dst, fig_prefix
+        self.chunk_rows = 36  # a plain tabular never splits across pages, so long tables are chunked
         self.unknown: dict[str, int] = {}
         self.identifying: dict[str, int] = {}
 
@@ -87,7 +101,7 @@ class Converter:
         codes: list[str] = []
 
         def stash(m: re.Match) -> str:
-            codes.append(r"\texttt{" + self.escape(m.group(1)) + "}")
+            codes.append(r"\texttt{" + self.escape(m.group(1)).replace(r"\_", r"\_\allowbreak{}") + "}")
             return f"\x00{len(codes) - 1}\x00"
 
         s = re.sub(r"`([^`]*)`", stash, s)
@@ -103,10 +117,15 @@ class Converter:
         rows = [r + [""] * (width - len(r)) for r in rows]
         header, body = rows[0], rows[1:]
         size = r"\tiny" if width > 9 else r"\scriptsize"
-        out = ["{" + size + r"\setlength{\tabcolsep}{3pt}", r"\begin{longtable}{" + "l" * width + "}", r"\toprule",
-               " & ".join(self.inline(c) for c in header) + r" \\", r"\midrule", r"\endhead"]
-        out += [" & ".join(self.inline(c) for c in r) + r" \\" for r in body]
-        out += [r"\bottomrule", r"\end{longtable}}", ""]
+        spec = column_spec(rows, width, char_cm=0.085 if width > 9 else 0.105)
+        head = " & ".join(self.inline(c) for c in header) + r" \\"
+        out: list[str] = []
+        for start in range(0, max(len(body), 1), self.chunk_rows):
+            chunk = body[start : start + self.chunk_rows]
+            out += [r"\begin{center}{" + size + r"\setlength{\tabcolsep}{3pt}", r"\begin{tabular}{" + spec + "}", r"\toprule", head, r"\midrule"]  # noqa: E501
+            out += [" & ".join(self.inline(c) for c in r) + r" \\" for r in chunk]
+            more = r"\par\footnotesize(continued below)" if start + self.chunk_rows < len(body) else ""
+            out += [r"\bottomrule", r"\end{tabular}}" + more, r"\end{center}", ""]
         return out
 
     def figure(self, alt: str, src: str) -> list[str]:
@@ -207,7 +226,6 @@ def build(paper: Path = PAPER, docs_dir: Path = DOCS_DIR, docs=DOCS) -> Converte
 \documentclass[10pt,twocolumn,letterpaper]{article}
 \usepackage[review]{cvpr}
 \input{preamble}
-\usepackage{longtable}
 \definecolor{cvprblue}{rgb}{0.21,0.49,0.74}
 \usepackage[pagebackref,breaklinks,colorlinks,allcolors=cvprblue]{hyperref}
 \def\confName{CVPR}
@@ -217,6 +235,7 @@ def build(paper: Path = PAPER, docs_dir: Path = DOCS_DIR, docs=DOCS) -> Converte
 \begin{document}
 \maketitle
 \onecolumn
+\ifdefined\nolinenumbers\nolinenumbers\fi
 \small
 This supplement reproduces, in full, the result tables that the paper summarises: the one logged read of the locked
 test sets (every model, split, metric and bootstrap interval), the ablations, the error analysis, the model as a

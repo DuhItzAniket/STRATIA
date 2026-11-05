@@ -628,3 +628,7 @@ Following the CloudScope finding that the Sun computed from the B0268 ray map la
 ### P098 — Honesty pass on the B0268 claims (2026-11-06)
 
 The draft had left the nature of the B0268 annotators unsaid. It now states, in the data section, §5.8, the limitations and the Table 4 caption, that the 393 frames were labelled by two vision-language models (two variants of one commercial family; the human sheets were lost) with two more as a sensitivity set, that the reported ceiling is a model–model one, that the adaptation configuration was selected on held-out adaptation days (optimistic) while the locked day took no part in the selection, and that one of six adaptation draws exceeded the 0.02 regression guard by 0.01. `docs/phases/P099-internal-review.md` records it.
+
+### P098/P099 — Compiled (2026-11-06)
+
+MiKTeX installed with the owner's permission; `main.tex` compiles to 8 pages including the references with no overfull boxes and no undefined references or citations after two layout fixes (the six wide tables as `table*` in `footnotesize`, the efficiency table's setting labels shortened to fit one column); `supp.tex` compiles to 22 pages clean once its tables became chunked plain `tabular`s with paragraph columns for text-heavy fields (longtable after the kit's two-column title produced "infinite glue shrinkage" errors) and code spans break after underscores. PDFs are build products and stay out of git.

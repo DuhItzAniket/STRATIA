@@ -49,7 +49,7 @@ def table(name: str, caption: str, label: str, header: list[str], rows: list[lis
     tex = [
         r"\begin{" + env + "}[t]",
         r"\centering",
-        r"\footnotesize" if wide else r"\small",
+        r"\footnotesize",
         r"\begin{tabular}{" + align + "}",
         r"\toprule",
         " & ".join(esc(h) for h in header) + r" \\",
@@ -63,6 +63,18 @@ def table(name: str, caption: str, label: str, header: list[str], rows: list[lis
     ]
     (OUT / f"{name}.md").write_text(f"**{caption}**\n\n" + "\n".join(md) + "\n", encoding="utf-8", newline="\n")
     print(f"  {name}: {len(rows)} rows")
+
+
+def short_setting(k: str) -> str:
+    """Latency setting labels short enough for a one-column table; the host application is not named in review."""
+    return (
+        k.replace("CloudScope ONNX Runtime DirectML (NVIDIA GeForce RTX 4050 Laptop GPU)", "desktop app, DirectML, RTX 4050")
+        .replace("CloudScope ONNX Runtime CPU", "desktop app, ONNX Runtime CPU")
+        .replace("pytorch", "PyTorch")
+        .replace("onnx runtime", "ONNX Runtime")
+        .replace("autocast fp16", "fp16")
+        .replace(" (per frame)", "")
+    )
 
 
 def f3(v) -> str:
@@ -233,7 +245,7 @@ def main() -> int:
     # ---- Table 7: efficiency (P094)
     try:
         ef = json.loads((result_file("efficiency.json")).read_text(encoding="utf-8"))
-        t7 = [[k.replace("CloudScope", "desktop application"), f"{v['median_ms']:.1f}", f"{v['p95_ms']:.1f}"]
+        t7 = [[short_setting(k), f"{v['median_ms']:.1f}", f"{v['p95_ms']:.1f}"]
               for k, v in ef["latency"].items() if isinstance(v, dict)]  # the host app is not named in review
         t7.append(["Raspberry Pi 5", "–", "–"])
         table(
