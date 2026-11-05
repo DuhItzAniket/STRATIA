@@ -46,7 +46,7 @@ def test_markdown_becomes_latex_with_escapes_tables_lists_and_figures(tmp_path):
     conv = mod.Converter(tmp_path / "figures", tmp_path / "fig")
     tex = conv.convert(SAMPLE, "Sample")
     assert r"\section{Sample}" in tex and "Title (dropped)" not in tex
-    assert r"\subsection{A section with \textbf{bold}, \texttt{code\_\allowbreak{}with\_\allowbreak{}underscore} and a link}" in tex
+    assert r"\subsection{A section with \textbf{bold}, \texttt{code\_\allowbreak{}with\_\allowbreak{}underscore} and a link}" in tex  # noqa: E501
     assert r"5 \% and R\&D, a $\geq$ 0.9 bound, a 512 $\times$ 512 frame, $-$3 and the authors' the desktop application camera" in tex  # noqa: E501
     assert r"\begin{tabular}{lll}" in tex and r"ccsn & val & 0.719 [0.68, 0.76] \\" in tex and r"\end{center}" in tex
     assert r"\begin{itemize}" in tex and r"\item first item with \texttt{x}" in tex and r"\begin{enumerate}" in tex
