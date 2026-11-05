@@ -1,0 +1,14 @@
+**Recognition on the locked test sets: STRATIA against the strongest linear probe of Stage F (ViT-L/16 for in-domain genus, ViT-B/16 for LODO étage), macro-F1 with cluster-bootstrap 95% intervals.**
+
+| Protocol | Source | STRATIA | Linear probe |
+|---|---|---|---|
+| in-domain genus | CCSN | 0.591 [0.54, 0.63] | 0.549 [0.50, 0.59] |
+| in-domain genus | MGCD | 0.821 [0.71, 1.00] | 0.918 [0.76, 0.95] |
+| in-domain étage | ccsn | 0.719 [0.68, 0.76] | – |
+| in-domain étage | mgcd | 1.000 [1.00, 1.00] | – |
+| in-domain étage | montenegro | 0.680 [0.63, 0.72] | – |
+| in-domain étage | almeria | 0.803 [0.68, 0.86] | – |
+| LODO étage (held out) | ccsn | 0.451 [0.43, 0.47] | 0.396 [0.38, 0.41] |
+| LODO étage (held out) | mgcd | 0.709 [0.62, 0.78] | 0.860 [0.79, 0.92] |
+| LODO étage (held out) | montenegro | 0.367 [0.30, 0.45] | 0.463 [0.39, 0.53] |
+| LODO étage (held out) | almeria | 0.634 [0.60, 0.66] | 0.397 [0.36, 0.43] |

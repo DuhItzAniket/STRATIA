@@ -1,0 +1,12 @@
+**Pre-registered criteria on validation (Gate G4) and on the locked test sets, read once.**
+
+|  | Quantity | Val | Test [95% CI] | Reference | Required | Holds |
+|---|---|---|---|---|---|---|
+| C1 | LODO étage macro-F1, mean of the four folds | 0.548 | 0.540 | 0.529 | ≥ reference + 0.05 | no |
+| C1 | in-domain genus macro-F1 (CCSN, MGCD) | 0.719 | 0.706 | 0.733 | ≥ reference − 0.01 | no |
+| C2 | Montenegro étage-set agreement / human ceiling | 1.047 | 0.926 | 0.900 | ≥ 0.90 | yes |
+| C2 | Montenegro oktas ±1 agreement / human ceiling | 1.027 | 0.963 | 0.900 | ≥ 0.90 | yes |
+| C3 | CBH skill, OLDLR (CDLRA) pairs | 0.471 | 0.536 [0.440, 0.630] | 0.200 | ≥ 0.20 | yes |
+| C3 | CBH skill, WESTE (CDLRB) pairs, OLDLR-only training | 0.448 | 0.436 [0.276, 0.585] | 0.100 | ≥ 0.10 | yes |
+| C3 | CBH MAE (m), all pairs, against the frozen-feature ridge | 566 | 872 [679, 1055] | 1096 | ≤ 0.9 × reference | yes |
+| C3 | 80 % interval coverage with the P089 temperature and radius | 0.802 | 0.720 | 0.800 | 0.75–0.85 | no |

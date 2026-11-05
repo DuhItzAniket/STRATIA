@@ -1,0 +1,57 @@
+{
+ "params": {
+  "backbone (DINOv3 ViT-S/16, frozen)": 21596544,
+  "SkyRay encoder, global": 101313,
+  "global heads": 995991,
+  "SkyRay encoder, CBH": 101313,
+  "CBH head": 205979,
+  "dense heads": 355271,
+  "OOD score (buffers)": 262661,
+  "total trainable above the backbone": 1759867,
+  "total": 23356411
+ },
+ "flops_forward_512": 45698036736,
+ "flops_backbone_512": 44302860288,
+ "input": "512 x 512",
+ "onnx": "models\\stratia-1.0.1-demo\\stratia.onnx",
+ "latency": {
+  "pytorch fp32, RTX 4050, batch 1": {
+   "median_ms": 19.527550000930205,
+   "p95_ms": 23.69595000782283,
+   "runs": 20
+  },
+  "pytorch autocast fp16, RTX 4050, batch 1": {
+   "median_ms": 15.008949994808063,
+   "p95_ms": 16.2099749839399,
+   "runs": 20
+  },
+  "pytorch fp32, RTX 4050, batch 8 (per frame)": {
+   "median_ms": 16.47431250057707,
+   "p95_ms": 16.516268751001917,
+   "runs": 10
+  },
+  "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+  "onnx runtime CPU, batch 1": {
+   "median_ms": 144.0843999880599,
+   "p95_ms": 149.44082500296645,
+   "runs": 10
+  },
+  "cpu": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "CloudScope ONNX Runtime DirectML (NVIDIA GeForce RTX 4050 Laptop GPU), batch 1": {
+   "median_ms": 29.218,
+   "p95_ms": 32.98187000000001,
+   "mean_ms": 29.59761000000001,
+   "runs": 20,
+   "preprocess_ms": 28.8516
+  },
+  "CloudScope ONNX Runtime CPU, batch 1": {
+   "median_ms": 148.6851,
+   "p95_ms": 153.66819,
+   "mean_ms": 148.380025,
+   "runs": 20,
+   "preprocess_ms": 28.8516
+  }
+ },
+ "pi5": "not measured: no Raspberry Pi 5 on hand",
+ "machine": "LEGION"
+}

@@ -54,3 +54,4 @@ paper/**/*.pdf
 .idea/
 .DS_Store
 Thumbs.db
+!results/*.parquet
