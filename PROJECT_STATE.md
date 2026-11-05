@@ -2,9 +2,9 @@
 
 | Field | Value |
 |---|---|
-| Current stage | J in progress — P090 locked test DONE 2026-10-25 (the numbers the paper reports; `results/P090_locked_test.json`); P089 done; P091–P094 open; Stage I: P083, P084 (reduced), P088 done, P085–P087 deferred; P056 partial |
-| Last completed phase | P090 — Locked-test evaluation: C2 holds (0.926 / 0.963 of the human ceiling), C3 holds on three of four components (CBH skill 0.536 OLDLR, 0.436 held-out WESTE, MAE 872 m vs ridge 1,096; the calibrated 80 % interval covers 0.720), C1 fails on both clauses (LODO 0.540 vs probe 0.529; in-domain genus 0.706 vs 0.733); B0268 locked day: adapted 1.0.1-demo oktas ±1 0.671, étage set 0.463, zero-shot at the floor |
-| Next phase | P091 — Ablations (validation data; the test numbers are final), then P092–P094, P097 release and the paper (P098–P100; CVPR registration 10 Nov, paper 16 Nov 2026); AI-day demo 2026-10-30 on `stratia-1.0.1-demo` (installed in CloudScope, rehearsed 2026-10-25); P085–P087 when the deadline allows |
+| Current stage | J DONE 2026-11-05 (P090 locked test read once 2026-10-25, `results/P090_locked_test.json`; P091 ablations, P092 human ceiling, P093 error analysis, P094 efficiency on validation data); K (P097 release prep) and L (P098 paper draft, P099 checklist) in progress; Stage I: P083, P084 (reduced), P088 done, P085–P087 deferred; P056 partial |
+| Last completed phase | P094 — Efficiency: 23.4 M parameters (1.76 M above the frozen backbone), 46 GFLOPs per 512 px frame, 29 ms per frame through DirectML inside CloudScope (144 ms ONNX Runtime CPU, 20 ms PyTorch fp32 on the RTX 4050); Pi 5 not measured. Stage J before it: P091 hard targets −0.023 étage F1, SkyRay within ±0.011, Eye2Sky étage rows lift the all-sky LODO folds (Almería 0.327 -> 0.593); P092 STRATIA as a sixth Montenegro rater ranks second of six on étage sets (LOO 0.932 vs human mean 0.893, alpha 0.659 -> 0.684), last of six on oktas (0.892 vs 0.909); P093 St/Sc swapped on 18.5 % of CCSN rows, mid étage missed 35–46 %, glare parsed as cloud, dataset identity 1.000 from the pooled features |
+| Next phase | P097 — Release prep (CHANGELOG, licence table, `scripts/reproduce_tables.py`, model package; nothing published without the owner), then P098 paper draft in `paper/` (CVPR 2027 kit; registration 10 Nov, paper 16 Nov 2026), P099 checklist, P100 the owner's; P085–P087 and P095 when hardware and time allow |
 | Branch | `main` |
 | Target venue | CVPR 2027 (registration 10 Nov, paper 16 Nov 2026 AoE); go/no-go at Gate G4 (target 3 Nov) |
 | Blockers | None for Paper A (G1 signed). **Paper B:** 0 pairable Eye2Sky images on disk; OLDLR and WESTE images Apr–Jul 2022 complete on disk (2026-10-11); P047 pair table built. B0268: 393 frames labelled by two model annotators (P041 DONE 2026-10-23); human labels on a subset remain an owner item. Missing public datasets need owner action (P015) |
@@ -109,5 +109,9 @@
 | P084 | Few-shot adaptation (reduced: heads only) | DONE (reduced) | 2026-10-23 |
 | P089 | Calibration | DONE | 2026-10-11 |
 | P090 | Locked-test evaluation (once) | DONE (two evaluations; the first crashed before anything was saved) | 2026-10-25 |
+| P091 | Ablations (validation) | DONE | 2026-11-05 |
+| P092 | Human-ceiling comparison (model as a sixth rater) | DONE | 2026-11-05 |
+| P093 | Error analysis and shortcut re-check | DONE (no attention maps) | 2026-11-05 |
+| P094 | Efficiency (params, FLOPs, latency) | DONE (Pi 5 not measured) | 2026-11-05 |
 | P088 | Robustness suite | DONE | 2026-10-11 |
 | P096 | ONNX export (FP32) and model card | PARTIAL (INT8 deferred; 1.0.1-demo added 2026-10-23) | 2026-10-21 |
