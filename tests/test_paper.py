@@ -57,3 +57,15 @@ def test_numbers_are_generated_not_typed():
     assert headline
     for value in headline:
         assert not re.search(rf"(?<![\d.]){re.escape(value)}(?![\d])", sections), value
+
+
+def test_sources_use_only_characters_pdflatex_knows():
+    """pdflatex with utf8 input knows accented Latin letters and the dashes, not the Unicode minus (U+2212),
+    the multiplication sign or the relation signs; those must come out of the generator as math."""
+    allowed = set("éèêëáàâäãåíìîïóòôöõúùûüçñÉÈÊËÁÀÂÄÍÌÎÏÓÒÔÖÚÙÛÜÇÑ–")
+    bad = {}
+    for f in [PAPER / "main.tex", PAPER / "numbers.tex", *sorted((PAPER / "sec").glob("*.tex")), *sorted((PAPER / "tables").glob("*.tex"))]:  # noqa: E501
+        for ch in f.read_text(encoding="utf-8"):
+            if ord(ch) > 127 and ch not in allowed:
+                bad.setdefault(f"U+{ord(ch):04X}", set()).add(f.name)
+    assert not bad, bad

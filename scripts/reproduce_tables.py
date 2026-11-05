@@ -35,6 +35,8 @@ def esc(s: str) -> str:
         .replace("±", r"$\pm$")
         .replace("≥", r"$\geq$")
         .replace("≤", r"$\leq$")
+        .replace("−", "$-$")  # U+2212 is not set up in pdflatex
+        .replace("×", r"$\times$")
     )
 
 
