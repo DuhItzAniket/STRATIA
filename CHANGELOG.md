@@ -4,6 +4,9 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P099 — Supplementary material and anonymity (2026-11-06)
+- `scripts/supplementary.py` → `paper/supp.tex` and `paper/supp/sec_*.tex`: the nine result documents under `docs/data/` converted to LaTeX (longtables, figures copied), anonymised for review; `tests/test_supplementary.py`. The paper and its tables no longer name the desktop application; the checklist carries the repository-visibility decision. `scripts/b0268_sun_track.py`: the authors' camera's pose from the Sun track (declared pointing 107° off; fitted rotation ~162°, axis ~13° off the zenith; record stored as insufficient).
+
 ### P099 — Internal review checklist (2026-11-05)
 - Every bibliography entry checked against its Zenodo / Crossref / arXiv / PMLR record (`docs/phases/P099-internal-review.md`): 14 confirmed, 4 with the venue or edition still to confirm from the proceedings page, none invented; anonymity and supplementary checklists; the mentor read, compile and OpenReview steps are the owner's.
 
