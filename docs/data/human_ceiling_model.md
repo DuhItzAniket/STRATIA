@@ -1,0 +1,24 @@
+# STRATIA as an extra Montenegro annotator (P092)
+
+The Gate G4 global heads (`indomain_e2s`, EMA) answer the 511 Montenegro validation images the way the 5 human raters did: an étage set from the altitude class and a cover in oktas. Krippendorff's alpha over the raters with and without the model, and each rater against the majority (étage set) or the median within ±1 okta (cover) of the others, as in P035. Validation units only; the locked test is P090. Run `20261105T135320Z_human_ceiling_model_2500933325`.
+
+| Quantity | Metric | Value | n |
+|---|---|---|---|
+| étage set | alpha, humans only | 0.659 |  |
+| étage set | alpha, humans + STRATIA | 0.684 |  |
+| étage set | leave-one-out agreement, STRATIA vs the others' majority | 0.932 | 486 |
+| étage set | leave-one-out agreement, humans (mean over raters) | 0.893 | 2047 |
+| étage set | leave-one-out agreement, humans (min / max) | 0.827 / 0.955 |  |
+| étage set | pairwise agreement, model-human (mean over raters) | 0.829 |  |
+| étage set | pairwise agreement, human-human (mean over pairs) | 0.769 |  |
+| oktas 0-8 | alpha, humans only | 0.960 |  |
+| oktas 0-8 | alpha, humans + STRATIA | 0.956 |  |
+| oktas 0-8 | leave-one-out agreement, STRATIA vs the others' majority | 0.892 | 509 |
+| oktas 0-8 | leave-one-out agreement, humans (mean over raters) | 0.909 | 2245 |
+| oktas 0-8 | leave-one-out agreement, humans (min / max) | 0.808 / 0.964 |  |
+| oktas 0-8 | pairwise agreement, model-human (mean over raters) | 0.857 |  |
+| oktas 0-8 | pairwise agreement, human-human (mean over pairs) | 0.874 |  |
+
+![raters](figures/human_ceiling_model.png)
+
+Reading: alpha is a chance-corrected agreement over the whole panel; adding a rater who agrees with the panel about as often as the humans do leaves it unchanged, a rater who disagrees systematically lowers it. The leave-one-out rows put the model on the same footing as each human: its agreement with the others' majority next to theirs.
