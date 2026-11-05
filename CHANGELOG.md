@@ -4,6 +4,31 @@ All notable changes, grouped by phase.
 
 ## [Unreleased]
 
+### P099 — Internal review checklist (2026-11-05)
+- Every bibliography entry checked against its Zenodo / Crossref / arXiv / PMLR record (`docs/phases/P099-internal-review.md`): 14 confirmed, 4 with the venue or edition still to confirm from the proceedings page, none invented; anonymity and supplementary checklists; the mentor read, compile and OpenReview steps are the owner's.
+
+### P098 — Paper draft (2026-11-05)
+- `paper/`: full CVPR 2027 draft (review mode): `main.tex`, `sec/*.tex`, `main.bib`, generated `tables/*.tex`, `numbers.tex` and `fig/*.png` (`scripts/paper_figures.py`); `tests/test_paper.py` checks that every cite key, label, number macro, input and graphic resolves and that no headline number is typed into the prose. Not compiled locally (no TeX): compile on Overleaf.
+
+### P097 — Release preparation (2026-11-05)
+- `scripts/reproduce_tables.py`: every paper table (`paper/tables/tab1…tab7.{tex,md}`) and every number quoted in the prose (`paper/numbers.tex`) regenerated from the committed result files (`results/P090_locked_test.json`, `results/ablations.parquet`, `results/human_ceiling_model.parquet`, `results/efficiency.json`); works from a fresh clone without the data.
+- Release notes and licence table in `docs/release/`; the model package `stratia-1.0.1-demo` (ONNX + card, 94.9 MB) is zipped with its SHA-256 and **not published** until the owner says so.
+
+### P094 — Efficiency (2026-11-05)
+- `scripts/efficiency.py` → `docs/data/efficiency.md`: 23.36 M parameters (1.76 M above the frozen backbone), 45.7 GFLOPs per 512 px frame; median latency 19.5 ms PyTorch fp32 (RTX 4050), 144 ms ONNX Runtime CPU, 29.2 ms DirectML / 148.7 ms CPU inside CloudScope (`cloudscope-aibench`) plus 29 ms host preprocessing. Raspberry Pi 5 not measured.
+
+### P093 — Error analysis and shortcut re-check (2026-11-05)
+- `scripts/error_analysis.py` → `docs/data/error_analysis.md`: native-class confusions (St/Sc swapped on 18.5 % of their CCSN rows), the mid étage missed on 35–46 % of its rows, glare parsed as cloud, a failure gallery, and dataset identity at 1.000 from the model's pooled features.
+
+### P092 — Human-ceiling comparison (2026-11-05)
+- `scripts/human_ceiling_model.py` → `docs/data/human_ceiling_model.md`: STRATIA as a sixth Montenegro annotator — alpha on étage sets 0.659 → 0.684, leave-one-out agreement 0.932 (second of six raters); oktas 0.892 against a human mean of 0.909.
+
+### P091 — Ablations (2026-11-05)
+- Five global-head runs (`--p-drop`, `--hard-targets`, `--lambda-h 0`, `--kendall`) and the Stage H variants in one table (`scripts/ablations.py` → `docs/data/ablations.md`): hard targets −0.023 étage F1, SkyRay within ±0.011, the Eye2Sky étage rows lift the all-sky LODO folds (Almería 0.327 → 0.593).
+
+### P090 — Locked-test evaluation (2026-10-25)
+- `scripts/locked_test.py --split test --final` read the 23 locked test sets once (`results/P090_locked_test.json` + SHA-256, `docs/data/locked_test.md`): C2 holds (0.926 / 0.963 of the human ceiling), C3 holds on skill (0.536 OLDLR, 0.436 held-out WESTE) and MAE (872 m vs ridge 1,096 m) but not on 80 % coverage (0.720), C1 fails on both clauses (LODO 0.540 vs probe 0.529; in-domain genus 0.706 vs 0.733). Two evaluations: the first crashed before anything was saved; both are logged.
+
 ### P096 — ONNX export and model card (2026-10-21)
 - `stratia/export/onnx_model.py` + `scripts/export_onnx.py`: the Gate G4 model (DINOv3 ViT-S/16, global, dense and CBH heads, P089 calibration folded in) as one ONNX graph (opset 17, dynamic batch, FP32; `models/stratia-1.0.0-demo/`, 94.9 MB, git-ignored) with a validated `model_card.json` (also embedded in the ONNX metadata); parity vs ONNX Runtime ≤ 1.6e-4 absolute (≤ 5.5e-5 relative), 172 ms per frame on the laptop CPU; report `docs/data/onnx_export.md`.
 - Dummy export `tests/fixtures/stratia_dummy/` (0.45 MB, untrained, same interface) for CloudScope's contract test; `tests/test_export.py`; onnx, onnxruntime and jsonschema pinned.

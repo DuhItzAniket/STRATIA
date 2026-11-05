@@ -1,0 +1,65 @@
+# P099 — Internal review checklist
+
+Status: PARTIAL (what the assistant can do is done; the mentor read, the compile and the OpenReview steps are the
+owner's)     Date: 2026-11-05     Commit: (this commit)
+
+## Objective
+Plan (Stage L, P099): mentor read; verify every citation exists (CVPR rejects fabricated citations); anonymity;
+supplementary (code, splits, data card).
+
+## Checklist
+
+### Citations (every entry of `paper/main.bib`, checked 2026-11-05 against the record named)
+| Key | Checked against | Result |
+|---|---|---|
+| wmo2017atlas | cloudatlas.wmo.int | 2017 edition confirmed; no citation format given |
+| zhang2018cloudnet | Crossref 10.1029/2018GL077787 | confirmed (GRL 45(16), 8665–8672) |
+| liu2020mgcd | Crossref 10.3390/rs12030464 | confirmed (Remote Sensing 12(3), 464) |
+| dev2017colorbased | Crossref 10.1109/JSTARS.2016.2558474 | confirmed (JSTARS 10(1), 231–242) |
+| eye2sky | Zenodo 12804613 | confirmed (Schmidt et al., 2024, CDLA-Sharing 1.0) |
+| blum2021cloudheight | Crossref 10.5194/amt-14-5199-2021 | confirmed (AMT 14(7), 5199–5224) |
+| montenegro2025 | Zenodo 21787669 | confirmed (Plamenac & Tomovic, published 2026-08-04, CC BY 4.0) |
+| almeria2025 | Zenodo 14639170 | confirmed (Fabel et al., 2025; supplement to 10.5194/amt-15-797-2022) |
+| simeoni2025dinov3 | arXiv 2508.10104 | confirmed (27 authors) |
+| oquab2024dinov2 | arXiv 2304.07193 | title and authors confirmed; **TMLR venue from memory — confirm** |
+| ranftl2021dpt | arXiv 2103.13413 | title and authors confirmed; **ICCV 2021 venue from memory — confirm** |
+| guo2017calibration | PMLR v70 | confirmed (pages 1321–1330) |
+| lee2018mahalanobis | arXiv 1807.03888 | confirmed ("Accepted in NIPS 2018") |
+| liu2020energy | arXiv 2010.03759 | title and authors confirmed; **NeurIPS 2020 venue from memory — confirm** |
+| vovk2022conformal | Crossref 10.1007/978-3-031-06649-8 | confirmed (2nd edition, Springer 2022) |
+| angelopoulos2023conformal | Crossref 10.1561/2200000101 | confirmed (FnT ML 16(4), 494–591) |
+| krippendorff2004content | Crossref rate-limited (HTTP 429) | **edition / year from memory — confirm** |
+| barz2020duplicates | Crossref 10.3390/jimaging6060041 | confirmed (J. Imaging 6(6), 41) |
+
+Four venues to confirm from the proceedings pages before submission; no entry is invented.
+
+### Anonymity (review mode)
+- [x] `\usepackage[review]{cvpr}`, author block "Anonymous CVPR submission", no paper ID set yet (OpenReview gives it).
+- [x] No author names, institution or city in the sections beyond "the authors' rooftop in Bengaluru" and
+  "BLR01" in the data section — **decide**: keep (a city is not identifying) or write "a tropical city".
+- [ ] Repository and release links withheld until camera-ready; the supplementary must be anonymised (strip the
+  GitHub user from the zip, the git history and `PROJECT_STATE.md`).
+- [x] Acknowledgements absent.
+
+### Supplementary
+- [ ] Code: a zip of the repository at the submission commit without `.git`, `DATA`, `cache`, `runs`, `models`.
+- [x] Splits: `configs/splits/`, `test_lock.json`, `docs/splits.md`.
+- [x] Data card: `docs/data/data_card.md`; licences `docs/release/licences.md`.
+- [x] Locked results: `results/P090_locked_test.json` + SHA-256; the final-evaluation log stays private
+  (`runs/final_eval_log.md`), its two entries are quoted in `docs/phases/P090-locked-test.md`.
+- [ ] Extended tables: `docs/data/ablations.md`, `error_analysis.md`, `human_ceiling_model.md`, `efficiency.md`
+  as a PDF appendix (pandoc or print-to-PDF).
+
+### Compile and page budget (owner, Overleaf)
+- [ ] `pdflatex` ×2 + `bibtex`; fix overfull lines; check that Table 1 fits the column (it may need `table*`).
+- [ ] Eight pages of content plus references; the architecture figure is `figure*`.
+- [ ] Figure 2 (confusion) and Figure 3 (CBH scatter) readable at column width.
+
+### Mentor read
+- [ ] One pass by the mentor on the claims in the abstract and the two failed criteria.
+- [ ] Decide whether to keep the LODO clause of C1 as a negative or to drop the "+0.05" framing to "did not beat
+  the probe by the pre-registered margin" (the paper currently says exactly that).
+
+### Registration and submission (P100, owner)
+- [ ] OpenReview registration by 10 Nov 2026 (author list frozen).
+- [ ] PDF by 16 Nov 2026 AoE; supplementary by 23 Nov.
