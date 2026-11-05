@@ -40,20 +40,23 @@ def esc(s: str) -> str:
     )
 
 
-def table(name: str, caption: str, label: str, header: list[str], rows: list[list[str]], align: str | None = None) -> None:
+def table(name: str, caption: str, label: str, header: list[str], rows: list[list[str]], align: str | None = None,
+          wide: bool = True) -> None:
+    """One table: `wide` spans both columns (table*, footnotesize); otherwise a one-column float (table, small)."""
     OUT.mkdir(parents=True, exist_ok=True)
     align = align or ("l" + "r" * (len(header) - 1))
+    env = "table*" if wide else "table"
     tex = [
-        r"\begin{table}[t]",
+        r"\begin{" + env + "}[t]",
         r"\centering",
-        r"\small",
+        r"\footnotesize" if wide else r"\small",
         r"\begin{tabular}{" + align + "}",
         r"\toprule",
         " & ".join(esc(h) for h in header) + r" \\",
         r"\midrule",
     ]
     tex += [" & ".join(esc(c) for c in r) + r" \\" for r in rows]
-    tex += [r"\bottomrule", r"\end{tabular}", r"\caption{" + esc(caption) + "}", r"\label{tab:" + label + "}", r"\end{table}", ""]
+    tex += [r"\bottomrule", r"\end{tabular}", r"\caption{" + esc(caption) + "}", r"\label{tab:" + label + "}", r"\end{" + env + "}", ""]  # noqa: E501
     (OUT / f"{name}.tex").write_text("\n".join(tex), encoding="utf-8", newline="\n")
     md = ["| " + " | ".join(header) + " |", "|" + "---|" * len(header)] + [
         "| " + " | ".join(rows_) + " |" for rows_ in [list(map(str, r)) for r in rows]
@@ -240,6 +243,7 @@ def main() -> int:
             ["Setting", "Median ms", "p95 ms"],
             t7,
             "lrr",
+            wide=False,
         )
     except OSError:
         print("  efficiency: missing")
