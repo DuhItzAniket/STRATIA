@@ -75,6 +75,9 @@ def main() -> int:
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--train-fraction", type=float, default=1.0, help="P079: subsample the training rows per dataset")
     ap.add_argument("--monitor", default="val/mean_etage_f1")
+    ap.add_argument("--hard-targets", action="store_true",
+                    help="P091 ablation: one-hot / 0-1 targets instead of set-valued and soft ones (first listed genus, "
+                         "majority étages, majority okta)")
     a = ap.parse_args()
     t0 = time.perf_counter()
     torch.manual_seed(a.seed)
@@ -95,6 +98,8 @@ def main() -> int:
             drop_units = rng.choice(units, int(round(len(units) * (1 - a.train_fraction))), replace=False)
             keep[part.index[part.unit.isin(drop_units)]] = False
         rows = rows[keep].reset_index(drop=True)
+    if a.hard_targets:
+        rows = harden_targets(rows)
     geo_key = f"{a.name}_{len(rows)}"
     geo = D.GeometryCache.build(rows, data_root, cache_root / "geometry" / f"pool4_{geo_key}.npz")
     ds = D.GlobalDataset(rows, grid.rows_for(rows.sample_id), cls_cache.rows_for(rows.sample_id), grid.load("patches"),
@@ -119,7 +124,8 @@ def main() -> int:
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=a.epochs * a.batches_per_epoch)
     drop = GeometryDropout(a.p_drop, a.p_drop)
 
-    cfg = OmegaConf.create({"name": a.name, "lodo": a.lodo, "eye2sky_etage": a.eye2sky_etage, "epochs": a.epochs,
+    cfg = OmegaConf.create({"name": a.name, "lodo": a.lodo, "eye2sky_etage": a.eye2sky_etage, "hard_targets": a.hard_targets,
+                            "epochs": a.epochs,
                             "batch": a.batch, "batches_per_epoch": a.batches_per_epoch, "lr": a.lr,
                             "weight_decay": a.weight_decay, "dropout": a.dropout,
                             "hidden": a.hidden, "tau": a.tau, "p_drop": a.p_drop, "lambda_h": a.lambda_h, "kendall": a.kendall,
@@ -200,6 +206,33 @@ def main() -> int:
     print(f"done in {time.perf_counter() - t0:.0f} s: best {a.monitor} {res['best']:.3f} at epoch {best_epoch['epoch']} "
           f"-> {DOC}", flush=True)
     return 0
+
+
+def harden_targets(rows: pd.DataFrame) -> pd.DataFrame:
+    """P091 ablation: collapse every set-valued or soft target to one hard label. Genus: the first listed genus (ontology
+    order) of a set, the argmax of a share vector; étage: shares > 0.5 (a single étage when none passes); oktas: the
+    argmax okta. Weights and masks are untouched."""
+    rows = rows.copy()
+    genus, etage, oktas = [], [], []
+    for r in rows.itertuples(index=False):
+        g = np.asarray(r.genus_set, dtype=np.float32)
+        hard = np.zeros_like(g)
+        if r.mask_genus and g.max() > 0:
+            hard[int(np.flatnonzero(g >= min(g.max(), 0.5) if g.max() >= 0.5 else g.max())[0])] = 1.0
+        genus.append(hard)
+        e = np.asarray(r.etage, dtype=np.float32)
+        h = (e > 0.5).astype(np.float32)
+        if r.mask_etage and h.sum() == 0 and e.max() > 0:
+            h[int(e.argmax())] = 1.0
+        etage.append(h)
+        o = np.asarray(r.oktas, dtype=np.float32)
+        ho = np.zeros_like(o)
+        if r.mask_oktas and o.sum() > 0:
+            ho[int(o.argmax())] = 1.0
+        oktas.append(ho)
+    rows["genus_set"], rows["etage"], rows["oktas"] = genus, etage, oktas
+    rows["genus_alt"] = False
+    return rows
 
 
 def write_doc(df: pd.DataFrame) -> None:

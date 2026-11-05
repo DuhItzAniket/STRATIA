@@ -2,6 +2,91 @@
 
 GeometryEncoder + GlobalHeads on the pooled 8 x 8 DINOv3 ViT-S/16 grid; grouped in-domain splits (train -> val) or LODO folds (val = the held-out source's val units). Genus macro-F1 over native classes (noisy-OR of the class's genera), étage macro-F1 (threshold 0.5, columns with support), Montenegro oktas MAE / within-1 and the agreement with the majority étage set and oktas ±1 as a ratio to the P035 human ceiling (criterion C2 asks ≥ 0.90). 'train' rows are a fixed subset of the training rows (the fit report's gap).
 
+## abl_geoalways (best epoch 13, lodo = -)
+
+| Dataset | Split | c2_etage_ratio | c2_oktas_ratio | etage_f1 | etage_f1_tuned | etage_recall | etage_set_agreement | etage_unsupported_fp | genus_acc | genus_f1 | lowest_etage_acc | mean_etage_f1 | mean_genus_f1 | n_etage | n_genus | oktas_kl | oktas_mae | oktas_within1 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| all | train | - | - | - | - | - | - | - | - | - | - | 0.933 | 0.951 | - | - | - | - | - |
+| all | val | - | - | - | - | - | - | - | - | - | - | 0.829 | 0.709 | - | - | - | - | - |
+| almeria | train | - | - | 0.947 | 0.949 | - | - | nan | - | - | - | - | - | 570.000 | - | - | - | - |
+| almeria | val | - | - | 0.787 | 0.820 | - | - | nan | - | - | - | - | - | 84.000 | - | - | - | - |
+| ccsn | train | - | - | 0.982 | 0.984 | - | - | nan | 0.909 | 0.906 | - | - | - | 901.000 | 1000.000 | - | - | - |
+| ccsn | val | - | - | 0.777 | 0.804 | - | - | nan | 0.624 | 0.619 | - | - | - | 236.000 | 255.000 | - | - | - |
+| eye2sky_cbh | train | - | - | - | - | 0.990 | - | - | - | - | 0.832 | - | - | 1000.000 | - | - | - | - |
+| eye2sky_cbh | val | - | - | - | - | 0.968 | - | - | - | - | 0.805 | - | - | 1233.000 | - | - | - | - |
+| mgcd | train | - | - | 1.000 | 1.000 | - | - | 0.000 | 0.997 | 0.997 | - | - | - | 530.000 | 877.000 | - | - | - |
+| mgcd | val | - | - | 1.000 | 1.000 | - | - | 0.000 | 0.839 | 0.798 | - | - | - | 438.000 | 789.000 | - | - | - |
+| montenegro | train | 1.062 | 1.000 | 0.802 | 0.847 | - | 0.905 | nan | - | - | - | - | - | 1000.000 | - | 0.613 | 0.635 | 0.873 |
+| montenegro | val | 1.054 | 1.049 | 0.751 | 0.763 | - | 0.898 | nan | - | - | - | - | - | 511.000 | - | 0.571 | 0.444 | 0.916 |
+
+## abl_hard (best epoch 12, lodo = -)
+
+| Dataset | Split | c2_etage_ratio | c2_oktas_ratio | etage_f1 | etage_f1_tuned | etage_recall | etage_set_agreement | etage_unsupported_fp | genus_acc | genus_f1 | lowest_etage_acc | mean_etage_f1 | mean_genus_f1 | n_etage | n_genus | oktas_kl | oktas_mae | oktas_within1 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| all | train | - | - | - | - | - | - | - | - | - | - | 0.944 | 0.941 | - | - | - | - | - |
+| all | val | - | - | - | - | - | - | - | - | - | - | 0.794 | 0.729 | - | - | - | - | - |
+| almeria | train | - | - | 0.917 | 0.935 | - | - | nan | - | - | - | - | - | 570.000 | - | - | - | - |
+| almeria | val | - | - | 0.767 | 0.823 | - | - | nan | - | - | - | - | - | 84.000 | - | - | - | - |
+| ccsn | train | - | - | 0.967 | 0.969 | - | - | nan | 0.892 | 0.886 | - | - | - | 901.000 | 1000.000 | - | - | - |
+| ccsn | val | - | - | 0.771 | 0.784 | - | - | nan | 0.635 | 0.626 | - | - | - | 236.000 | 255.000 | - | - | - |
+| eye2sky_cbh | train | - | - | - | - | 0.987 | - | - | - | - | 0.811 | - | - | 1000.000 | - | - | - | - |
+| eye2sky_cbh | val | - | - | - | - | 0.974 | - | - | - | - | 0.800 | - | - | 1233.000 | - | - | - | - |
+| mgcd | train | - | - | 1.000 | 1.000 | - | - | 0.000 | 0.995 | 0.995 | - | - | - | 530.000 | 877.000 | - | - | - |
+| mgcd | val | - | - | 1.000 | 1.000 | - | - | 0.000 | 0.891 | 0.831 | - | - | - | 438.000 | 789.000 | - | - | - |
+| montenegro | train | 1.104 | 0.971 | 0.893 | 0.896 | - | 0.941 | nan | - | - | - | - | - | 1000.000 | - | 0.974 | 0.679 | 0.848 |
+| montenegro | val | 0.942 | 1.036 | 0.638 | 0.666 | - | 0.802 | nan | - | - | - | - | - | 511.000 | - | 0.807 | 0.477 | 0.904 |
+
+## abl_kendall (best epoch 13, lodo = -)
+
+| Dataset | Split | c2_etage_ratio | c2_oktas_ratio | etage_f1 | etage_f1_tuned | etage_recall | etage_set_agreement | etage_unsupported_fp | genus_acc | genus_f1 | lowest_etage_acc | mean_etage_f1 | mean_genus_f1 | n_etage | n_genus | oktas_kl | oktas_mae | oktas_within1 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| all | train | - | - | - | - | - | - | - | - | - | - | 0.957 | 0.967 | - | - | - | - | - |
+| all | val | - | - | - | - | - | - | - | - | - | - | 0.814 | 0.716 | - | - | - | - | - |
+| almeria | train | - | - | 0.984 | 0.985 | - | - | nan | - | - | - | - | - | 570.000 | - | - | - | - |
+| almeria | val | - | - | 0.766 | 0.789 | - | - | nan | - | - | - | - | - | 84.000 | - | - | - | - |
+| ccsn | train | - | - | 0.993 | 0.995 | - | - | nan | 0.938 | 0.936 | - | - | - | 901.000 | 1000.000 | - | - | - |
+| ccsn | val | - | - | 0.780 | 0.814 | - | - | nan | 0.655 | 0.643 | - | - | - | 236.000 | 255.000 | - | - | - |
+| eye2sky_cbh | train | - | - | - | - | 0.987 | - | - | - | - | 0.843 | - | - | 1000.000 | - | - | - | - |
+| eye2sky_cbh | val | - | - | - | - | 0.963 | - | - | - | - | 0.821 | - | - | 1233.000 | - | - | - | - |
+| mgcd | train | - | - | 1.000 | 1.000 | - | - | 0.000 | 0.998 | 0.998 | - | - | - | 530.000 | 877.000 | - | - | - |
+| mgcd | val | - | - | 1.000 | 1.000 | - | - | 0.000 | 0.831 | 0.790 | - | - | - | 438.000 | 789.000 | - | - | - |
+| montenegro | train | 1.086 | 0.975 | 0.849 | 0.877 | - | 0.925 | nan | - | - | - | - | - | 1000.000 | - | 0.654 | 0.681 | 0.851 |
+| montenegro | val | 1.043 | 1.036 | 0.710 | 0.719 | - | 0.888 | nan | - | - | - | - | - | 511.000 | - | 0.577 | 0.476 | 0.904 |
+
+## abl_nogeo (best epoch 17, lodo = -)
+
+| Dataset | Split | c2_etage_ratio | c2_oktas_ratio | etage_f1 | etage_f1_tuned | etage_recall | etage_set_agreement | etage_unsupported_fp | genus_acc | genus_f1 | lowest_etage_acc | mean_etage_f1 | mean_genus_f1 | n_etage | n_genus | oktas_kl | oktas_mae | oktas_within1 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| all | train | - | - | - | - | - | - | - | - | - | - | 0.945 | 0.962 | - | - | - | - | - |
+| all | val | - | - | - | - | - | - | - | - | - | - | 0.809 | 0.720 | - | - | - | - | - |
+| almeria | train | - | - | 0.969 | 0.970 | - | - | nan | - | - | - | - | - | 570.000 | - | - | - | - |
+| almeria | val | - | - | 0.780 | 0.801 | - | - | nan | - | - | - | - | - | 84.000 | - | - | - | - |
+| ccsn | train | - | - | 0.991 | 0.992 | - | - | nan | 0.929 | 0.927 | - | - | - | 901.000 | 1000.000 | - | - | - |
+| ccsn | val | - | - | 0.771 | 0.793 | - | - | nan | 0.627 | 0.612 | - | - | - | 236.000 | 255.000 | - | - | - |
+| eye2sky_cbh | train | - | - | - | - | 0.991 | - | - | - | - | 0.826 | - | - | 1000.000 | - | - | - | - |
+| eye2sky_cbh | val | - | - | - | - | 0.974 | - | - | - | - | 0.792 | - | - | 1233.000 | - | - | - | - |
+| mgcd | train | - | - | 1.000 | 1.000 | - | - | 0.000 | 0.998 | 0.998 | - | - | - | 530.000 | 877.000 | - | - | - |
+| mgcd | val | - | - | 1.000 | 1.000 | - | - | 0.000 | 0.872 | 0.828 | - | - | - | 438.000 | 789.000 | - | - | - |
+| montenegro | train | 1.068 | 1.021 | 0.819 | 0.859 | - | 0.910 | nan | - | - | - | - | - | 1000.000 | - | 0.584 | 0.597 | 0.891 |
+| montenegro | val | 1.036 | 1.063 | 0.685 | 0.701 | - | 0.883 | nan | - | - | - | - | - | 511.000 | - | 0.584 | 0.417 | 0.928 |
+
+## abl_noh (best epoch 14, lodo = -)
+
+| Dataset | Split | c2_etage_ratio | c2_oktas_ratio | etage_f1 | etage_f1_tuned | etage_recall | etage_set_agreement | etage_unsupported_fp | genus_acc | genus_f1 | lowest_etage_acc | mean_etage_f1 | mean_genus_f1 | n_etage | n_genus | oktas_kl | oktas_mae | oktas_within1 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| all | train | - | - | - | - | - | - | - | - | - | - | 0.937 | 0.956 | - | - | - | - | - |
+| all | val | - | - | - | - | - | - | - | - | - | - | 0.813 | 0.712 | - | - | - | - | - |
+| almeria | train | - | - | 0.954 | 0.958 | - | - | nan | - | - | - | - | - | 570.000 | - | - | - | - |
+| almeria | val | - | - | 0.777 | 0.818 | - | - | nan | - | - | - | - | - | 84.000 | - | - | - | - |
+| ccsn | train | - | - | 0.987 | 0.988 | - | - | nan | 0.914 | 0.912 | - | - | - | 901.000 | 1000.000 | - | - | - |
+| ccsn | val | - | - | 0.782 | 0.802 | - | - | nan | 0.635 | 0.629 | - | - | - | 236.000 | 255.000 | - | - | - |
+| eye2sky_cbh | train | - | - | - | - | 0.990 | - | - | - | - | 0.829 | - | - | 1000.000 | - | - | - | - |
+| eye2sky_cbh | val | - | - | - | - | 0.968 | - | - | - | - | 0.808 | - | - | 1233.000 | - | - | - | - |
+| mgcd | train | - | - | 1.000 | 1.000 | - | - | 0.000 | 0.999 | 0.999 | - | - | - | 530.000 | 877.000 | - | - | - |
+| mgcd | val | - | - | 1.000 | 1.000 | - | - | 0.000 | 0.837 | 0.795 | - | - | - | 438.000 | 789.000 | - | - | - |
+| montenegro | train | 1.066 | 1.011 | 0.806 | 0.850 | - | 0.908 | nan | - | - | - | - | - | 1000.000 | - | 0.600 | 0.613 | 0.883 |
+| montenegro | val | 1.034 | 1.042 | 0.691 | 0.718 | - | 0.881 | nan | - | - | - | - | - | 511.000 | - | 0.573 | 0.458 | 0.910 |
+
 ## hpo_t00 (best epoch 10, lodo = -)
 
 | Dataset | Split | c2_etage_ratio | c2_oktas_ratio | etage_f1 | etage_recall | etage_set_agreement | etage_unsupported_fp | genus_acc | genus_f1 | lowest_etage_acc | mean_etage_f1 | mean_genus_f1 | n_etage | n_genus | oktas_kl | oktas_mae | oktas_within1 |
