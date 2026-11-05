@@ -21,17 +21,19 @@ supplementary (code, splits, data card).
 | montenegro2025 | Zenodo 21787669 | confirmed (Plamenac & Tomovic, published 2026-08-04, CC BY 4.0) |
 | almeria2025 | Zenodo 14639170 | confirmed (Fabel et al., 2025; supplement to 10.5194/amt-15-797-2022) |
 | simeoni2025dinov3 | arXiv 2508.10104 | confirmed (27 authors) |
-| oquab2024dinov2 | arXiv 2304.07193 | title and authors confirmed; **TMLR venue from memory — confirm** |
-| ranftl2021dpt | arXiv 2103.13413 | title and authors confirmed; **ICCV 2021 venue from memory — confirm** |
+| oquab2024dinov2 | jmlr.org/tmlr/papers listing (2026-11-06) | confirmed (Transactions on Machine Learning Research, January 2024) |
+| ranftl2021dpt | CVF open access (2026-11-06) | confirmed (ICCV 2021, pp. 12179–12188) |
 | guo2017calibration | PMLR v70 | confirmed (pages 1321–1330) |
 | lee2018mahalanobis | arXiv 1807.03888 | confirmed ("Accepted in NIPS 2018") |
-| liu2020energy | arXiv 2010.03759 | title and authors confirmed; **NeurIPS 2020 venue from memory — confirm** |
+| liu2020energy | proceedings.neurips.cc (2026-11-06) | confirmed (Advances in Neural Information Processing Systems 33, NeurIPS 2020) |
 | vovk2022conformal | Crossref 10.1007/978-3-031-06649-8 | confirmed (2nd edition, Springer 2022) |
 | angelopoulos2023conformal | Crossref 10.1561/2200000101 | confirmed (FnT ML 16(4), 494–591) |
-| krippendorff2004content | Crossref rate-limited (HTTP 429) | **edition / year from memory — confirm** |
+| krippendorff2018content | publisher's page (sagepub.com, 2026-11-06) | confirmed: 4th edition, Sage, 2018 (the entry now cites this edition) |
 | barz2020duplicates | Crossref 10.3390/jimaging6060041 | confirmed (J. Imaging 6(6), 41) |
 
-Four venues to confirm from the proceedings pages before submission; no entry is invented.
+All 18 entries verified against a publisher, proceedings, repository or journal page (the last four on 2026-11-06);
+no entry is invented. `paper/rebuttal_notes.md` holds the anticipated reviewer concerns with the answers the
+committed results support.
 
 ### Anonymity (review mode)
 - [x] `\usepackage[review]{cvpr}`, author block "Anonymous CVPR submission", no paper ID set yet (OpenReview gives it).
