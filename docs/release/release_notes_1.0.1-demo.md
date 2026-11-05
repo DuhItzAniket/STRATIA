@@ -42,6 +42,9 @@ is where they differ: étage-set agreement 0.000 → 0.463, oktas ±1 0.017 → 
   (0.28 of pixels on the clear-sky test set) and the glare class does not fire on the B0268 camera (circumsolar
   brightness is parsed as cloud); the conformal intervals fitted on spring weeks under-cover a summer season (0.72
   at the 80 % level). Zero-shot on a new camera is at the floor; adapt the heads (P084 recipe) first.
+- The CloudScope application refines the masks it draws (image-guided upsampling to 512 px) and applies a
+  geometric glare rule around the Sun when the geometry is known; those are presentation steps in the host, not
+  part of this graph, and none of the numbers above include them.
 - Licence: research use, non-commercial (see `docs/release/licences.md`).
 
 ## Package
