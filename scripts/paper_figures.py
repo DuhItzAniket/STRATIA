@@ -85,7 +85,7 @@ def architecture(out: Path) -> None:
     for y in (3.27, 2.17, 1.07, 0.27):
         _arrow(ax, (hx + hw, y), (ox, y))
     ax.set_xlim(0, ox + ow + 0.1)
-    ax.text((ox + ow) / 2, 3.8, "one ONNX graph · temperatures, conformal radii and OOD statistics folded in · runs inside the CloudScope desktop application",  # noqa: E501
+    ax.text((ox + ow) / 2, 3.8, "one ONNX graph · temperatures, conformal radii and OOD statistics folded in · runs inside the desktop application",  # noqa: E501
             ha="center", va="center", fontsize=7.8, color=GREY, style="italic")
     fig.savefig(out, dpi=220, bbox_inches="tight")
     plt.close(fig)

@@ -39,6 +39,10 @@ Four venues to confirm from the proceedings pages before submission; no entry is
   "BLR01" in the data section — **decide**: keep (a city is not identifying) or write "a tropical city".
 - [ ] Repository and release links withheld until camera-ready; the supplementary must be anonymised (strip the
   GitHub user from the zip, the git history and `PROJECT_STATE.md`).
+- [ ] **Decide (owner):** the public GitHub repositories are named STRATIA and CloudScope under the author's account
+  and a reviewer who searches the model's name can find them. Either make both private for the review period
+  (16 Nov 2026 until the decision) or accept the risk. The paper names neither repository nor the application
+  (the efficiency table and the architecture figure say "desktop application" since 2026-11-06).
 - [x] Acknowledgements absent.
 
 ### Supplementary

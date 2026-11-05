@@ -6,6 +6,6 @@
 | pytorch autocast fp16, RTX 4050, batch 1 | 15.0 | 16.2 |
 | pytorch fp32, RTX 4050, batch 8 (per frame) | 16.5 | 16.5 |
 | onnx runtime CPU, batch 1 | 144.1 | 149.4 |
-| CloudScope ONNX Runtime DirectML (NVIDIA GeForce RTX 4050 Laptop GPU), batch 1 | 29.2 | 33.0 |
-| CloudScope ONNX Runtime CPU, batch 1 | 148.7 | 153.7 |
+| desktop application ONNX Runtime DirectML (NVIDIA GeForce RTX 4050 Laptop GPU), batch 1 | 29.2 | 33.0 |
+| desktop application ONNX Runtime CPU, batch 1 | 148.7 | 153.7 |
 | Raspberry Pi 5 | – | – |

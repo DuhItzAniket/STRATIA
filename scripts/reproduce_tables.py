@@ -230,7 +230,8 @@ def main() -> int:
     # ---- Table 7: efficiency (P094)
     try:
         ef = json.loads((result_file("efficiency.json")).read_text(encoding="utf-8"))
-        t7 = [[k, f"{v['median_ms']:.1f}", f"{v['p95_ms']:.1f}"] for k, v in ef["latency"].items() if isinstance(v, dict)]
+        t7 = [[k.replace("CloudScope", "desktop application"), f"{v['median_ms']:.1f}", f"{v['p95_ms']:.1f}"]
+              for k, v in ef["latency"].items() if isinstance(v, dict)]  # the host app is not named in review
         t7.append(["Raspberry Pi 5", "–", "–"])
         table(
             "tab7_efficiency",
