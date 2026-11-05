@@ -1,0 +1,26 @@
+\section{Limitations}
+\label{sec:limitations}
+
+\paragraph{Two criteria failed.} The heads do not beat a linear probe on cross-dataset \'etage by the margin we
+asked for, and the smaller backbone trails the ViT-L probe on in-domain genus. We chose ViT-S/16 for the laptop and
+edge budget; the honest reading of \cref{tab:recognition} is that for recognition alone a probe on a larger frozen
+backbone is as good, and that the heads earn their keep on the set-valued, dense and height tasks. The conformal
+intervals fitted on spring weeks under-cover a summer test season; a deployment must refit the radii on recent
+ceilometer data or report the wider raw intervals.
+
+\paragraph{Geography and seasons.} The ceilometer pairs come from one camera network in one region over four
+months; the recognition sets are web images and three sites. The owner's camera is the only tropical sky in the
+corpus, and only through adaptation. Skill at a site never seen in training is evidence of transfer, not of
+global validity.
+
+\paragraph{Camera identity.} Dataset identity is linearly readable from the features at 99.7\,\% and remains so
+after training; our protocol holds cameras out rather than pretending otherwise, and the OOD state exists because a
+new camera \emph{will} be recognised as new. Zero-shot on such a camera is near zero; three afternoons of labels
+were needed.
+
+\paragraph{Labels.} The mid \'etage is rare on four of five sources and is the one the model misses; glare breaks
+the sky parse; the human ceiling comes from one five-rater set whose test portion is two blocks of days. The
+Eye2Sky \'etage rows are weak labels derived from the ceilometer's lowest base.
+
+\paragraph{Not measured.} The Raspberry Pi 5 edge student, INT8 quantisation and self-training over more days of
+the owner's camera are planned and not reported; the table cells are left blank rather than estimated.

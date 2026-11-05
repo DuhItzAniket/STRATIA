@@ -1,0 +1,37 @@
+\section{Data and Protocol}
+\label{sec:data}
+
+\paragraph{Sources.} Seven public datasets and our own camera: CCSN~\cite{zhang2018cloudnet} (2,543 web images,
+11 genera with alternatives), MGCD~\cite{liu2020mgcd} (8,000 camera images, 7 sky types), SWIMCAT and the
+SWIMSEG/SWINSEG/SWINySEG family~\cite{dev2017colorbased} (sky types and sky/cloud masks), Montenegro~\cite{montenegro2025}
+(2,522 all-sky images with five expert annotations each: altitude class, genus codes, cover in oktas),
+Almer\'ia~\cite{almeria2025} (818 all-sky images with sky/cloud/layer masks), Eye2Sky~\cite{eye2sky} (four all-sky
+imagers with CHM15k ceilometers at two of them; April--July 2022), and B0268, a 16-megapixel fisheye camera on
+the authors' rooftop in Bengaluru (393 labelled frames over four afternoons). The corpus holds 52,425 images; the
+data card lists every licence.
+
+\paragraph{Leakage audit.} Perceptual hashes under the dihedral group, DINOv3 embeddings and the datasets' own
+metadata find 661 exact duplicates in 312 within-dataset groups, 34.6\,\% of SWINySEG as flipped or rotated copies
+of SWIMSEG/SWINSEG, MGCD's 8,000 images in about 227 same-scene groups, and CCSN images that carry a second genus
+on a copy of themselves (7.9\,\%). Temporal autocorrelation puts Eye2Sky frames of one day at 82--92\,\% same-scene
+similarity, decorrelating only across days; Montenegro is correlated across days and needs contiguous blocks of at
+least seven days. A shortcut audit shows that dataset identity is readable from frozen features at 99.7\,\% and
+the Eye2Sky station at 100\,\%: camera identity cannot be masked, so the protocol holds out cameras and datasets
+rather than images. The CCSN number that motivates all of this: a grouped split scores \emph{lower} than the random
+split (0.511 vs 0.588 macro-F1 for the same probe), because the random split's errors are concentrated on the
+duplicates that leaked.
+
+\paragraph{Harmonisation.} Every native label maps into the WMO hierarchy (genus $\rightarrow$ \'etage) as a
+\emph{set}: a CCSN image with an alternative genus keeps both, a Montenegro image keeps the share of raters per
+genus and \'etage and the distribution of oktas, an Eye2Sky frame paired with a ceilometer gets the \'etage of the
+lowest base as a known positive and the \'etages below it as weak negatives. Losses are masked where a label is
+unknown. The human ceiling on Montenegro is the leave-one-out agreement of a rater with the majority of the
+others: 0.852 on the \'etage set and 0.873 on cover within $\pm1$ okta (alpha 0.66 and 0.96).
+
+\paragraph{Splits and the lock.} In-domain splits assign whole duplicate or temporal \emph{units} to train, val
+and test (70/10/20) with conflicting images never in test; leave-one-dataset-out (LODO) folds hold out a whole
+source; a held-out-station split holds out one Eye2Sky camera; the ceilometer pairs are split by day with the second
+site's data entirely in test for one model; the B0268 frames are split by day with the last day locked. The 23 test
+manifests are hashed into a lock file that CI checks; the research design fixed three success criteria on
+validation data before training (C1 transfer, C2 expert agreement, C3 cloud-base height); the locked sets were
+read once, with the reason logged, and every number from them in this paper comes from that one read.

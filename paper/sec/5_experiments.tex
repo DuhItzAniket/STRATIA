@@ -1,0 +1,109 @@
+\section{Experiments}
+\label{sec:experiments}
+
+All test numbers in this section come from one logged read of the locked test sets (\cref{sec:data}); every
+other number is on validation units. Intervals are 95\,\% cluster bootstraps over the split units (duplicate or
+temporal groups, days for the ceilometer pairs), 1,000 resamples. Baselines are a linear probe on the best frozen
+backbone of our own probe sweep (DINOv3 ViT-L/16 for in-domain genus, ViT-B/16 for cross-dataset \'etage) and a
+ridge on the same frozen features for cloud-base height, so that every comparison isolates what the heads add.
+
+\subsection{Pre-registered criteria}
+\input{tables/tab1_criteria}
+\Cref{tab:criteria} is the paper in one table. The three criteria were fixed before training with their
+thresholds; two of the eight clauses fail on the test read and we leave them failed. C1 asked the heads to beat the
+probe on cross-dataset \'etage by 0.05 macro-F1 and to match it within 0.01 on in-domain genus; the heads lead the
+probe by \nLodoModel{} to \nLodoProbe{} (within the interval) and trail the larger ViT-L probe on genus
+(\nIndGenusModel{} vs \nIndGenusProbe{}). C2 asked for 90\,\% of the expert ceiling on the five-rater set and holds
+on both \'etage sets (\nCtwoEtage{}) and cover (\nCtwoOktas{}). C3 asked for skill over climatology at the seen site
+and at a site never trained on, and for a 10\,\% MAE lead over the ridge; all three hold with the test intervals
+clear of the thresholds. Its fourth clause, 80\,\% conformal coverage, does not: the intervals fitted on the spring
+validation days cover \nCovEighty{} of the summer test pairs, where the climatology MAE itself grows from 1,147\,m
+to \nMaeClim{}\,m. The calibration transfers worse than the point estimate.
+
+\subsection{Recognition}
+\input{tables/tab2_recognition}
+\Cref{tab:recognition} breaks the criteria down by source. The heads win where the probe has the least to go on
+(CCSN genus with its alternatives, Almer\'ia and CCSN \'etage held out) and lose on MGCD, whose seven sky types a
+linear probe already separates at 0.918, and on Montenegro held out, where the mid \'etage is rare (2\,\% of
+images) and the heads over-predict ``high''. The error analysis (\cref{fig:confusion}) shows where the remaining
+genus errors live: stratus and stratocumulus are swapped on 18.5\,\% of their CCSN rows, cirrus and cirrostratus
+on 7.0\,\%, altostratus and nimbostratus on 6.4\,\%, and MGCD altocumulus is read as stratocumulus 71\,\% of the
+time, pairs that human annotators also split on. The mid \'etage is the one the model misses most, on every source
+that has it (35--46\,\% missed at the 0.5 threshold).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig/genus_confusion.png}
+\caption{Genus confusion on validation, native classes, for CCSN (left) and MGCD (right). Errors concentrate on
+the pairs that the WMO hierarchy itself places as neighbours.}
+\label{fig:confusion}
+\end{figure}
+
+\subsection{Against the expert ceiling}
+\input{tables/tab6_human_ceiling}
+C2 compares with the ceiling as a ratio; \cref{tab:humanceiling} puts the model in the annotators' seats. Adding
+STRATIA as a sixth rater raises Krippendorff's alpha on \'etage sets from \nAlphaEtageHumans{} to
+\nAlphaEtageModel{} (the model agrees with the group more than the average human does) and leaves cover alpha
+unchanged within 0.004. In leave-one-out terms the model agrees with the other raters' majority on
+\nLooEtageModel{} of images against a human mean of \nLooEtageHumans{}, which ranks it second of six raters; on
+cover it ranks last of six, at \nLooOktasModel{} against \nLooOktasHumans{}, close behind the humans. These are
+validation images (the Montenegro test set is two blocks of days and too small to rank six raters).
+
+\subsection{Cloud-base height}
+\input{tables/tab3_cbh}
+\Cref{tab:cbh} reports the ceilometer-paired test pairs. The height head halves the climatology error and beats the
+ridge on the same features by 20\,\% in MAE; trained on one station and tested on the other it keeps a skill of
+\nSkillWeste{}, so what it learns is not a station's climatology. Zeroing the geometry at test time changes the
+MAE by 3\,m, which says the head reads height from appearance, not from where the camera points (the SkyRay
+ablations in \cref{tab:ablations} say the same for the global heads). Calibrated 95\,\% intervals cover
+\nCovNinetyFive{} and the 80\,\% intervals \nCovEighty{}; \cref{fig:cbh} shows the per-pair scatter on the
+validation days.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fig/cbh_scatter.png}
+\caption{Predicted against ceilometer cloud-base height on the validation days (log axes), with the 80\,\%
+conformal interval of each pair in grey.}
+\label{fig:cbh}
+\end{figure}
+
+\subsection{Sky parse, OOD and glare}
+The dense head reaches a sky/cloud/glare mIoU of \nSkyMiou{} on the pooled test masks and a layer mIoU of
+\nLayerMiou{} on Almer\'ia; on the clear-sky test frames it still calls \nClearCloud{} of the pixels cloud, most of
+it in the circumsolar region. The OOD score separates the owner's camera from the in-domain test frames at an
+AUROC of \nOodAuroc{}. Under a synthetic Sun-glare corruption on validation, \'etage F1 drops from 0.838 to 0.760,
+sky mIoU from 0.901 to 0.816, and the clear-sky cloud fraction rises from 0.29 to 0.47: glare is the single
+failure mode we can name, and the parse rather than the recognition is what it breaks.
+
+\subsection{Ablations}
+\input{tables/tab5_ablations}
+\Cref{tab:ablations} varies the global heads one factor at a time on validation (one seed; the three reference
+seeds spread by less than 0.01 in mean \'etage F1). Dropping the geometry always (\nAblNoGeo) or giving it always
+(\nAblGeoAlways) brackets the reference (\nAblRef) within a point either way: SkyRay is cheap and does not hurt, but
+on these sources the signal in the pixels dominates. Collapsing the set-valued and soft targets to one hard label
+costs more (\nAblHard): the \emph{sets} are worth more than the geometry. Removing the hierarchy loss (\nAblNoH) and
+uncertainty-weighting the tasks (\nAblKendall) are within noise of the reference. The weak \'etage rows derived
+from the ceilometers are what make the all-sky folds transfer: without them the held-out Almer\'ia fold drops from
+0.593 to 0.327 and Montenegro from 0.360 to 0.258, while MGCD, whose \'etages follow its seven sky types, gains;
+the four-fold mean goes from 0.486 to the 0.548 of C1. Joint multi-task training and LoRA unfreezing of the last
+blocks, tried in earlier stages, did not beat the staged cached-feature training that the released model uses
+(layer mIoU 0.544 jointly against 0.559 staged); the released ablation tables report them.
+
+\subsection{Efficiency}
+\input{tables/tab7_efficiency}
+The exported graph has \nParamsM{}\,M parameters, of which \nHeadsParamsM{}\,M are above the frozen backbone, and
+runs at \nGFlops{}\,GFLOPs for one 512$\times$512 frame (\cref{tab:efficiency}); inside the desktop application on a
+laptop GPU through DirectML it takes \nLatencyDml{}\,ms per frame, and \nLatencyCpu{}\,ms on the CPU provider. The
+Raspberry Pi 5 figure is left blank: the edge student is planned but not measured.
+
+\subsection{A new camera from three afternoons}
+\label{sec:b0268}
+\input{tables/tab4_b0268}
+The released graph was pointed at the authors' own fisheye camera, a lens, exposure and horizon no training image
+shares. Zero-shot (\cref{tab:b0268}) it is useless and says so: it agrees with the two annotators on
+\nZsEtage{} of \'etage sets and \nZsOktas{} of cover within one okta on the locked fourth day, and flags \nZsOod{} of
+the frames as out of distribution. Fine-tuning the global heads on the three earlier afternoons (273 frames, source
+replay, regression guard) and re-exporting brings the agreement to \nAdEtage{} and \nAdOktas{}, with the top genus
+inside the annotators' set on every frame and no frame flagged; the two annotators agree with each other on
+0.911 and 0.771. The adapted graph is the one the application ships, and the fourth day was read once, after the
+graph was frozen.

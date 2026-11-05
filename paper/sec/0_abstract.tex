@@ -1,0 +1,20 @@
+\begin{abstract}
+Ground-based sky cameras are cheap, but the models trained on them are usually evaluated on leaked splits, forced
+single labels and one camera. We present STRATIA, a single-image model that reads cloud genus, \'etage, cover in
+oktas, a per-pixel sky parse and a calibrated cloud-base height (CBH) distribution from one all-sky picture, and
+the protocol that makes its numbers believable. A leakage audit of 52,425 images from seven public datasets and our
+own camera removes duplicate and same-scene images from across splits, harmonises the labels into the WMO
+genus/\'etage hierarchy as \emph{sets}, and measures a human ceiling from five expert annotators. The model keeps a
+frozen DINOv3 ViT-S/16 backbone and adds a \emph{SkyRay} encoder that tells each token where in the sky it looks
+(a ray map from the camera calibration and the Sun's position), with geometry dropout so unknown geometry is a valid
+input. Success criteria were pre-registered and the test sets locked and read once. On them, the model reaches
+\nCtwoEtage{} of expert--expert agreement on \'etage sets and \nCtwoOktas{} on cover; as a sixth annotator it ranks
+second of six on \'etage sets. Its cloud-base height, learned from ceilometer-paired frames of a camera network,
+has skill \nSkillOldlr{} over climatology at a seen site and \nSkillWeste{} at a site never seen in training,
+\nMaeModel{}\,m MAE against \nMaeRidge{}\,m for a ridge on the same frozen features. Two pre-registered claims
+fail and we report them: cross-dataset \'etage transfer does not beat a linear probe (\nLodoModel{} vs
+\nLodoProbe{} macro-F1), and split-conformal intervals fitted on spring weeks cover \nCovEighty{} instead of 0.80 on a
+different season. The deployed graph runs at \nLatencyDml{}\,ms per frame on a laptop GPU inside an open desktop
+application, flags out-of-distribution skies (AUROC \nOodAuroc{}), and adapts to a new camera from three afternoons
+of captures. Code, splits, data card and the locked results are released.
+\end{abstract}

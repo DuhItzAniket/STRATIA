@@ -1,0 +1,44 @@
+\section{Introduction}
+\label{sec:intro}
+
+Knowing what the sky is doing above a point still takes a trained observer or a ceilometer. An observer reports
+cloud genus, amount and base height by eye following the WMO conventions~\cite{wmo2017atlas}; a ceilometer
+measures the base height along one vertical line and costs more than most of the stations that would like one.
+Upward-looking cameras cost a few thousand rupees, and a decade of work has shown that cloud type, cover and even
+base height can be read from their pictures~\cite{zhang2018cloudnet,dev2017colorbased,liu2020mgcd}. Yet almost
+none of that work transfers to a camera it was not trained on, and much of it reports numbers that do not survive
+a second look.
+
+Three problems stand between the published results and a deployable model. First, \emph{leakage}: the popular
+recognition sets are built from web images and time series; exact and near-duplicate images straddle train and
+test splits, and the same scene appears minutes apart. Our audit (\cref{sec:data}) finds that the 91--97\,\%
+accuracies reported on CCSN~\cite{zhang2018cloudnet} fall to 57--62\,\% once duplicates are grouped. Second,
+\emph{forced labels}: experts disagree on cloud type on a large fraction of images; a single hard label hides a
+measurable ceiling, and a model scored against it is scored against noise. Third, \emph{one camera}: a classifier
+that has never seen another lens, exposure or horizon does not know that it is looking at a new sky; it answers
+anyway.
+
+This paper treats those three problems as the method. We assemble seven public datasets and our own camera into a
+single corpus with grouped, day-blocked and leave-one-dataset-out splits, WMO-harmonised \emph{set-valued} labels
+and a human ceiling measured from five annotators; we pre-register the success criteria and lock the test sets
+before any model is trained, and read them once. On that footing we build STRATIA (\cref{fig:teaser}): a frozen
+DINOv3 ViT-S/16 backbone~\cite{simeoni2025dinov3}, a \emph{SkyRay} encoder that adds to every token the direction it
+looks at (from the camera calibration) and where the Sun is, with geometry dropout so that ``unknown'' geometry is a
+valid input, and heads for genus and \'etage sets, ordinal cover, a sky/cloud/glare parse with cloud layers, an
+ordinal cloud-base height distribution supervised by ceilometers of an all-sky camera network~\cite{eye2sky}, and
+an out-of-distribution score that turns into an explicit \emph{uncertain} state. The whole model exports to one ONNX
+graph with its calibration folded in, and runs inside an open desktop application on a laptop GPU.
+
+\paragraph{Contributions.}
+\begin{itemize}
+\item A leakage-audited, WMO-harmonised benchmark protocol for sky cameras: grouped and temporal splits, LODO
+  folds, a held-out station, set-valued labels, a measured expert ceiling, and locked test sets with a logged
+  single read (\cref{sec:data}).
+\item STRATIA: geometry-aware heads on a frozen foundation backbone, trained on cached features in stages, with
+  temperature and split-conformal calibration and an OOD score (\cref{sec:method}).
+\item Locked-test results with bootstrap intervals (\cref{sec:experiments}): expert-level agreement on
+  \'etage and cover, ceilometer-level cloud-base height that transfers to a site never seen in training, and two
+  pre-registered negatives reported as such.
+\item A few-shot adaptation to the authors' own camera from three afternoons, verified on a locked fourth day, and
+  a working deployment (\cref{sec:b0268}).
+\end{itemize}

@@ -1,0 +1,33 @@
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Ground-based cloud classification.} CCSN~\cite{zhang2018cloudnet} introduced an eleven-class genus set
+of web images and a CNN baseline; the Tianjin multimodal series (MGCD)~\cite{liu2020mgcd} added a camera and
+weather variables; SWIMCAT~\cite{dev2017colorbased} groups five sky types. Reported accuracies are high but the
+protocols are random image splits; our audit (\cref{sec:data}) and that of others on near-duplicate web
+data~\cite{barz2020duplicates} show why such numbers do not transfer. We keep the datasets and change the protocol.
+
+\paragraph{Sky parsing and layers.} Colour-based and learned segmentation of sky versus cloud is well studied on the
+SWIMSEG/SWINSEG family~\cite{dev2017colorbased}; multi-layer masks exist for one all-sky camera set in
+Almer\'ia~\cite{almeria2025}. We train one dense head for both on frozen tokens with a light DPT-style
+decoder~\cite{ranftl2021dpt}.
+
+\paragraph{Cloud-base height from cameras.} Stereo pairs of all-sky imagers and ceilometer references give
+base heights for a network~\cite{blum2021cloudheight,eye2sky}; single-camera height from appearance alone is rarer and rarely
+calibrated. We learn a 24-bin ordinal height distribution from ceilometer-paired frames and report it with
+split-conformal intervals~\cite{vovk2022conformal,angelopoulos2023conformal}.
+
+\paragraph{Expert disagreement as a ceiling.} Krippendorff's alpha~\cite{krippendorff2004content} and
+leave-one-out agreement are standard in annotation studies; the Montenegro expert set~\cite{montenegro2025}
+provides five raters per image and lets us put a model on the same footing as a human annotator rather than
+against a majority vote.
+
+\paragraph{Foundation features and the sky.} Self-supervised ViTs transfer as frozen feature
+extractors~\cite{simeoni2025dinov3,oquab2024dinov2}; linear probes on them are strong baselines for recognition,
+which is why our pre-registered transfer criterion is measured against the best such probe. Geometry-conditioned
+tokens are common in 3D vision; feeding the ray direction of every patch, with the Sun, to a sky model is, to our
+knowledge, new.
+
+\paragraph{Calibration and OOD.} Temperature scaling~\cite{guo2017calibration}, Mahalanobis~\cite{lee2018mahalanobis}
+and energy~\cite{liu2020energy} scores are the components we combine; we fit all of them on validation data and
+test them once.
