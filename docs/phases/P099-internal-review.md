@@ -66,6 +66,10 @@ Four venues to confirm from the proceedings pages before submission; no entry is
 
 ### Mentor read
 - [ ] One pass by the mentor on the claims in the abstract and the two failed criteria.
+- [x] The paper states that the owner's-camera labels come from two vision-language models, not people (data
+  section, §5.8, limitations, Table 4 caption), that the adaptation configuration was selected on held-out days
+  (optimistic) while the locked day took no part in it, and that one adaptation draw exceeded the regression
+  guard (2026-11-06).
 - [ ] Decide whether to keep the LODO clause of C1 as a negative or to drop the "+0.05" framing to "did not beat
   the probe by the pre-registered margin" (the paper currently says exactly that).
 

@@ -24,7 +24,9 @@ this; a checkerboard calibration and the fitted pose are the first things to do 
 
 \paragraph{Labels.} The mid \'etage is rare on four of five sources and is the one the model misses; glare breaks
 the sky parse; the human ceiling comes from one five-rater set whose test portion is two blocks of days. The
-Eye2Sky \'etage rows are weak labels derived from the ceilometer's lowest base.
+Eye2Sky \'etage rows are weak labels derived from the ceilometer's lowest base. The owner's-camera labels come
+from vision--language models, not observers (\cref{sec:b0268}): the adaptation result shows that the heads can be
+moved to a new camera from a few afternoons, not that they then match a human observer there.
 
 \paragraph{Not measured.} The Raspberry Pi 5 edge student, INT8 quantisation and self-training over more days of
 the owner's camera are planned and not reported; the table cells are left blank rather than estimated.

@@ -171,10 +171,10 @@ def main() -> int:
             for m in ("etage_set_agreement", "oktas_within1", "genus_top1_in_set", "ood_flagged_share")
         ]
         t4.append([label] + [f3(v) for v in vals])
-    t4.append(["rater vs rater (ceiling)", "0.911", "0.771", "–", "–"])
+    t4.append(["annotator vs annotator (ceiling)", "0.911", "0.771", "–", "–"])
     table(
         "tab4_b0268",
-        "The owner's camera (Arducam B0268), locked day 2026-10-20, 120 frames never used before the final evaluation; scored against each of the two annotators and averaged.",  # noqa: E501
+        "The owner's camera (Arducam B0268), locked day 2026-10-20, 120 frames never used before the final evaluation; scored against each of the two vision-language-model annotators and averaged.",  # noqa: E501
         "b0268",
         ["Model", "Exact étage set", "Oktas ±1", "Top genus in set", "OOD flagged"],
         t4,

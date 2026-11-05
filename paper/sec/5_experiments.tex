@@ -100,10 +100,15 @@ Raspberry Pi 5 figure is left blank: the edge student is planned but not measure
 \label{sec:b0268}
 \input{tables/tab4_b0268}
 The released graph was pointed at the authors' own fisheye camera, a lens, exposure and horizon no training image
-shares. Zero-shot (\cref{tab:b0268}) it is useless and says so: it agrees with the two annotators on
-\nZsEtage{} of \'etage sets and \nZsOktas{} of cover within one okta on the locked fourth day, and flags \nZsOod{} of
-the frames as out of distribution. Fine-tuning the global heads on the three earlier afternoons (273 frames, source
-replay, regression guard) and re-exporting brings the agreement to \nAdEtage{} and \nAdOktas{}, with the top genus
-inside the annotators' set on every frame and no frame flagged; the two annotators agree with each other on
-0.911 and 0.771. The adapted graph is the one the application ships, and the fourth day was read once, after the
-graph was frozen.
+shares. Its labels are not human: the human sheets were lost, and the 393 frames carry image-level \'etage sets,
+genus sets and oktas from two vision--language models (two variants of one commercial family) prompted with the
+WMO definitions, with two further models as a sensitivity set; the agreement between the two annotators is the
+ceiling we report, and it is a model--model ceiling, not an expert one. Zero-shot (\cref{tab:b0268}) the released
+graph is useless and says so: it agrees with the two annotators on \nZsEtage{} of \'etage sets and \nZsOktas{} of
+cover within one okta on the locked fourth day, and flags \nZsOod{} of the frames as out of distribution.
+Fine-tuning the global heads on the three earlier afternoons (273 frames, source replay, regression guard) and
+re-exporting brings the agreement to \nAdEtage{} and \nAdOktas{}, with the top genus inside the annotators' set on
+every frame and no frame flagged; the two annotators agree with each other on 0.911 and 0.771. The fine-tuning
+configuration was chosen on held-out adaptation days, so the held-out numbers of that selection are optimistic;
+the locked fourth day took no part in it and was read once, after the graph was frozen. The adapted graph is the
+one the application ships.

@@ -7,8 +7,9 @@ SWIMSEG/SWINSEG/SWINySEG family~\cite{dev2017colorbased} (sky types and sky/clou
 (2,522 all-sky images with five expert annotations each: altitude class, genus codes, cover in oktas),
 Almer\'ia~\cite{almeria2025} (818 all-sky images with sky/cloud/layer masks), Eye2Sky~\cite{eye2sky} (four all-sky
 imagers with CHM15k ceilometers at two of them; April--July 2022), and B0268, a 16-megapixel fisheye camera on
-the authors' rooftop in Bengaluru (393 labelled frames over four afternoons). The corpus holds 52,425 images; the
-data card lists every licence.
+the authors' rooftop in Bengaluru (393 frames over four afternoons, labelled at image level by two
+vision--language models rather than by people; \cref{sec:b0268}). The corpus holds 52,425 images; the data card
+lists every licence.
 
 \paragraph{Leakage audit.} Perceptual hashes under the dihedral group, DINOv3 embeddings and the datasets' own
 metadata find 661 exact duplicates in 312 within-dataset groups, 34.6\,\% of SWINySEG as flipped or rotated copies
